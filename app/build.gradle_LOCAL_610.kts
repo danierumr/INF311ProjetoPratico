@@ -3,19 +3,11 @@ plugins {
 }
 
 android {
-<<<<<<< HEAD
     namespace = "inf311.grupo1.projeto"
     compileSdk = 35
 
     defaultConfig {
         applicationId = "inf311.grupo1.projeto"
-=======
-    namespace = "com.example.apitest"
-    compileSdk = 35
-
-    defaultConfig {
-        applicationId = "com.example.apitest"
->>>>>>> main
         minSdk = 24
         targetSdk = 35
         versionCode = 1
