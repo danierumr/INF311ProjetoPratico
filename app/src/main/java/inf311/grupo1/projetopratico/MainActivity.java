@@ -2,6 +2,7 @@ package inf311.grupo1.projetopratico;
 
 import android.os.Bundle;
 
+import androidx.appcompat.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
 
