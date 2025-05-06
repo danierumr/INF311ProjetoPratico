@@ -1,9 +1,4 @@
 <resources>
-<<<<<<< HEAD
     <string name="app_name">INF311 - ProjetoPrático</string>
     <string name="hello">Hello World! AAAAAAAAA</string>
-=======
-    <string name="app_name">Api test</string>
-    <string name="btn">Api</string>
->>>>>>> main
 </resources>

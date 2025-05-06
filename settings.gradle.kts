@@ -19,10 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-<<<<<<< HEAD
 rootProject.name = "INF311 - ProjetoPrático"
-=======
-rootProject.name = "Api test"
->>>>>>> main
 include(":app")
  

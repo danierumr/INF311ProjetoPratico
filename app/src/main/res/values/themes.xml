@@ -1,17 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-<<<<<<< HEAD
     <style name="Base.Theme.INF311ProjetoPrático" parent="Theme.Material3.DayNight.NoActionBar">
-=======
-    <style name="Base.Theme.ApiTest" parent="Theme.Material3.DayNight.NoActionBar">
->>>>>>> main
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
-<<<<<<< HEAD
     <style name="Theme.INF311ProjetoPrático" parent="Base.Theme.INF311ProjetoPrático" />
-=======
-    <style name="Theme.ApiTest" parent="Base.Theme.ApiTest" />
->>>>>>> main
 </resources>
