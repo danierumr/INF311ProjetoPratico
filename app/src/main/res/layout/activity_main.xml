@@ -7,13 +7,70 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+
+     <TextView
+        android:id="@+id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:textSize="10pt"
+
+         />
+
+    <Button
+        android:id="@+id/btn1"
+        android:text="@string/btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="@+id/text1"
+        android:onClick="call_api"
+        />
+
+
+
+    <Button
+        android:id="@+id/btn2"
+        android:text="@string/btn2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btn1"
+        android:onClick="call_api2"
+        android:layout_marginTop="64dp"
+
+
+        />
+
+    <Button
+        android:id="@+id/btn3"
+        android:text="@string/btn3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btn2"
+        android:onClick="call_api3"
+        android:layout_marginTop="64dp"
+
+
+        />
+
+    <Button
+        android:id="@+id/btn4"
+        android:text="@string/btn4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/btn3"
+        android:onClick="call_api4"
+        android:layout_marginTop="64dp"
+
+
+        />
+
+    <TextView
+        android:id="@+id/text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:layout_alignTop="@+id/btn4"
+        android:layout_marginTop="64dp"
+
         />
 
 </RelativeLayout>
