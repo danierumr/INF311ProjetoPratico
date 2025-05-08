@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">INF311 Projeto Pratico</string>
+     <string name="hello">Hello World! AAAAAAAAA</string>
+    <string name="app_name">Api test</string>
+    <string name="btn">Agendar atividade</string>
+    <string name="btn2">Listar eventos</string>
+    <string name="btn3">Listar oportunidades</string>
+    <string name="btn4">Listar etapas do processo</string>
 </resources>
