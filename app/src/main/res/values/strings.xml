@@ -5,4 +5,15 @@
     <string name="btn2">Listar eventos</string>
     <string name="btn3">Listar oportunidades</string>
     <string name="btn4">Listar etapas do processo</string>
+
+
+
+    <string name="cap_title">Captação comercial</string>
+    <string name="cap_subtitle">Métricas e desempenho em tempo real</string>
+    <string name="email">Email</string>
+    <string name="senha">Senha</string>
+    <string name="admin">Administrador</string>
+    <string name="user">Consultor</string>
+    <string name="do_login">Entrar</string>
+
 </resources>
