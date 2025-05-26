@@ -15,5 +15,16 @@
     <string name="admin">Administrador</string>
     <string name="user">Consultor</string>
     <string name="do_login">Entrar</string>
+    
+    <string name="aluno_name">Nome do Aluno</string>
+    <string name="escola_atual">Escola Atual</string>
+    <string name="serie">Série</string>
+    <string name="nome_responsável">Nome do Responsável</string>
+    <string name="tel">Telefone</string>
+    <string name="interesse">Interesse</string>
+    <string name="estagio_funil">Estágio no Funil</string>
+    <string name="obser">Observações</string>
+    <string name="salvar_lead">Salvar lead</string>
+
 
 </resources>
