@@ -18,7 +18,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 
-public class TelaDashboard extends AppCompatActivity
+public class TelaDashboard extends Toolbar_activity
 {
     @Override
     protected void onCreate(Bundle savedInstanceState)

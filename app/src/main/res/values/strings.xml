@@ -27,4 +27,13 @@
     <string name="salvar_lead">Salvar lead</string>
 
 
+    <string name="t1">1</string>
+    <string name="t2">2</string>
+    <string name="t3">+</string>
+    <string name="t4">3</string>
+    <string name="t5">4</string>
+
+    <string name="dashboard">Dashboard</string>
+
+
 </resources>

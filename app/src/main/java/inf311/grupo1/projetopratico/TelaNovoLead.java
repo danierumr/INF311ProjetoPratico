@@ -22,7 +22,7 @@ import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
 
-public class TelaNovoLead extends AppCompatActivity
+public class TelaNovoLead extends Toolbar_activity
 {
 
 
@@ -76,6 +76,8 @@ public class TelaNovoLead extends AppCompatActivity
         serie.setAdapter(ad_sr);
         sp_interests.setAdapter(ad_in);
         funil.setAdapter(ad_fn);
+
+
 
 
 

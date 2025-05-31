@@ -5,8 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".TelaNovoLead"
     android:id = "@+id/tela_novo_lead"
+    android:layout_marginTop="16dp"
+
 
     >
+
+
 
     <TextView
         android:id = "@+id/textview_name"
@@ -252,6 +256,16 @@
         >
 
     </Button>
+
+
+    <include layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        />
+
+
 
 
 

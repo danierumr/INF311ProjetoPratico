@@ -40,7 +40,7 @@ public class TelaLogin extends AppCompatActivity
 
     public void to_dashboard(View v)
     {
-        Intent a = new Intent(getBaseContext(), TelaNovoLead.class);
+        Intent a = new Intent(getBaseContext(), TelaDashboard.class);
         a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
         startActivity(a);
