@@ -7,7 +7,7 @@ Telas:
 - Detalhes dos lead
 - Acompanhamento do Lead
 
-  Funcionalidade:
+Funcionalidade:
   - Botão de seleção do modo admin/consultor
   - Api para o login
   - Mais campos no banco de dados
