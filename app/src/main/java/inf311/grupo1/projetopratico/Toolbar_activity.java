@@ -25,6 +25,8 @@ public class Toolbar_activity extends AppCompatActivity
         tb = (androidx.appcompat.widget.Toolbar) findViewById(R.id.toolbar);
 
         setSupportActionBar(tb);
+
+        tb.setElevation(25.0f);
     }
 
     public void novo_lead(View v)

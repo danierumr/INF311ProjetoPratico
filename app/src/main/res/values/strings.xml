@@ -34,6 +34,23 @@
     <string name="t5">4</string>
 
     <string name="dashboard">Dashboard</string>
+    <string name="dashboard_title">Dashboard Gerencial</string>
+    <string name="dashboard_subtitle">Métricas e desempenho em tempo real</string>
+    <string name="dash_atencao">Leads que precisam de atenção</string>
+    <string name="dash_funil">Funil de Captação</string>
+    <string name="dash_acoes">Ações Rápidas</string>
+    <string name="dash_alertas">Alertas Recentes</string>
+    <string name="dash_adimistracao">Administração</string>
+    <string name="dash_buscar">Buscar leads</string>
+    <string name="dash_novo">Novo lead</string>
+    <string name="dash_metrica">Metricas da equipe</string>
+    <string name="dash_taxa_conversao">Taxa de Conversão</string>
+    <string name="dash_tempo_resposta">Tempo de Resposta</string>
+    <string name="dash_interacoes">Interações</string>
+    <string name="dash_meta_mensal">Meta Mensal</string>
+    <string name="dash_conver">Conversão total</string>
+    <string name="novos">Novos</string>
+    <string name="dash_matriculados">Matriculados</string>
 
 
 </resources>
