@@ -52,5 +52,20 @@
     <string name="novos">Novos</string>
     <string name="dash_matriculados">Matriculados</string>
 
+    <string name="dlead_title">Detalhes do Lead</string>
+    <string name="dlead_estagio">Estágio:</string>
+    <string name="dlead_nome">Nome do Lead</string>
+    <string name="dlead_escola">Escola do Lead • Serie do lead</string>
+    <string name="dlead_prioridade">Prioridade:</string>
+    <string name="dlead_informacoes_cont">Informações de Contato</string>
+    <string name="dlead_responsavel">Responsável:</string>
+    <string name="dlead_email">Email:</string>
+    <string name="dlead_tel">Telefone:</string>
+    <string name="dlead_interesse">Interesse:</string>
+    <string name="dlead_ult_cont">Último Contato:</string>
+    <string name="dlead_ult_observacoes">Observações</string>
+    <string name="dlead_hist">Histórico de Atividades</string>
+
+    <string name="dlead_regist_at">+ Registrar atividades</string>
 
 </resources>
