@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".TelaNovoLead"
+    android:id = "@+id/tela_novo_lead"
+    android:layout_marginTop="16dp"
+
+
+    >
+
+
+
+    <TextView
+        android:id = "@+id/textview_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/aluno_name"
+
+        >
+
+    </TextView>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/edittext_name"
+        android:layout_below="@+id/textview_name"
+        android:inputType="text"
+        >
+
+    </EditText>
+
+    <LinearLayout
+        android:id="@+id/linear_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/edittext_name"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+            android:id = "@+id/textview_escola"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/escola_atual"
+
+            >
+
+        </TextView>
+
+        <TextView
+            android:id = "@+id/textview_serie"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/serie"
+            android:layout_toEndOf="@+id/textview_escola"
+
+            >
+
+        </TextView>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linear_layout2"
+        android:orientation="horizontal"
+        android:layout_below="@id/linear_layout"
+
+        >
+
+        <EditText
+            android:id = "@+id/edittext_escola"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="text"
+            >
+
+        </EditText>
+
+        <Spinner
+            android:id ="@+id/serie_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            >
+
+        </Spinner>
+
+
+
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:id="@+id/textview_nome_responsavel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear_layout2"
+        android:text="@string/nome_responsável"
+        >
+
+    </TextView>
+
+    <EditText
+        android:id="@+id/edittext_nome_resp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textview_nome_responsavel"
+        android:inputType="text"
+        >
+
+    </EditText>
+
+    <LinearLayout
+        android:layout_marginTop="16dp"
+        android:id="@+id/linear_layout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/edittext_nome_resp"
+        >
+
+        <TextView
+            android:id="@+id/textview_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/email"
+            >
+
+        </TextView>
+
+        <TextView
+            android:id="@+id/textview_tel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/tel"
+            >
+
+        </TextView>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:id="@+id/linear_layout4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@id/linear_layout3"
+        >
+
+        <EditText
+            android:id="@+id/edittext_email"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="textEmailAddress"
+            >
+
+        </EditText>
+
+        <EditText
+            android:id="@+id/edittext_tel"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:inputType="phone"
+            >
+
+        </EditText>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:id="@+id/textview_interrese"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/interesse"
+        android:layout_below="@id/linear_layout4"
+        >
+
+    </TextView>
+
+    <Spinner
+        android:id="@+id/spinner_interesse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textview_interrese"
+        >
+
+    </Spinner>
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:id="@+id/textview_funil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/estagio_funil"
+        android:layout_below="@id/spinner_interesse"
+        >
+
+    </TextView>
+
+    <Spinner
+        android:id="@+id/spinner_funil"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textview_funil"
+        >
+
+    </Spinner>
+
+    <TextView
+        android:id="@+id/textview_observacoes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_below="@id/spinner_funil"
+        android:text="@string/obser"
+        >
+
+    </TextView>
+
+    <EditText
+        android:layout_below="@id/textview_observacoes"
+        android:id="@+id/edittext_obser"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:inputType="text|textMultiLine"
+        android:gravity="top"
+        />
+
+
+    <Button
+        android:id="@+id/button_enviar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/salvar_lead"
+        android:layout_below="@id/edittext_obser"
+        android:onClick="register_lead"
+        >
+
+    </Button>
+
+
+    <include layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+
+        />
+
+
+
+
+
+
+
+
+</RelativeLayout>

@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
 
         String url = "https://crmufvgrupo1.apprubeus.com.br/api/Contato/cadastro";
         URL urlObj = new URL(url);
+        Log.w("myapp","Mandando contato...");
         HttpURLConnection conn = (HttpURLConnection) urlObj.openConnection();
 
         conn.setDoOutput(true);

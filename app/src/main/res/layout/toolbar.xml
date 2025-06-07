@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="25dp"
+
+    >
+
+
+
+
+<androidx.appcompat.widget.Toolbar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    android:fitsSystemWindows="true"
+    android:id="@+id/toolbar"
+    android:theme="?attr/actionBarTheme"
+
+
+
+    >
+
+
+
+
+
+    <LinearLayout
+        android:id="@+id/toolbar_linear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+
+
+        >
+
+        <Button
+            android:id="@+id/toolbar_btn1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/t1"
+            android:onClick="dashboard"
+            android:backgroundTint="@color/verdeagua"
+
+
+            >
+
+        </Button>
+
+        <Button
+            android:id="@+id/toolbar_btn2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/t2"
+
+
+            >
+
+        </Button>
+
+        <Button
+            android:id="@+id/toolbar_btn3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/t3"
+            android:onClick="novo_lead"
+
+
+            >
+
+        </Button>
+
+        <Button
+            android:id="@+id/toolbar_btn4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/t4"
+
+
+            >
+
+        </Button>
+
+        <Button
+            android:id="@+id/toolbar_btn5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/t5"
+
+
+            >
+
+        </Button>
+
+    </LinearLayout>
+
+</androidx.appcompat.widget.Toolbar>
+
+</androidx.cardview.widget.CardView>
