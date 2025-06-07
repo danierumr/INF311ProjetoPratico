@@ -38,11 +38,15 @@
 
     </TextView>
 
+
+
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:id="@+id/dash_scroll"
         android:layout_below="@id/dash_subtitle"
+
         >
 
         <RelativeLayout
@@ -95,6 +99,19 @@
 
                        </TextView>
 
+                       <TextView
+                           android:id = "@+id/dash_grid_tv1_num"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:text="28.6%"
+                           android:gravity="center"
+                           android:textColor="@color/verdeagua_dark"
+                           android:layout_below="@id/dash_grid_tv1"
+                           android:textSize="24dp"
+                           >
+
+                       </TextView>
+
                    </RelativeLayout>
 
                 </androidx.cardview.widget.CardView>
@@ -124,6 +141,19 @@
                             android:layout_height="wrap_content"
                             android:text="@string/dash_tempo_resposta"
                             android:gravity="center"
+                            >
+
+                        </TextView>
+
+                        <TextView
+                            android:id = "@+id/dash_grid_tv2_num"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="1.4h"
+                            android:gravity="center"
+                            android:textColor="@color/verdeagua_dark"
+                            android:layout_below="@id/dash_grid_tv2"
+                            android:textSize="24dp"
                             >
 
                         </TextView>
@@ -165,6 +195,19 @@
 
                        </TextView>
 
+                       <TextView
+                           android:id = "@+id/dash_grid_tv3_num"
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:text="423"
+                           android:gravity="center"
+                           android:textColor="@color/verdeagua_dark"
+                           android:layout_below="@id/dash_grid_tv3"
+                           android:textSize="24dp"
+                           >
+
+                       </TextView>
+
                    </RelativeLayout>
 
 
@@ -198,6 +241,19 @@
 
                         </TextView>
 
+                        <TextView
+                            android:id = "@+id/dash_grid_tv4_num"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="68%"
+                            android:gravity="center"
+                            android:textColor="@color/verdeagua_dark"
+                            android:layout_below="@id/dash_grid_tv4"
+                            android:textSize="24dp"
+                            >
+
+                        </TextView>
+
                     </RelativeLayout>
 
 
@@ -222,6 +278,17 @@
 
             </TextView>
 
+            <LinearLayout
+                android:orientation="vertical"
+                android:id="@+id/dash_scroll_linear2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dash_scroll_atencao"
+                android:layout_marginTop="8dp"
+                >
+
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/dash_scroll_funil"
@@ -230,7 +297,7 @@
                 android:text="@string/dash_funil"
                 android:textStyle="bold"
                 android:textSize="8pt"
-                android:layout_below="@id/dash_scroll_atencao"
+                android:layout_below="@id/dash_scroll_linear2"
                 >
 
             </TextView>
@@ -466,6 +533,20 @@
                         android:layout_height="wrap_content"
                         android:text="@string/dash_metrica"
                         android:gravity="center"
+                        android:textStyle="bold"
+
+                        >
+
+                    </TextView>
+
+                    <TextView
+                        android:id="@+id/dash_admin_met_sub"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/dash_metrica_sub"
+                        android:gravity="center"
+
+                        android:layout_below="@+id/dash_admin_met"
 
                         >
 
@@ -479,10 +560,15 @@
 
 
 
+
             </androidx.cardview.widget.CardView>
 
 
-
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_below="@id/dash_admin_card"
+                />
 
 
 
