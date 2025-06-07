@@ -57,174 +57,73 @@
 
             >
 
+
             <GridLayout
+                android:id="@+id/dash_scroll_gridlay"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/dash_scroll_gridlay"
-
-                android:rowCount="2"
-                android:columnCount="2"
-                android:orientation="horizontal"
-                android:elevation="4dp"
 
                 android:layout_marginTop="16dp"
-                >
+                android:columnCount="2"
+                android:elevation="4dp"
+                android:orientation="horizontal"
+
+                android:rowCount="2">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/dash_grid_card1"
                     android:layout_width="0dp"
                     android:layout_height="100dp"
+
                     android:layout_columnWeight="1"
-
-                    android:id = "@+id/dash_grid_card1"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
-
                     android:layout_gravity="fill_horizontal"
-                    >
-
-                   <RelativeLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="match_parent"
-                       >
-
-                       <TextView
-                           android:id = "@+id/dash_grid_tv1"
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:text="@string/dash_taxa_conversao"
-                           android:gravity="center"
-                           >
-
-                       </TextView>
-
-                       <TextView
-                           android:id = "@+id/dash_grid_tv1_num"
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:text="28.6%"
-                           android:gravity="center"
-                           android:textColor="@color/verdeagua_dark"
-                           android:layout_below="@id/dash_grid_tv1"
-                           android:textSize="24dp"
-                           >
-
-                       </TextView>
-
-                   </RelativeLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_columnWeight="1"
-
-                    android:layout_gravity="fill_horizontal"
-                    android:id = "@+id/dash_grid_card2"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
 
-                    >
+                    android:layout_marginBottom="8dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        >
+                        android:layout_height="match_parent">
 
                         <TextView
-                            android:id = "@+id/dash_grid_tv2"
+                            android:id="@+id/dash_grid_tv1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/dash_tempo_resposta"
                             android:gravity="center"
-                            >
+                            android:text="@string/dash_taxa_conversao">
 
                         </TextView>
 
                         <TextView
-                            android:id = "@+id/dash_grid_tv2_num"
+                            android:id="@+id/dash_grid_tv1_num"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="1.4h"
+                            android:layout_below="@id/dash_grid_tv1"
                             android:gravity="center"
+                            android:text="28.6%"
                             android:textColor="@color/verdeagua_dark"
-                            android:layout_below="@id/dash_grid_tv2"
-                            android:textSize="24dp"
-                            >
+                            android:textSize="24dp">
 
                         </TextView>
 
                     </RelativeLayout>
 
-
-
-
-
-
-
                 </androidx.cardview.widget.CardView>
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/dash_grid_card2"
                     android:layout_width="0dp"
                     android:layout_height="100dp"
+
                     android:layout_columnWeight="1"
-
                     android:layout_gravity="fill_horizontal"
-                    android:id = "@+id/dash_grid_card3"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
                     android:layout_marginStart="8dp"
-                    >
-
-                   <RelativeLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="match_parent">
-
-                       <TextView
-                           android:id = "@+id/dash_grid_tv3"
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:text="@string/dash_interacoes"
-                           android:gravity="center"
-                           >
-
-                       </TextView>
-
-                       <TextView
-                           android:id = "@+id/dash_grid_tv3_num"
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:text="423"
-                           android:gravity="center"
-                           android:textColor="@color/verdeagua_dark"
-                           android:layout_below="@id/dash_grid_tv3"
-                           android:textSize="24dp"
-                           >
-
-                       </TextView>
-
-                   </RelativeLayout>
-
-
-
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="0dp"
-                    android:layout_height="100dp"
-                    android:layout_columnWeight="1"
-
-                    android:layout_gravity="fill_horizontal"
-                    android:id = "@+id/dash_grid_card4"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="8dp"
+
                     >
 
                     <RelativeLayout
@@ -232,38 +131,117 @@
                         android:layout_height="match_parent">
 
                         <TextView
-                            android:id = "@+id/dash_grid_tv4"
+                            android:id="@+id/dash_grid_tv2"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/dash_meta_mensal"
                             android:gravity="center"
-                            >
+                            android:text="@string/dash_tempo_resposta">
 
                         </TextView>
 
                         <TextView
-                            android:id = "@+id/dash_grid_tv4_num"
+                            android:id="@+id/dash_grid_tv2_num"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="68%"
+                            android:layout_below="@id/dash_grid_tv2"
                             android:gravity="center"
+                            android:text="1.4h"
                             android:textColor="@color/verdeagua_dark"
-                            android:layout_below="@id/dash_grid_tv4"
-                            android:textSize="24dp"
-                            >
+                            android:textSize="24dp">
 
                         </TextView>
 
                     </RelativeLayout>
 
 
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/dash_grid_card3"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="fill_horizontal"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/dash_grid_tv3"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/dash_interacoes">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/dash_grid_tv3_num"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/dash_grid_tv3"
+                            android:gravity="center"
+                            android:text="423"
+                            android:textColor="@color/verdeagua_dark"
+                            android:textSize="24dp">
+
+                        </TextView>
+
+                    </RelativeLayout>
+
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/dash_grid_card4"
+                    android:layout_width="0dp"
+                    android:layout_height="100dp"
+
+                    android:layout_columnWeight="1"
+                    android:layout_gravity="fill_horizontal"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/dash_grid_tv4"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="@string/dash_meta_mensal">
+
+                        </TextView>
+
+                        <TextView
+                            android:id="@+id/dash_grid_tv4_num"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/dash_grid_tv4"
+                            android:gravity="center"
+                            android:text="68%"
+                            android:textColor="@color/verdeagua_dark"
+                            android:textSize="24dp">
+
+                        </TextView>
+
+                    </RelativeLayout>
+
 
                 </androidx.cardview.widget.CardView>
 
 
-
             </GridLayout>
-
 
             <TextView
                 android:id="@+id/dash_scroll_atencao"
@@ -566,7 +544,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="100dp"
                 android:layout_below="@id/dash_admin_card"
                 />
 
