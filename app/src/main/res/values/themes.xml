@@ -3,7 +3,21 @@
     <style name="Base.Theme.INF311ProjetoPratico" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+
+        <item name="colorPrimary">@color/verdeagua</item>
+
+        >
+
     </style>
 
-    <style name="Theme.INF311ProjetoPratico" parent="Base.Theme.INF311ProjetoPratico" />
+    <style name="Widget.App.Button" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/verdeagua</item>
+        <item name="roundPercent">50</item>
+    </style>
+
+
+
+    <style name="Theme.INF311ProjetoPratico" parent="Base.Theme.INF311ProjetoPratico"/>
+
 </resources>
