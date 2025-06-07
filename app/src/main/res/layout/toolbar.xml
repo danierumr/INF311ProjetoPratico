@@ -1,21 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+
+
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="25dp"
+
+    >
+
+
+
+
+<androidx.appcompat.widget.Toolbar
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
     android:fitsSystemWindows="true"
     android:id="@+id/toolbar"
     android:theme="?attr/actionBarTheme"
-    android:background="@color/cardview_dark_background"
+
 
 
     >
+
+
+
+
 
     <LinearLayout
         android:id="@+id/toolbar_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+
+
         >
 
         <Button
@@ -25,6 +47,9 @@
             android:layout_weight="1"
             android:text="@string/t1"
             android:onClick="dashboard"
+            android:backgroundTint="@color/verdeagua"
+
+
             >
 
         </Button>
@@ -35,6 +60,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/t2"
+
 
             >
 
@@ -48,6 +74,7 @@
             android:text="@string/t3"
             android:onClick="novo_lead"
 
+
             >
 
         </Button>
@@ -58,6 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/t4"
+
 
             >
 
@@ -70,6 +98,7 @@
             android:layout_weight="1"
             android:text="@string/t5"
 
+
             >
 
         </Button>
@@ -77,3 +106,5 @@
     </LinearLayout>
 
 </androidx.appcompat.widget.Toolbar>
+
+</androidx.cardview.widget.CardView>

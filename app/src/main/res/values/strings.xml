@@ -33,6 +33,39 @@
     <string name="t5">4</string>
 
     <string name="dashboard">Dashboard</string>
+    <string name="dashboard_title">Dashboard Gerencial</string>
+    <string name="dashboard_subtitle">Métricas e desempenho em tempo real</string>
+    <string name="dash_atencao">Leads que precisam de atenção</string>
+    <string name="dash_funil">Funil de Captação</string>
+    <string name="dash_acoes">Ações Rápidas</string>
+    <string name="dash_alertas">Alertas Recentes</string>
+    <string name="dash_adimistracao">Administração</string>
+    <string name="dash_buscar">Buscar leads</string>
+    <string name="dash_novo">Novo lead</string>
+    <string name="dash_metrica">Metricas da equipe</string>
+    <string name="dash_metrica_sub">Visualize o desempenho de toda a equipe</string>
+    <string name="dash_taxa_conversao">Taxa de Conversão</string>
+    <string name="dash_tempo_resposta">Tempo de Resposta</string>
+    <string name="dash_interacoes">Interações</string>
+    <string name="dash_meta_mensal">Meta Mensal</string>
+    <string name="dash_conver">Conversão total</string>
+    <string name="novos">Novos</string>
+    <string name="dash_matriculados">Matriculados</string>
 
+    <string name="dlead_title">Detalhes do Lead</string>
+    <string name="dlead_estagio">Estágio:</string>
+    <string name="dlead_nome">Nome do Lead</string>
+    <string name="dlead_escola">Escola do Lead • Serie do lead</string>
+    <string name="dlead_prioridade">Prioridade:</string>
+    <string name="dlead_informacoes_cont">Informações de Contato</string>
+    <string name="dlead_responsavel">Responsável:</string>
+    <string name="dlead_email">Email:</string>
+    <string name="dlead_tel">Telefone:</string>
+    <string name="dlead_interesse">Interesse:</string>
+    <string name="dlead_ult_cont">Último Contato:</string>
+    <string name="dlead_ult_observacoes">Observações</string>
+    <string name="dlead_hist">Histórico de Atividades</string>
+
+    <string name="dlead_regist_at">+ Registrar atividades</string>
 
 </resources>
