@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fitsSystemWindows="true"
+    >
+
+<ScrollView
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,31 +18,30 @@
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-        <!-- Header -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:paddingTop="36dp"
+            android:layout_height="wrap_content"
             android:background="@color/primary_green"
             android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:paddingVertical="16dp"
             android:paddingHorizontal="16dp">
 
             <ImageView
+                android:id="@+id/backButton"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_arrow_back"
                 app:tint="@android:color/white" />
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
                 android:text="Métricas da Equipe"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:textSize="20sp"
+                android:textColor="@color/text_white"
+                android:gravity="start" />
 
             <View
                 android:layout_width="24dp"
@@ -43,7 +49,6 @@
 
         </LinearLayout>
 
-        <!-- Period Selector -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -96,7 +101,6 @@
 
         </LinearLayout>
 
-        <!-- Metrics Cards Row 1 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -104,7 +108,6 @@
             android:orientation="horizontal"
             android:paddingHorizontal="16dp">
 
-            <!-- Total de Leads Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -162,7 +165,6 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Conversões Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -222,7 +224,6 @@
 
         </LinearLayout>
 
-        <!-- Metrics Cards Row 2 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -230,7 +231,6 @@
             android:orientation="horizontal"
             android:paddingHorizontal="16dp">
 
-            <!-- Taxa de Conversão Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -288,7 +288,6 @@
 
             </androidx.cardview.widget.CardView>
 
-            <!-- Tempo de Resposta Card -->
             <androidx.cardview.widget.CardView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -348,7 +347,6 @@
 
         </LinearLayout>
 
-        <!-- Distribuição de Leads Card -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -370,90 +368,17 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <!-- Pie Chart Container -->
                 <com.github.mikephil.charting.charts.PieChart
                     android:id="@+id/pieChart"
                     android:layout_width="match_parent"
                     android:layout_height="250dp"
                     android:layout_marginTop="16dp" />
 
-                <!-- Legend for Pie Chart -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:background="@color/primary_green" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="Ana: 26"
-                                android:textColor="@color/text_primary"
-                                android:textSize="12sp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:background="#F44336" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="Carlos: 19"
-                                android:textColor="@color/text_primary"
-                                android:textSize="12sp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:background="#2196F3" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="Juliana: 22"
-                                android:textColor="@color/text_primary"
-                                android:textSize="12sp" />
-
-                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -462,65 +387,12 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
                         android:orientation="horizontal">
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:background="#FF9800" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="Roberto: 17"
-                                android:textColor="@color/text_primary"
-                                android:textSize="12sp" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
-
-                            <View
-                                android:layout_width="12dp"
-                                android:layout_height="12dp"
-                                android:background="#E91E63" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
-                                android:text="Mariana: 16"
-                                android:textColor="@color/text_primary"
-                                android:textSize="12sp" />
-
-                        </LinearLayout>
-
-                        <View
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1" />
-
-                    </LinearLayout>
-
                 </LinearLayout>
 
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Chart Section -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -543,7 +415,6 @@
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <!-- Chart Legend -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -595,7 +466,6 @@
 
                 </LinearLayout>
 
-                <!-- Chart Container -->
                 <com.github.mikephil.charting.charts.BarChart
                     android:id="@+id/barChart"
                     android:layout_width="match_parent"
@@ -606,7 +476,6 @@
 
         </androidx.cardview.widget.CardView>
 
-        <!-- Desempenho Individual Section -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -623,7 +492,6 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <!-- Ana Silva Card (exemplo) -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -637,7 +505,6 @@
                     android:orientation="horizontal"
                     android:padding="16dp">
 
-                    <!-- Avatar -->
                     <View
                         android:layout_width="48dp"
                         android:layout_height="48dp"
@@ -646,9 +513,6 @@
                         android:background="@drawable/circle_avatar"
                         />
 
-
-
-                    <!-- Informações -->
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -676,7 +540,6 @@
                                 android:textColor="@color/text_primary"
                                 android:textSize="12sp" />
 
-                            <!-- Progress Bar -->
                             <ProgressBar
                                 style="?android:attr/progressBarStyleHorizontal"
                                 android:layout_width="60dp"
@@ -692,7 +555,6 @@
 
                     </LinearLayout>
 
-                    <!-- Estatísticas -->
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -724,7 +586,6 @@
 
         </LinearLayout>
 
-        <!-- Bottom Navigation Space -->
         <View
             android:layout_width="match_parent"
             android:layout_height="80dp" />
@@ -732,3 +593,11 @@
     </LinearLayout>
 
 </ScrollView>
+
+    <include layout="@layout/toolbar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_alignParentBottom="true"
+    android:elevation="25dp" />
+
+</RelativeLayout>

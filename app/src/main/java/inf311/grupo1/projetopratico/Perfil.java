@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class Perfil extends AppCompatActivity {
+public class Perfil extends Toolbar_activity {
 
     private CircleImageView ivAvatar;
     private ImageView ivCamera;
@@ -32,6 +32,8 @@ public class Perfil extends AppCompatActivity {
     private LinearLayout llConfigConta;
     private LinearLayout llAjudaSuporte;
     private LinearLayout llSair;
+
+    private ImageView ivBackButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +64,7 @@ public class Perfil extends AppCompatActivity {
         llConfigConta = findViewById(R.id.ll_config_conta);
         llAjudaSuporte = findViewById(R.id.ll_ajuda_suporte);
         llSair = findViewById(R.id.ll_sair);
+        ivBackButton = findViewById(R.id.backButtonProfile);
     }
 
     private void setupClickListeners() {
@@ -98,6 +101,13 @@ public class Perfil extends AppCompatActivity {
                 Toast.makeText(Perfil.this, "Ajuda e Suporte", Toast.LENGTH_SHORT).show();
                 // Intent intent = new Intent(Perfil.this, AjudaSuporteActivity.class);
                 // startActivity(intent);
+            }
+        });
+
+        ivBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
             }
         });
 

@@ -1,30 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background_white"
+    android:fitsSystemWindows="true"
     tools:context=".Perfil">
 
-    <!-- Header com AppBar -->
-    <com.google.android.material.appbar.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+    <ImageView
+        android:id="@+id/backButtonProfile"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:src="@drawable/ic_arrow_back"
+        app:tint="@android:color/white" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/primary_green"
-            app:title="Meu Perfil"
-            app:titleTextColor="@color/text_white"
-            app:navigationIcon="@drawable/ic_arrow_back" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-    <!-- Conteúdo principal -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,7 +25,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Seção do perfil do usuário -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -43,7 +32,6 @@
                 android:orientation="vertical"
                 android:padding="24dp">
 
-                <!-- Avatar do usuário -->
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_avatar"
                     android:layout_width="80dp"
@@ -53,7 +41,6 @@
                     app:civ_border_color="@color/text_white"
                     app:civ_border_width="2dp" />
 
-                <!-- Ícone de câmera -->
                 <ImageView
                     android:id="@+id/iv_camera"
                     android:layout_width="24dp"
@@ -66,7 +53,6 @@
                     android:src="@drawable/ic_camera"
                     android:visibility="visible" />
 
-                <!-- Nome do usuário -->
                 <TextView
                     android:id="@+id/tv_nome"
                     android:layout_width="wrap_content"
@@ -78,7 +64,6 @@
                     android:textColor="@color/text_white"
                     android:textSize="20sp" />
 
-                <!-- Cargo do usuário -->
                 <TextView
                     android:id="@+id/tv_cargo"
                     android:layout_width="wrap_content"
@@ -91,7 +76,6 @@
 
             </LinearLayout>
 
-            <!-- Seção de Desempenho -->
 
                 <LinearLayout
                     android:id="@+id/section_desempenho"
@@ -109,7 +93,6 @@
                         android:textColor="@color/text_primary"
                         android:textSize="18sp" />
 
-                    <!-- Linha de métricas -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -117,7 +100,6 @@
                         android:orientation="horizontal"
                         android:paddingHorizontal="16dp">
 
-                        <!-- Card: Total de Leads -->
                         <androidx.cardview.widget.CardView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -153,7 +135,6 @@
 
                         </androidx.cardview.widget.CardView>
 
-                        <!-- Card: Conversões -->
                         <androidx.cardview.widget.CardView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -191,7 +172,6 @@
 
                     </LinearLayout>
 
-                    <!-- Segunda linha de métricas -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -199,7 +179,6 @@
                         android:orientation="horizontal"
                         android:paddingHorizontal="16dp">
 
-                        <!-- Card: Taxa de Conversão -->
                         <androidx.cardview.widget.CardView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -235,7 +214,6 @@
 
                         </androidx.cardview.widget.CardView>
 
-                        <!-- Card: Este Mês -->
                         <androidx.cardview.widget.CardView
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -276,13 +254,11 @@
                 </LinearLayout>
 
 
-                <!-- Divisor -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
                 android:background="@color/background_gray_light" />
 
-            <!-- Seção de Informações Pessoais -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -298,7 +274,6 @@
                     android:textColor="@color/text_primary"
                     android:textSize="18sp" />
 
-                <!-- Email -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -323,7 +298,6 @@
 
                 </LinearLayout>
 
-                <!-- Telefone -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -348,7 +322,6 @@
 
                 </LinearLayout>
 
-                <!-- Cargo -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -375,13 +348,11 @@
 
             </LinearLayout>
 
-            <!-- Divisor -->
             <View
                 android:layout_width="match_parent"
                 android:layout_height="8dp"
                 android:background="@color/background_gray_light" />
 
-            <!-- Seção de Configurações -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -397,7 +368,6 @@
                     android:textColor="@color/text_primary"
                     android:textSize="18sp" />
 
-                <!-- Configurações da Equipe -->
                 <LinearLayout
                     android:id="@+id/ll_config_equipe"
                     android:layout_width="match_parent"
@@ -435,7 +405,6 @@
 
                 </LinearLayout>
 
-                <!-- Configurações da Conta -->
                 <LinearLayout
                     android:id="@+id/ll_config_conta"
                     android:layout_width="match_parent"
@@ -473,7 +442,6 @@
 
                 </LinearLayout>
 
-                <!-- Ajuda e Suporte -->
                 <LinearLayout
                     android:id="@+id/ll_ajuda_suporte"
                     android:layout_width="match_parent"
@@ -511,7 +479,6 @@
 
                 </LinearLayout>
 
-                <!-- Sair -->
                 <LinearLayout
                     android:id="@+id/ll_sair"
                     android:layout_width="match_parent"
@@ -555,12 +522,11 @@
 
     </androidx.core.widget.NestedScrollView>
 
-<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--        android:id="@+id/bottom_navigation"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom"-->
-<!--        android:background="@color/background_white"-->
-<!--        app:menu="@menu/bottom_navigation_menu" />-->
+    <include layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:elevation="25dp" />
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</RelativeLayout>

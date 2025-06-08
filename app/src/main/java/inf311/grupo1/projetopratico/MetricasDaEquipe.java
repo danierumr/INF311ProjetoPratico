@@ -2,6 +2,10 @@ package inf311.grupo1.projetopratico;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.PieChart;
@@ -20,10 +24,12 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MetricasDaEquipe extends AppCompatActivity {
+public class MetricasDaEquipe extends  Toolbar_activity {
 
     private BarChart barChart;
     private PieChart pieChart;
+
+    private ImageView backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +38,11 @@ public class MetricasDaEquipe extends AppCompatActivity {
 
         barChart = findViewById(R.id.barChart);
         pieChart = findViewById(R.id.pieChart);
+        backButton = findViewById(R.id.backButton);
 
         setupBarChart();
         setupPieChart();
+        setupClickListeners();
     }
 
     private void setupPieChart() {
@@ -186,5 +194,14 @@ public class MetricasDaEquipe extends AppCompatActivity {
         barChart.animateY(1000);
 
         barChart.invalidate();
+    }
+
+    private void setupClickListeners() {
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
     }
 }

@@ -81,7 +81,8 @@ public class TelaDashboard extends Toolbar_activity
 
     public void add_lead_card(Contato cont)
     {
-
+        int dp_16 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics());
+        int dp_12 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics());
         int dp_8 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 8, getResources().getDisplayMetrics());
         int dp_4 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 4, getResources().getDisplayMetrics());
 
@@ -139,6 +140,7 @@ public class TelaDashboard extends Toolbar_activity
         rl.setId(View.generateViewId());
         RelativeLayout.LayoutParams rl_para = new RelativeLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT,CardView.LayoutParams.WRAP_CONTENT);
         rl.setLayoutParams(rl_para);
+        rl.setPadding(dp_16, dp_16, dp_16, dp_16);
 
 
 
@@ -147,7 +149,10 @@ public class TelaDashboard extends Toolbar_activity
         CardView cv = new CardView(this);
         cv.setId(View.generateViewId());
         CardView.LayoutParams cvl = new CardView.LayoutParams(CardView.LayoutParams.MATCH_PARENT,CardView.LayoutParams.WRAP_CONTENT);
-        cvl.setMargins(dp_8,dp_8,dp_8,dp_8);
+        cvl.setMargins(0,0,0,dp_12);
+        cv.setCardElevation(dp_4);
+        cv.setRadius(dp_8);
+
         cv.setLayoutParams(cvl);
 
 
@@ -185,5 +190,8 @@ public class TelaDashboard extends Toolbar_activity
     }
 
 
-
+    public void metricasDaEquipe(View view) {
+        Intent it = new Intent(this, MetricasDaEquipe.class);
+        startActivity(it);
+    }
 }
