@@ -60,4 +60,12 @@ public class Toolbar_activity extends AppCompatActivity
 
         startActivity(it);
     }
+
+    public void alertas(View v) {
+        Intent it = new Intent(this, TelaAlertas.class);
+        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(it);
+    }
+
 }
