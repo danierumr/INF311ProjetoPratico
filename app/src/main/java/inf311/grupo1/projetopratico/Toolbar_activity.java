@@ -44,4 +44,12 @@ public class Toolbar_activity extends AppCompatActivity
 
         startActivity(a);
     }
+
+    public void profile(View v)
+    {
+        Intent it = new Intent(this, Perfil.class);
+        it.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(it);
+    }
 }

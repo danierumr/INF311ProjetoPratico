@@ -4,148 +4,161 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/tela_login"
-    android:layout_marginTop="16dp"
-    android:layout_marginBottom="16dp"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
+    android:background="@color/background_gray_light"
+    android:padding="24dp"
     tools:context=".TelaLogin">
 
-
-    <TextView
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:id="@+id/logo_container"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/cap_title"
-        android:id="@+id/title"
-        android:textStyle="bold"
-        android:textSize="16pt"
-        android:gravity="center"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="48dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
 
-        >
-
-    </TextView>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/cap_subtitle"
-        android:id="@+id/subtitle"
-        android:layout_below="@id/title"
-
-
-        android:gravity="center"
-
-        >
-
-    </TextView>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/email"
-        android:id="@+id/email_title"
-        android:layout_below="@id/subtitle"
-
-
-        android:layout_marginTop="64dp"
-
-
-        >
-
-    </TextView>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/email_edit"
-        android:layout_below="@id/email_title"
-        android:hint="@string/email"
-
-        >
-
-    </EditText>
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/senha"
-        android:id="@+id/password_title"
-        android:layout_below="@id/email_edit"
-
-
-        android:layout_marginTop="32dp"
-
-
-        >
-
-    </TextView>
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/password_edit"
-        android:layout_below="@id/password_title"
-        android:hint="@string/senha">
-
-    </EditText>
-
-
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="100dp"
+            android:src="@drawable/logo_rubeus"
+            android:contentDescription="Logo Rubeus" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="32dp"
-        android:id="@+id/linear_layout"
-        android:layout_below="@id/password_edit">
+        android:layout_below="@id/logo_container"
+        android:layout_marginTop="64dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cap_title"
+            android:id="@+id/title"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:textColor="@color/text_primary"
+            android:gravity="center"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/cap_subtitle"
+            android:id="@+id/subtitle"
+            android:textSize="14sp"
+            android:textColor="@color/text_secondary"
+            android:gravity="center"
+            android:layout_marginBottom="48dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/email"
+            android:id="@+id/email_title"
+            android:textSize="14sp"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/email_edit"
+            android:hint="@string/email"
+            android:inputType="textEmailAddress"
+            android:background="@drawable/input_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="14sp"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/senha"
+            android:id="@+id/password_title"
+            android:textSize="14sp"
+            android:textColor="@color/text_primary"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/password_edit"
+            android:hint="@string/senha"
+            android:inputType="textPassword"
+            android:background="@drawable/input_background"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="14sp"
+            android:textColor="@color/text_primary"
+            android:textColorHint="@color/text_hint"
+            android:layout_marginBottom="32dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:id="@+id/linear_layout"
+            android:layout_marginBottom="32dp">
+
+            <Button
+                android:id="@+id/admin_btn"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="@string/admin"
+                android:onClick="set_as_admin"
+                android:background="@drawable/button_admin_selector"
+                android:textColor="@color/button_text_selector"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginEnd="8dp"
+                android:elevation="0dp" />
+
+            <Button
+                android:id="@+id/user_btn"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:text="@string/user"
+                android:onClick="set_as_user"
+                android:background="@drawable/button_user_selector"
+                android:textColor="@color/button_text_selector"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:layout_marginStart="8dp"
+                android:elevation="0dp" />
+
+        </LinearLayout>
 
         <Button
-            android:id="@+id/admin_btn"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="@string/do_login"
+            android:onClick="to_dashboard"
+            android:background="@drawable/login_button_background"
+            android:textColor="@android:color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:elevation="2dp"
+            android:layout_marginBottom="24dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_below="@id/password_edit"
-            android:text="@string/admin"
-            android:onClick="set_as_admin"
-            >
-
-        </Button>
-
-        <Button
-            android:id="@+id/user_btn"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_toEndOf="@+id/admin_btn"
-            android:layout_below="@id/password_edit"
-            android:text="@string/user"
-            android:onClick="set_as_user"
-            >
-
-        </Button>
-
+            android:text="Esqueceu sua senha?"
+            android:textSize="14sp"
+            android:textColor="@color/primary_green"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:focusable="true" />
 
     </LinearLayout>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/do_login"
-        android:layout_marginTop="32dp"
-        android:layout_below="@+id/linear_layout"
-        android:onClick="to_dashboard"
-        >
-
-    </Button>
-
-
-
-
-
-
-
-
-
-
-
 
 </RelativeLayout>
