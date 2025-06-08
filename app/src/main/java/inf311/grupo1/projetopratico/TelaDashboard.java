@@ -195,4 +195,9 @@ public class TelaDashboard extends Toolbar_activity
         Intent it = new Intent(this, MetricasDaEquipe.class);
         startActivity(it);
     }
+
+    public void funil_cap(View view) {
+        Intent it = new Intent(this, TelaFunil.class);
+        startActivity(it);
+    }
 }

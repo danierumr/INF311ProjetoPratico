@@ -292,22 +292,53 @@
                 android:layout_below="@id/dash_scroll_atencao"
                 android:layout_marginBottom="24dp" />
 
-            <TextView
-                android:id="@+id/dash_scroll_funil"
+
+            <LinearLayout
+                android:id="@+id/dash_funil_linear"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/dash_funil"
-                android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="@color/text_primary"
+                android:orientation="horizontal"
                 android:layout_below="@id/dash_scroll_linear2"
-                android:layout_marginBottom="12dp" />
+                >
+
+                <TextView
+                    android:id="@+id/dash_scroll_funil"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/dash_funil"
+                    android:textStyle="bold"
+                    android:textSize="16sp"
+                    android:textColor="@color/text_primary"
+
+                    android:layout_marginBottom="12dp" />
+
+                <TextView
+                    android:id="@+id/dash_scroll_funil_detalhes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Ver detalhes"
+                    android:onClick="funil_cap"
+
+
+                    android:textColor="@color/primary_green"
+                    android:gravity="end"
+
+                    android:layout_marginBottom="12dp" />
+
+
+            </LinearLayout>
+
+
+
+
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/dash_funil_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/dash_scroll_funil"
+                android:layout_below="@id/dash_funil_linear"
                 android:layout_marginBottom="24dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="2dp"

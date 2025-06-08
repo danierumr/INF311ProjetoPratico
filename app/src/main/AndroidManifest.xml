@@ -67,6 +67,11 @@
             android:exported="true">
         </activity>
 
+        <activity
+            android:name=".TelaFunil"
+            android:exported="true">
+        </activity>
+
 
     </application>
 
