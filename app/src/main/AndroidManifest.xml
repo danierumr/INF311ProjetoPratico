@@ -36,12 +36,6 @@
         </activity>
 
         <activity
-            android:name=".TelaDetalhesLead"
-            android:exported="true">
-
-        </activity>
-
-        <activity
             android:name=".TelaLogin"
             android:exported="true">
 
@@ -52,6 +46,16 @@
             </intent-filter>
 
          </activity>
+
+        <activity
+            android:name=".MetricasDaEquipe"
+            android:exported="true">
+        </activity>
+
+        <activity
+            android:name=".Perfil"
+            android:exported="true">
+        </activity>
 
 
     </application>

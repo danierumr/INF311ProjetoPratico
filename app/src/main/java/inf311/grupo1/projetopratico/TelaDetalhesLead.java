@@ -2,7 +2,10 @@ package inf311.grupo1.projetopratico;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.widget.TextView;
+
+import java.util.Date;
 
 public class TelaDetalhesLead extends Toolbar_activity
 {
@@ -41,6 +44,12 @@ public class TelaDetalhesLead extends Toolbar_activity
 
         TextView interesse = findViewById(R.id.detalhes_lead_interesse_edit);
         interesse.setText(c.interesse);
+
+        TextView ult_cont = findViewById(R.id.detalhes_lead_ult_cont_edit);
+
+
+        Date now = new Date();
+        ult_cont.setText(DateUtils.getRelativeTimeSpanString(c.ultimo_contato.getTime(),now.getTime(),0));
 
 
 

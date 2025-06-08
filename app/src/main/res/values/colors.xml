@@ -1,7 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Cores Primárias -->
+    <color name="primary_green">#14b8a6</color>
+    <color name="primary_green_dark">#388E3C</color>
+    <color name="primary_green_light">#C8E6C9</color>
+
+    <!-- Cores de Fundo -->
+    <color name="background_white">#FFFFFF</color>
+    <color name="background_gray_light">#F5F5F5</color>
+    <color name="background_gray">#E0E0E0</color>
+
+    <!-- Cores de Texto -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_hint">#BDBDBD</color>
+
+    <!-- Cores de Ícones -->
+    <color name="icon_gray">#757575</color>
+    <color name="icon_green">#14b8a6</color>
+
+    <!-- Cores de Estado -->
+    <color name="success_green">#14b8a6</color>
+    <color name="warning_orange">#FF9800</color>
+    <color name="error_red">#F44336</color>
+    <color name="info_blue">#2196F3</color>
+
+    <!-- Cores Específicas -->
+    <color name="logout_red">#F44336</color>
+    <color name="divider_color">#E0E0E0</color>
+
+    <!-- Cores de Transparência -->
+    <color name="transparent">#00000000</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="white_overlay">#66FFFFFF</color>
+
+    <!--    Cores Gabriel -->
     <color name="verdeagua">#14b8a6</color>
     <color name="verdeagua_dark">#0d9488</color>
     <color name="azul_barra">#3b82f6</color>
@@ -9,7 +45,5 @@
     <color name="lilas_barra">#a855f7</color>
     <color name="magenta_barra">#ec4899</color>
     <color name="vermelho_barra">#ef4444</color>
-
-
 
 </resources>
