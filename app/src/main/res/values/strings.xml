@@ -68,4 +68,15 @@
 
     <string name="dlead_regist_at">+ Registrar atividades</string>
 
+    <string name="lead_title">Leads</string>
+    <string name="lead_buscar">Buscar Leads…</string>
+    <string name="lead_filter_todos">Todos</string>
+    <string name="lead_filter_novos">Novos leads</string>
+    <string name="lead_filter_contatados">Contatados</string>
+    <string name="lead_filter_interesados">Interessados</string>
+    <string name="lead_filter_agendados">Agendados</string>
+    <string name="lead_filter_visitaram">Visitaram</string>
+    <string name="lead_filter_matriculados">Matriculados</string>
+    <string name="lead_btn"> Adicionar Novo Lead</string>
+
 </resources>
