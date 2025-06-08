@@ -37,6 +37,14 @@ public class Toolbar_activity extends AppCompatActivity
         startActivity(a);
     }
 
+    public void leads(View v)
+    {
+        Intent a = new Intent(getBaseContext(), Tela_leads.class);
+        a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+        startActivity(a);
+    }
+
     public void dashboard(View v)
     {
         Intent a = new Intent(getBaseContext(), TelaDashboard.class);

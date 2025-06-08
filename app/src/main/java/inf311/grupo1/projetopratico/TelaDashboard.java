@@ -108,7 +108,7 @@ public class TelaDashboard extends Toolbar_activity
         RelativeLayout.LayoutParams al_para = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
         al_para.topMargin=dp_4;
         alert .setGravity(Gravity.END);
-        alert .setLayoutParams(nm_para);
+        alert .setLayoutParams(al_para);
         alert .setText(st_alert);
 
 
@@ -152,6 +152,7 @@ public class TelaDashboard extends Toolbar_activity
         cvl.setMargins(0,0,0,dp_12);
         cv.setCardElevation(dp_4);
         cv.setRadius(dp_8);
+
 
         cv.setLayoutParams(cvl);
 
