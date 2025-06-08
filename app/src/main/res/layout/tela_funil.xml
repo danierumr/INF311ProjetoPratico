@@ -3,10 +3,11 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
-        android:id="@+id/top_bar"
+        android:id="@+id/funil_top_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primary_green"
@@ -16,7 +17,7 @@
         android:paddingHorizontal="16dp">
 
         <ImageView
-            android:id="@+id/backButton"
+            android:id="@+id/funil_backButton"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:src="@drawable/ic_arrow_back"
@@ -38,16 +39,16 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/intervalo_select"
+        android:id="@+id/funil_intervalo_select"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/top_bar"
+        android:layout_below="@id/funil_top_bar"
         android:background="@android:color/white"
         android:orientation="horizontal"
         android:padding="16dp">
 
         <Button
-            android:id="@+id/btn_semanal"
+            android:id="@+id/funil_btn_semanal"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
 
@@ -61,7 +62,7 @@
             android:onClick="mudar_intervalo" />
 
         <Button
-            android:id="@+id/btn_mensal"
+            android:id="@+id/funil_btn_mensal"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
 
@@ -76,7 +77,7 @@
             android:onClick="mudar_intervalo" />
 
         <Button
-            android:id="@+id/btn_trimestral"
+            android:id="@+id/funil_btn_trimestral"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
 
@@ -96,8 +97,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/intervalo_select"
-        android:layout_above="@id/toolbar"
+        android:layout_below="@id/funil_intervalo_select"
         android:background="#F5F5F5">
 
         <LinearLayout
@@ -108,7 +108,7 @@
 
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/card_visualizacao"
+                android:id="@+id/funil_card_visualizacao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
@@ -116,7 +116,7 @@
                 card_view:cardCornerRadius="12dp">
 
                 <LinearLayout
-                    android:id="@+id/card_visualizacao_barras"
+                    android:id="@+id/funil_card_visualizacao_barras"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -129,7 +129,7 @@
                     android:gravity="center_vertical">
 
                     <TextView
-                        android:id="@+id/card_visualizacao_title"
+                        android:id="@+id/funil_card_visualizacao_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Visualização do Funil"
@@ -355,7 +355,7 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/card_analise"
+                android:id="@+id/funil_card_analise"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
@@ -364,14 +364,14 @@
 
 
                 <LinearLayout
-                    android:id="@+id/container_analises"
+                    android:id="@+id/funil_container_analises"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:padding="16dp">
 
                     <TextView
-                        android:id="@+id/card_analise_title"
+                        android:id="@+id/funil_card_analise_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Análise de Gargalos"
@@ -458,7 +458,7 @@
 
     <!-- Toolbar fixa no rodapé -->
     <include
-        android:id="@+id/toolbar"
+        android:id="@+id/funil_toolbar"
         layout="@layout/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
