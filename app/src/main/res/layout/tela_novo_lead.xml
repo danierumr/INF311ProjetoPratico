@@ -114,6 +114,8 @@
 
             </LinearLayout>
 
+
+
             <TextView
                 android:id="@+id/textview_nome_responsavel"
                 android:layout_width="match_parent"
@@ -291,9 +293,13 @@
                 android:elevation="4dp"
                 android:layout_marginBottom="20dp" />
 
+
+
         </RelativeLayout>
 
     </ScrollView>
+
+
 
     <include layout="@layout/toolbar"
         android:layout_width="match_parent"
