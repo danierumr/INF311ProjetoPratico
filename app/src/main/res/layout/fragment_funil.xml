@@ -4,45 +4,47 @@
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
+    android:background="@color/background_gray_light"
     android:fitsSystemWindows="true">
 
-    <LinearLayout
-        android:id="@+id/funil_top_bar"
+    <RelativeLayout
+        android:id="@+id/funil_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primary_green"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
         android:paddingVertical="16dp"
-        android:paddingHorizontal="16dp">
-
-        <ImageView
-            android:id="@+id/funil_backButton"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/ic_arrow_back"
-            app:tint="@android:color/white" />
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Funil de Captação"
+            android:id="@+id/funil_title"
             android:textStyle="bold"
             android:textSize="20sp"
             android:textColor="@color/text_white"
-            android:gravity="start" />
+            android:gravity="center" />
 
-        <View
-            android:layout_width="24dp"
-            android:layout_height="24dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Visualize o desempenho do seu funil"
+            android:id="@+id/funil_subtitle"
+            android:textSize="14sp"
+            android:textColor="@color/text_white"
+            android:alpha="0.8"
+            android:gravity="center"
+            android:layout_below="@+id/funil_title"
+            android:layout_marginTop="4dp" />
 
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/funil_intervalo_select"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/funil_top_bar"
+        android:layout_below="@id/funil_header"
         android:background="@android:color/white"
         android:orientation="horizontal"
         android:padding="16dp">
@@ -51,69 +53,65 @@
             android:id="@+id/funil_btn_semanal"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-
             android:background="@drawable/period_selector_active"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
             android:text="Semana"
             android:textColor="@color/text_primary"
-            android:textSize="14sp"
-
-            android:onClick="mudar_intervalo" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/funil_btn_mensal"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-
             android:layout_marginStart="8dp"
             android:background="@drawable/period_selector_active"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
             android:text="Mês"
             android:textColor="@android:color/white"
-            android:textSize="14sp"
-
-            android:onClick="mudar_intervalo" />
+            android:textSize="14sp" />
 
         <Button
             android:id="@+id/funil_btn_trimestral"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-
             android:layout_marginStart="8dp"
             android:background="@drawable/period_selector_active"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
             android:text="Trimestre"
             android:textColor="@color/text_primary"
-            android:textSize="14sp"
-
-            android:onClick="mudar_intervalo" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
     <!-- ScrollView com os conteúdos principais -->
     <ScrollView
+        android:id="@+id/scrollView_funil"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/funil_intervalo_select"
-        android:background="#F5F5F5">
+        android:paddingBottom="90dp"
+        android:clipToPadding="false"
+        android:background="@color/background_gray_light">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:paddingBottom="16dp">
-
+            android:paddingBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:paddingTop="16dp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/funil_card_visualizacao"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                card_view:cardElevation="4dp"
-                card_view:cardCornerRadius="12dp">
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="8dp">
 
                 <LinearLayout
                     android:id="@+id/funil_card_visualizacao_barras"
@@ -122,29 +120,29 @@
                     android:orientation="vertical"
                     android:padding="16dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical">
-
-                    <TextView
-                        android:id="@+id/funil_card_visualizacao_title"
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Visualização do Funil"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_weight="1"/>
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="183 leads"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"/>
+                        <TextView
+                            android:id="@+id/funil_card_visualizacao_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Visualização do Funil"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            android:layout_weight="1"/>
 
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="183 leads"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"/>
+
+                    </LinearLayout>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -177,8 +175,7 @@
                         android:progress="100"
                         android:max="100"
                         android:progressTint="@color/primary_green"
-                        android:progressDrawable="@drawable/round_progress_bar"
-                        />
+                        android:progressDrawable="@drawable/round_progress_bar" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -211,8 +208,7 @@
                         android:progress="90"
                         android:max="100"
                         android:progressTint="@color/primary_green"
-                        android:progressDrawable="@drawable/round_progress_bar"
-                        />
+                        android:progressDrawable="@drawable/round_progress_bar" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -245,8 +241,7 @@
                         android:progress="73"
                         android:max="100"
                         android:progressTint="@color/primary_green"
-                        android:progressDrawable="@drawable/round_progress_bar"
-                        />
+                        android:progressDrawable="@drawable/round_progress_bar" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -279,8 +274,7 @@
                         android:progress="57"
                         android:max="100"
                         android:progressTint="@color/primary_green"
-                        android:progressDrawable="@drawable/round_progress_bar"
-                        />
+                        android:progressDrawable="@drawable/round_progress_bar" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -313,8 +307,7 @@
                         android:progress="43"
                         android:max="100"
                         android:progressTint="@color/primary_green"
-                        android:progressDrawable="@drawable/round_progress_bar"
-                        />
+                        android:progressDrawable="@drawable/round_progress_bar" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -347,9 +340,7 @@
                         android:progress="28"
                         android:max="100"
                         android:progressTint="@color/primary_green"
-                        android:progressDrawable="@drawable/round_progress_bar"
-                        />
-
+                        android:progressDrawable="@drawable/round_progress_bar" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -358,10 +349,9 @@
                 android:id="@+id/funil_card_analise"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                card_view:cardElevation="4dp"
-                card_view:cardCornerRadius="12dp">
-
+                android:layout_marginBottom="16dp"
+                app:cardElevation="2dp"
+                app:cardCornerRadius="8dp">
 
                 <LinearLayout
                     android:id="@+id/funil_container_analises"
@@ -378,7 +368,6 @@
                         android:textSize="18sp"
                         android:textStyle="bold"
                         android:layout_weight="1"/>
-
 
                     <FrameLayout
                         android:layout_width="match_parent"
@@ -440,7 +429,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Taxa de conversão de 77%. Oportunidade de melhoria no agendamento de visitas."
+                                android:text="Performance estável. Continue com a estratégia atual de agendamento."
                                 android:textColor="@color/black"
                                 android:textSize="14sp"
                                 android:layout_marginTop="4dp"/>
@@ -448,19 +437,45 @@
                         </LinearLayout>
                     </FrameLayout>
 
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:background="@drawable/card_green"
+                        card_view:cardCornerRadius="12dp"
+                        card_view:cardElevation="0dp"
+                        android:layout_margin="10dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:padding="16dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Visitaram → Matriculados"
+                                android:textStyle="bold"
+                                android:textColor="@color/black"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Excelente taxa de conversão! Mantenha o padrão de qualidade das visitas."
+                                android:textColor="@color/black"
+                                android:textSize="14sp"
+                                android:layout_marginTop="4dp"/>
+
+                        </LinearLayout>
+                    </FrameLayout>
 
                 </LinearLayout>
-
             </androidx.cardview.widget.CardView>
 
         </LinearLayout>
+
     </ScrollView>
 
-    <!-- Toolbar fixa no rodapé -->
-    <include
-        android:id="@+id/funil_toolbar"
-        layout="@layout/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
-</RelativeLayout>
+</RelativeLayout> 
