@@ -10,6 +10,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.gson.Gson;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -21,6 +26,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class TelaNovoLead extends Toolbar_activity
 {
@@ -88,6 +94,8 @@ public class TelaNovoLead extends Toolbar_activity
     public void register_lead(View v) throws IOException
     {
 
+        Gson gson = new Gson();
+
         var nma = ( (TextView)findViewById(R.id.edittext_name) ).getText().toString();
 
         if(nma.matches(""))
@@ -146,32 +154,104 @@ public class TelaNovoLead extends Toolbar_activity
         }
 
         var obs = ( (TextView)findViewById(R.id.edittext_obser) ).getText().toString();
+        Integer[] idx = new Integer[]{Data_master.user_id};
+        String[] idxs = new String[]{Data_master.user_id.toString()};
+
+
+
+        HashMap<String, String> params_ex = new HashMap<>();
+        params_ex.put("campopersonalizado_1_compl_cont",nmr);
+        //params_ex.put("campopersonalizado_3_compl_cont","[\""+Data_master.user_id.toString() +"\"]");
+        params_ex.put("campopersonalizado_3_compl_cont",Data_master.user_id.toString());
+        String ar = "[\""+Data_master.user_id.toString() +"\"]";
+
+        int i = 0;
+        StringBuilder sbex = new StringBuilder();
+
+
+        for (String key : params_ex.keySet()) {
+            try {
+                if (i != 0) {
+                    sbex.append("&");
+                }
+                sbex.append(key).append("=").append(URLEncoder.encode(params_ex.get(key), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+            i++;
+        }
+
+        Log.w("myApp",sbex.toString());
 
 
 
 
 
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
         params.put("origem", "7");
         params.put("token", "b502570a7d57926038efe5c95a234b18");
 
         params.put("nome", nma);
         params.put("emailPrincipal", email);
-        params.put("telefonePrincipal", tel);
-        params.put("escolaOrigem",nme);
+        //params.put("telefonePrincipal", tel);
+        //params.put("escolaOrigem",nme);
+
+
+
+        StringBuilder sbq = new StringBuilder();
+        //sbq.append("{\"campopersonalizado_1_compl_cont\":" + nmr +"," + "\"campopersonalizado_3_compl_cont\":" + "85}");
+
+        JSONObject obj = new JSONObject();
+        JSONObject obj2 = new JSONObject();
+        JSONArray jsr = new JSONArray();
+        try {
+
+            obj.put("campopersonalizado_1_compl_cont",nmr);
+            jsr.put(Data_master.user_id);
+            obj.put("campopersonalizado_3_compl_cont",jsr);
+
+
+            obj2.put("origem", "7");
+            obj2.put("token", "b502570a7d57926038efe5c95a234b18");
+
+            obj2.put("nome", nma);
+            obj2.put("emailPrincipal", email);
+            obj2.put("telefonePrincipal", tel);
+            obj2.put("escolaOrigem",nme);
+            obj2.put("camposPersonalizados",obj);
+
+            Log.w("myApp",obj2.toString());
+
+        }
+        catch (org.json.JSONException j)
+        {
+             Log.w("myApp","Erro de json");
+        }
+
+
+        //params.put("camposPersonalizados",params_ex );
+
+
+        params.put("camposPersonalizados[campopersonalizado_1_compl_cont]",nmr );
+        params.put("camposPersonalizados[campopersonalizado_3_compl_cont][0]",Data_master.user_id.toString() );
 
         //b502570a7d57926038efe5c95a234b18
 
+        Object o = new Object();
+
+
+
 
         StringBuilder sbParams = new StringBuilder();
-        int i = 0;
+        i = 0;
         for (String key : params.keySet()) {
             try {
                 if (i != 0) {
                     sbParams.append("&");
                 }
-                sbParams.append(key).append("=").append(URLEncoder.encode(params.get(key), "UTF-8"));
+                sbParams.append(key).append("=").append(URLEncoder.encode(params.get(key).toString(), "UTF-8"));
             } catch (UnsupportedEncodingException e) {
+
                 e.printStackTrace();
             }
             i++;
@@ -189,7 +269,10 @@ public class TelaNovoLead extends Toolbar_activity
         conn.setConnectTimeout(15000);
         conn.connect();
 
-        String paramsString = sbParams.toString();
+
+
+        Log.w("myApp",obj2.toString());
+        String paramsString =  sbParams.toString();
         DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
         wr.writeBytes(paramsString);
         wr.flush();
@@ -204,6 +287,7 @@ public class TelaNovoLead extends Toolbar_activity
         }
 
         Log.w("myAPP","Final do request");
+        Log.w("myAPP",result.toString());
 
 
     }

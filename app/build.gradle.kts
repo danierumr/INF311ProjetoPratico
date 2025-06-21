@@ -37,11 +37,17 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
+    implementation(libs.gson)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
     implementation("androidx.cardview:cardview:1.0.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("de.hdodenhof:circleimageview:3.1.0")
+
+
+
+
 
 }

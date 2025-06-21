@@ -4,6 +4,8 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import org.json.JSONObject;
+
 import java.util.Date;
 
 public class Contato implements Parcelable {
@@ -21,6 +23,8 @@ public class Contato implements Parcelable {
 
     public Date ultimo_contato;
 
+    public int id;
+
 
     public Contato(String n,String e,String t,String r,String i,String s,String esc,Date d)
     {
@@ -32,6 +36,29 @@ public class Contato implements Parcelable {
         serie=s;
         escola = esc;
         ultimo_contato=d;
+        id=0;
+
+    }
+
+    public Contato(JSONObject ob)
+    {
+       try
+       {
+           nome=ob.getString("nome");
+           email=ob.getString("email");
+           telefone=ob.getString("telefone");
+           responsavel=ob.getString("campopersonalizado_1_compl_cont");;
+           //interesse="i";
+           //serie=s;
+           escola = ob.getString("escolaorigem");//
+           ultimo_contato=new Date();
+           id=ob.getInt("id");
+       }
+
+       catch (org.json.JSONException j)
+       {
+
+       }
 
     }
 

@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
@@ -54,12 +55,18 @@ public class Tela_leads extends Toolbar_activity
         Contato Joao_android = new Contato("Joao Android II","joaoandroid2@gmail.com",
                 "38923237","Joao Android","Matricula imediata","23 ano","Escola 2",new Date());
 
-        contatos.add(Joao_silva);
+        /*contatos.add(Joao_silva);
         contatos.add(Ana_silva);
         contatos.add(Joao_android);
         all_contatos.add(Joao_silva);
         all_contatos.add(Ana_silva);
-        all_contatos.add(Joao_android);
+        all_contatos.add(Joao_android);*/
+
+        var app= (App_main) getApplication();
+
+        var cdms = app.get_leads();
+        all_contatos =new ArrayList<Contato>(cdms);
+        contatos = cdms;
 
 
         for(int a=0;a<contatos.size();a++)
@@ -68,7 +75,11 @@ public class Tela_leads extends Toolbar_activity
 
         }
 
+        add_spacer();
+
         SearchView sv = (SearchView) findViewById(R.id.lead_search_bar);
+
+        sv.setIconified(false);
 
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -235,6 +246,9 @@ public class Tela_leads extends Toolbar_activity
         tg=tg.toLowerCase();
 
 
+        Log.w("myApp",all_contatos.toString());
+
+
 
 
 
@@ -247,6 +261,23 @@ public class Tela_leads extends Toolbar_activity
                      add_lead_card(all_contatos.get(a));
              }
         }
+    }
+    public void add_spacer()
+    {
+
+        int dp_50 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 50, getResources().getDisplayMetrics());
+        LinearLayout ln = findViewById(R.id.lead_scroll_linear2);
+
+
+
+        View v = new View(this);
+
+        RelativeLayout.LayoutParams v_para = new RelativeLayout.LayoutParams(CardView.LayoutParams.MATCH_PARENT,dp_50);
+
+        v.setLayoutParams(v_para);
+
+
+        ln.addView(v);
     }
 
 

@@ -160,10 +160,11 @@
     <ScrollView
         android:id="@+id/lead_scroll_view2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_below="@+id/lead_scroll_view"
         android:layout_marginTop="16dp"
         android:background="@color/background_white"
+        android:layout_above="@id/leads_div1"
 
         >
 
@@ -174,16 +175,34 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
+
         </LinearLayout>
+
+
+
+
 
     </ScrollView>
 
+
+
+
+
+
+    <include layout="@layout/toolbar"
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:elevation="25dp" />
 
     <com.google.android.material.divider.MaterialDivider
         android:id="@+id/leads_div1"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@id/lead_scroll_view2"
+        android:layout_above="@id/leads_btn"
+
         >
 
     </com.google.android.material.divider.MaterialDivider>
@@ -193,16 +212,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/lead_btn"
-        android:layout_below="@id/leads_div1"
+        android:layout_above="@id/toolbar"
         >
 
     </Button>
-
-    <include layout="@layout/toolbar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:elevation="25dp" />
 
 
 

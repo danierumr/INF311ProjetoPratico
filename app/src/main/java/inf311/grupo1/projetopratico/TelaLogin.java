@@ -43,6 +43,9 @@ public class TelaLogin extends AppCompatActivity
         Intent a = new Intent(getBaseContext(), TelaDashboard.class);
         a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 
+        var app= (App_main) getApplication();
+        app.update();
+
         startActivity(a);
     }
 }

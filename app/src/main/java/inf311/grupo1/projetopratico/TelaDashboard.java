@@ -48,9 +48,13 @@ public class TelaDashboard extends Toolbar_activity
 
         //@+id/dash_scroll_atencao
 
+        var app= (App_main) getApplication();
 
 
-        contatos = new ArrayList<Contato>();
+
+
+
+        contatos = app.get_leads();
         cont_dict = new HashMap<Integer,Contato>();
 
         Contato Joao_silva = new Contato("Joao silva","joaosilva@gmail.com",
@@ -62,15 +66,35 @@ public class TelaDashboard extends Toolbar_activity
         Contato Joao_android = new Contato("Joao Android II","joaoandroid2@gmail.com",
                 "38923237","Joao Android","Matricula imediata","23 ano","Escola 2",new Date());
 
-        contatos.add(Joao_silva);
-        contatos.add(Ana_silva);
-        contatos.add(Joao_android);
+        //contatos.add(Joao_silva);
+        //contatos.add(Ana_silva);
+        //contatos.add(Joao_android);
 
 
         for(int a=0;a<contatos.size();a++)
         {
             add_lead_card(contatos.get(a));
         }
+
+
+
+        //"@+id/dash_grid_tv3_num"
+
+        var its = (TextView) findViewById(R.id.dash_grid_tv3_num);
+        var txcv = (TextView) findViewById(R.id.dash_grid_tv1_num);
+
+
+        Float conv_rate = ( (float)(app.conversions)/(float)(app.iteractions)) * 100.0f;
+        conv_rate = Math.round(conv_rate*10) /10.0f;
+
+        its.setText(app.iteractions.toString());
+        txcv.setText(conv_rate.toString() + "%");
+
+
+        //Data_master.get_processos();
+
+
+
 
 
 
@@ -175,6 +199,7 @@ public class TelaDashboard extends Toolbar_activity
 
     }
 
+
     public void to_details(View v)
     {
         Contato c = cont_dict.get(v.getId());
@@ -197,6 +222,7 @@ public class TelaDashboard extends Toolbar_activity
     }
 
     public void funil_cap(View view) {
+
         Intent it = new Intent(this, TelaFunil.class);
         startActivity(it);
     }

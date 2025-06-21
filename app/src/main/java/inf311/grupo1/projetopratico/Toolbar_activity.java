@@ -13,6 +13,7 @@ public class Toolbar_activity extends AppCompatActivity
 {
 
     Toolbar tb;
+    public Data_master dm;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -27,6 +28,8 @@ public class Toolbar_activity extends AppCompatActivity
         setSupportActionBar(tb);
 
         tb.setElevation(25.0f);
+
+        dm = new Data_master();
     }
 
     public void novo_lead(View v)
