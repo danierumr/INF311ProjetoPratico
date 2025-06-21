@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1052455723434",
+    "firebase_url": "https://inf311-projeto-final-db-default-rtdb.firebaseio.com",
+    "project_id": "inf311-projeto-final-db",
+    "storage_bucket": "inf311-projeto-final-db.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1052455723434:android:64d124cf0eec7a09ae0bd3",
+        "android_client_info": {
+          "package_name": "inf311.grupo1.projetopratico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1052455723434-84nc9kmuf2m6kqqh23bqodvj7h4v36qa.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDiQF-3KjNdZUGY73xndyZahMuDexm9CBs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1052455723434-84nc9kmuf2m6kqqh23bqodvj7h4v36qa.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -15,68 +15,23 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.INF311ProjetoPratico"
-
         tools:targetApi="31">
+        
+        <!-- Activity principal com fragments -->
         <activity
-            android:name=".MainActivity"
+            android:name=".MainActivityNova"
             android:exported="true">
-
         </activity>
 
-        <activity
-            android:name=".TelaDashboard"
-            android:exported="true">
-
-        </activity>
-
-        <activity
-            android:name=".TelaNovoLead"
-            android:exported="true">
-
-        </activity>
-
+        <!-- Activity de login - ponto de entrada -->
         <activity
             android:name=".TelaLogin"
             android:exported="true">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
-         </activity>
-
-        <activity
-            android:name=".MetricasDaEquipe"
-            android:exported="true">
         </activity>
-
-        <activity
-            android:name=".Perfil"
-            android:exported="true">
-        </activity>
-
-        <activity
-            android:name=".TelaDetalhesLead"
-            android:exported="true">
-        </activity>
-
-        <activity
-            android:name=".Tela_leads"
-            android:exported="true">
-        </activity>
-
-        <activity
-            android:name=".TelaFunil"
-            android:exported="true">
-        </activity>
-
-        <activity
-            android:name=".TelaAlertas"
-            android:exported="true">
-        </activity>
-
 
     </application>
 

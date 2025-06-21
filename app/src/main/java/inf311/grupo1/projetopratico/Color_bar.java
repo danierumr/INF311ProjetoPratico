@@ -58,7 +58,7 @@ public class Color_bar extends View
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         // Desenha um retângulo preenchido que ocupa toda a View
-        canvas.drawRoundRect(0, 0, getWidth(), getHeight(),20.0f,20.0f,paint);
+        canvas.drawRect(0, 0, getWidth(), getHeight(), paint);
     }
 
     public void set_color(int c)
