@@ -24,6 +24,7 @@
     <uses-permission android:name="inf311.grupo1.projetopratico.permission.C2D_MESSAGE" />
 
     <application
+        android:name=".App_main"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"

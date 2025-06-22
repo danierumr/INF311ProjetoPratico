@@ -20,8 +20,9 @@ import inf311.grupo1.projetopratico.models.UserProfile;
 import inf311.grupo1.projetopratico.models.UserMetrics;
 import inf311.grupo1.projetopratico.services.UserProfileService;
 import inf311.grupo1.projetopratico.utils.AppConstants;
+import inf311.grupo1.projetopratico.utils.App_fragment;
 
-public class PerfilFragment extends Fragment {
+public class PerfilFragment extends App_fragment {
     
     private static final String TAG = "PerfilFragment";
     

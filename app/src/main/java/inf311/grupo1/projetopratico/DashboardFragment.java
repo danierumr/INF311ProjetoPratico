@@ -19,13 +19,14 @@ import androidx.fragment.app.Fragment;
 import inf311.grupo1.projetopratico.models.DashboardMetrics;
 import inf311.grupo1.projetopratico.services.DashboardDataProvider;
 import inf311.grupo1.projetopratico.utils.AppConstants;
+import inf311.grupo1.projetopratico.utils.App_fragment;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends App_fragment {
 
     private static final String TAG = "DashboardFragment";
 
@@ -146,7 +147,8 @@ public class DashboardFragment extends Fragment {
     private void loadRecentLeads() {
         try {
             contatos = dashboardDataProvider.getLeadsRecentes(userEmail, isAdmin, 
-                                                            AppConstants.LIMITE_LEADS_DASHBOARD);
+                                                            AppConstants.LIMITE_LEADS_DASHBOARD,
+                    app_pointer);
             cont_dict = new HashMap<>();
             
             Log.d(TAG, "Leads recentes carregados: " + contatos.size() + " leads");

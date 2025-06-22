@@ -10,7 +10,9 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
-public class FunilFragment extends Fragment {
+import inf311.grupo1.projetopratico.utils.App_fragment;
+
+public class FunilFragment extends App_fragment {
     
     private static final String TAG = "FunilFragment";
     
