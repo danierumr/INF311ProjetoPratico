@@ -53,36 +53,39 @@
             android:id="@+id/funil_btn_semanal"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:background="@drawable/period_selector_active"
+            android:background="@drawable/filter_button_selector"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
             android:text="Semana"
-            android:textColor="@color/text_primary"
-            android:textSize="14sp" />
+            android:textColor="@color/filter_button_text_selector"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/funil_btn_mensal"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
-            android:background="@drawable/period_selector_active"
+            android:background="@drawable/filter_button_selector"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
             android:text="Mês"
-            android:textColor="@android:color/white"
-            android:textSize="14sp" />
+            android:textColor="@color/filter_button_text_selector"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/funil_btn_trimestral"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
-            android:background="@drawable/period_selector_active"
+            android:background="@drawable/filter_button_selector"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
             android:text="Trimestre"
-            android:textColor="@color/text_primary"
-            android:textSize="14sp" />
+            android:textColor="@color/filter_button_text_selector"
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 
