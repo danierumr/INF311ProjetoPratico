@@ -23,13 +23,14 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import inf311.grupo1.projetopratico.services.LeadsDataProvider;
 import inf311.grupo1.projetopratico.utils.AppConstants;
+import inf311.grupo1.projetopratico.utils.App_fragment;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class LeadsFragment extends Fragment {
+public class LeadsFragment extends App_fragment {
     
     private static final String TAG = "LeadsFragment";
     
@@ -230,12 +231,12 @@ public class LeadsFragment extends Fragment {
         try {
             // Obter leads do provedor de dados
             if ("todos".equals(currentFilter)) {
-                all_contatos = leadsDataProvider.getAllLeads(userEmail, isAdmin);
+                all_contatos = leadsDataProvider.getAllLeads(userEmail, isAdmin,app_pointer);
                 contatos = new ArrayList<>(all_contatos);
             } else {
-                contatos = leadsDataProvider.getLeadsByStatus(userEmail, isAdmin, currentFilter);
+                contatos = leadsDataProvider.getLeadsByStatus(userEmail, isAdmin, currentFilter,app_pointer);
                 if (all_contatos.isEmpty()) {
-                    all_contatos = leadsDataProvider.getAllLeads(userEmail, isAdmin);
+                    all_contatos = leadsDataProvider.getAllLeads(userEmail, isAdmin,app_pointer);
                 }
             }
             
@@ -281,7 +282,7 @@ public class LeadsFragment extends Fragment {
             }
             
             // Buscar leads usando o provedor
-            List<Contato> resultados = leadsDataProvider.searchLeads(userEmail, isAdmin, query.trim());
+            List<Contato> resultados = leadsDataProvider.searchLeads(userEmail, isAdmin, query.trim(),app_pointer);
             
             // Atualizar lista de contatos
             contatos = resultados;
@@ -319,7 +320,7 @@ public class LeadsFragment extends Fragment {
      */
     public void loadLeadsStats() {
         try {
-            LeadsDataProvider.LeadsStats stats = leadsDataProvider.getLeadsStats(userEmail, isAdmin);
+            LeadsDataProvider.LeadsStats stats = leadsDataProvider.getLeadsStats(userEmail, isAdmin,app_pointer);
             
             // TODO: Implementar exibição das estatísticas na interface
             // Por exemplo, atualizar TextViews com os valores das estatísticas

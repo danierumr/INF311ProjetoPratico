@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment;
 
 import inf311.grupo1.projetopratico.services.LeadsDataProvider;
 import inf311.grupo1.projetopratico.utils.AppConstants;
+import inf311.grupo1.projetopratico.utils.App_fragment;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -31,7 +32,7 @@ import java.net.URLEncoder;
 import java.util.Date;
 import java.util.HashMap;
 
-public class NovoLeadFragment extends Fragment {
+public class NovoLeadFragment extends App_fragment {
     
     private static final String TAG = "NovoLeadFragment";
     

@@ -1,5 +1,6 @@
 package inf311.grupo1.projetopratico.services;
 
+import inf311.grupo1.projetopratico.App_main;
 import inf311.grupo1.projetopratico.Contato;
 import inf311.grupo1.projetopratico.models.DashboardMetrics;
 
@@ -53,11 +54,11 @@ public class DashboardDataProvider {
      * Obtém os leads recentes para exibir no dashboard
      * Futuramente este método fará uma chamada à API
      */
-    public List<Contato> getLeadsRecentes(String userEmail, boolean isAdmin, int limite) {
+    public List<Contato> getLeadsRecentes(String userEmail, boolean isAdmin, int limite, App_main app) {
         List<Contato> contatos = new ArrayList<>();
         
         // Simula dados dinâmicos - futuramente virá da API
-        if (isAdmin) {
+        /*if (isAdmin) {
             // Admin vê leads de todos os consultores
             contatos.add(new Contato("Maria Silva", "maria.silva@gmail.com",
                     "31987654321", "José Silva", "Matrícula imediata", "3º EM", 
@@ -83,7 +84,9 @@ public class DashboardDataProvider {
             contatos.add(new Contato("João Android II", "joaoandroid2@gmail.com",
                     "38923237", "João Android", "Matrícula imediata", "2º EM", 
                     "Escola 2", new Date()));
-        }
+        }*/
+
+        contatos = app.get_leads();
         
         // Limitar o número de resultados
         if (contatos.size() > limite) {

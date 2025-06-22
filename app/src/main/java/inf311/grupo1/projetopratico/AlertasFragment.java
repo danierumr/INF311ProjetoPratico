@@ -24,9 +24,10 @@ import inf311.grupo1.projetopratico.adapters.NotificationAdapter;
 import inf311.grupo1.projetopratico.models.Notification;
 import inf311.grupo1.projetopratico.services.NotificationService;
 import inf311.grupo1.projetopratico.utils.AppConstants;
+import inf311.grupo1.projetopratico.utils.App_fragment;
 import inf311.grupo1.projetopratico.utils.NotificationPermissionHelper;
 
-public class AlertasFragment extends Fragment implements 
+public class AlertasFragment extends App_fragment implements
     NotificationAdapter.OnNotificationClickListener,
     NotificationAdapter.OnNotificationActionListener {
     

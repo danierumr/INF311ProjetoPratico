@@ -1,5 +1,6 @@
 package inf311.grupo1.projetopratico.services;
 
+import inf311.grupo1.projetopratico.App_main;
 import inf311.grupo1.projetopratico.Contato;
 import inf311.grupo1.projetopratico.utils.AppConstants;
 
@@ -24,16 +25,16 @@ public class LeadsDataProvider {
      * Obtém todos os leads do usuário
      * Futuramente este método fará uma chamada à API
      */
-    public List<Contato> getAllLeads(String userEmail, boolean isAdmin) {
+    public List<Contato> getAllLeads(String userEmail, boolean isAdmin,App_main app) {
         List<Contato> leads = new ArrayList<>();
         
         // Simula dados dinâmicos - futuramente virá da API
         if (isAdmin) {
             // Admin vê leads de todos os consultores
-            leads.addAll(getAdminLeads());
+            leads.addAll(getAdminLeads(app));
         } else {
             // Consultor vê apenas seus leads
-            leads.addAll(getConsultorLeads(userEmail));
+            leads.addAll(getConsultorLeads(userEmail,app));
         }
         
         return leads;
@@ -43,8 +44,8 @@ public class LeadsDataProvider {
      * Obtém leads filtrados por status
      * Futuramente este método fará uma chamada à API
      */
-    public List<Contato> getLeadsByStatus(String userEmail, boolean isAdmin, String status) {
-        List<Contato> todosLeads = getAllLeads(userEmail, isAdmin);
+    public List<Contato> getLeadsByStatus(String userEmail, boolean isAdmin, String status,App_main app) {
+        List<Contato> todosLeads = getAllLeads(userEmail, isAdmin,app);
         List<Contato> leadsFiltrados = new ArrayList<>();
         
         for (Contato lead : todosLeads) {
@@ -60,8 +61,9 @@ public class LeadsDataProvider {
      * Busca leads por nome ou email
      * Futuramente este método fará uma chamada à API
      */
-    public List<Contato> searchLeads(String userEmail, boolean isAdmin, String query) {
-        List<Contato> todosLeads = getAllLeads(userEmail, isAdmin);
+    public List<Contato> searchLeads(String userEmail, boolean isAdmin, String query,App_main app) {
+        List<Contato> todosLeads = getAllLeads(userEmail, isAdmin,app
+        );
         List<Contato> resultados = new ArrayList<>();
         
         String queryLower = query.toLowerCase();
@@ -81,8 +83,8 @@ public class LeadsDataProvider {
      * Obtém estatísticas dos leads
      * Futuramente este método fará uma chamada à API
      */
-    public LeadsStats getLeadsStats(String userEmail, boolean isAdmin) {
-        List<Contato> leads = getAllLeads(userEmail, isAdmin);
+    public LeadsStats getLeadsStats(String userEmail, boolean isAdmin,App_main app) {
+        List<Contato> leads = getAllLeads(userEmail, isAdmin,app);
         
         int novos = 0, contatados = 0, interessados = 0, agendados = 0, 
             visitaram = 0, matriculados = 0;
@@ -105,8 +107,8 @@ public class LeadsDataProvider {
     /**
      * Dados de leads para admin (todos os consultores)
      */
-    private List<Contato> getAdminLeads() {
-        List<Contato> leads = new ArrayList<>();
+    private List<Contato> getAdminLeads(App_main app) {
+        /*List<Contato> leads = new ArrayList<>();
         
         // Leads do Consultor Ana
         leads.add(new Contato("Maria Silva", "maria.silva@gmail.com",
@@ -133,16 +135,16 @@ public class LeadsDataProvider {
         
         leads.add(new Contato("Gabriel Rocha", "gabriel.rocha@gmail.com",
                 "31987654326", "Maria Rocha", "Matrícula imediata", "2º EM",
-                "Instituto Saber", new Date()));
+                "Instituto Saber", new Date()));*/
         
-        return leads;
+        return app.get_leads();
     }
     
     /**
      * Dados de leads para consultor específico
      */
-    private List<Contato> getConsultorLeads(String userEmail) {
-        List<Contato> leads = new ArrayList<>();
+    private List<Contato> getConsultorLeads(String userEmail,App_main app) {
+        /*List<Contato> leads = new ArrayList<>();
         
         // Simula leads específicos do consultor baseado no email
         leads.add(new Contato("João Silva", "joaosilva@gmail.com",
@@ -164,9 +166,9 @@ public class LeadsDataProvider {
         
         leads.add(new Contato("Marcos Oliveira", "marcos.oliveira@gmail.com",
                 "31998877666", "Sandra Oliveira", "Informações", "7º ano",
-                "Escola Progresso", new Date()));
+                "Escola Progresso", new Date()));*/
         
-        return leads;
+        return app.get_leads();
     }
     
     /**

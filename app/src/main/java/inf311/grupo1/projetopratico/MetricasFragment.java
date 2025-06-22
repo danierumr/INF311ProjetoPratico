@@ -30,11 +30,12 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import inf311.grupo1.projetopratico.models.ChartData;
 import inf311.grupo1.projetopratico.services.MetricsDataProvider;
 import inf311.grupo1.projetopratico.utils.AppConstants;
+import inf311.grupo1.projetopratico.utils.App_fragment;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MetricasFragment extends Fragment {
+public class MetricasFragment extends App_fragment {
     
     private static final String TAG = "MetricasFragment";
     

@@ -15,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.firebase.auth.FirebaseUser;
 
 import inf311.grupo1.projetopratico.services.NotificationService;
+import inf311.grupo1.projetopratico.utils.App_fragment;
 import inf311.grupo1.projetopratico.utils.NotificationPermissionHelper;
 
 public class MainActivityNova extends AppCompatActivity {
@@ -101,16 +102,16 @@ public class MainActivityNova extends AppCompatActivity {
     private void getUserData() {
         Intent intent = getIntent();
         if (intent != null) {
-            isAdmin = intent.getBooleanExtra("is_admin", false);
+            Data_master.admin  =isAdmin = intent.getBooleanExtra("is_admin", false);
             userEmail = intent.getStringExtra("user_email");
-            userUid = intent.getStringExtra("user_uid");
+            Data_master.user_id = userUid = intent.getStringExtra("user_uid");
         }
         
         if (userEmail == null || userUid == null) {
             FirebaseUser currentUser = firebaseManager.getCurrentUser();
             if (currentUser != null) {
                 userEmail = currentUser.getEmail();
-                userUid = currentUser.getUid();
+                Data_master.user_id = userUid = currentUser.getUid();
             }
         }
         
@@ -237,54 +238,64 @@ public class MainActivityNova extends AppCompatActivity {
      * Cria um fragment baseado na tag fornecida
      */
     private Fragment createFragment(String tag, Bundle userData) {
-        Fragment fragment = null;
+        App_fragment fragment = null;
+
+        var app = (App_main) getApplication();
         
         switch (tag) {
             case DASHBOARD_FRAGMENT:
             case "dashboard":
                 fragment = new DashboardFragment();
+                fragment.app_pointer = app;
                 Log.d(TAG, "Criando DashboardFragment");
                 break;
                 
             case LEADS_FRAGMENT:
             case "leads":
                 fragment = new LeadsFragment();
+                fragment.app_pointer = app;
                 Log.d(TAG, "Criando LeadsFragment");
                 break;
                 
             case NOVO_LEAD_FRAGMENT:
             case "novo_lead":
                 fragment = new NovoLeadFragment();
+                fragment.app_pointer = app;
                 Log.d(TAG, "Criando NovoLeadFragment");
                 break;
                 
             case DETALHES_LEAD_FRAGMENT:
             case "detalhes_lead":
                 fragment = new DetalhesLeadFragment();
+                fragment.app_pointer = app;
                 Log.d(TAG, "Criando DetalhesLeadFragment");
                 break;
                 
             case PERFIL_FRAGMENT:
             case "perfil":
                 fragment = new PerfilFragment();
+                fragment.app_pointer = app;
                 Log.d(TAG, "Criando PerfilFragment");
                 break;
                 
             case METRICAS_FRAGMENT:
             case "metricas":
                 fragment = new MetricasFragment();
+                fragment.app_pointer = app;
                 Log.d(TAG, "Criando MetricasFragment");
                 break;
                 
             case ALERTAS_FRAGMENT:
             case "alertas":
                 fragment = new AlertasFragment();
+                fragment.app_pointer = app;
                 Log.d(TAG, "Criando AlertasFragment");
                 break;
                 
             case FUNIL_FRAGMENT:
             case "funil":
                 fragment = new FunilFragment();
+                fragment.app_pointer = app;
                 Log.d(TAG, "Criando FunilFragment");
                 break;
                 

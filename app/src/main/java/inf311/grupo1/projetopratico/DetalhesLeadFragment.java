@@ -16,7 +16,9 @@ import androidx.fragment.app.Fragment;
 
 import java.util.Date;
 
-public class DetalhesLeadFragment extends Fragment {
+import inf311.grupo1.projetopratico.utils.App_fragment;
+
+public class DetalhesLeadFragment extends App_fragment {
     
     private static final String TAG = "DetalhesLeadFragment";
     
