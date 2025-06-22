@@ -14,11 +14,15 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import inf311.grupo1.projetopratico.services.NotificationService;
+import inf311.grupo1.projetopratico.utils.NotificationPermissionHelper;
+
 public class MainActivityNova extends AppCompatActivity {
     
     private static final String TAG = "MainActivityNova";
     
     private FirebaseManager firebaseManager;
+    private NotificationService notificationService;
     private Toolbar toolbar;
     private FragmentManager fragmentManager;
     
@@ -42,7 +46,7 @@ public class MainActivityNova extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_nova);
         
-        Log.d(TAG, "MainActivityNova iniciada");
+        Log.d(TAG, "=== MainActivityNova INICIADA ===");
         
         firebaseManager = FirebaseManager.getInstance();
         
@@ -51,8 +55,18 @@ public class MainActivityNova extends AppCompatActivity {
         }
         
         getUserData();
+        
+        // Verificar e solicitar permissões ANTES de inicializar notificações
+        checkAndRequestPermissions();
+        
+        initializeNotificationService();
         setupToolbar();
         setupFragmentManager();
+        
+        // Verificar se deve abrir a aba de notificações
+        if (getIntent().getBooleanExtra("open_notifications", false)) {
+            currentFragmentTag = ALERTAS_FRAGMENT;
+        }
         
         if (savedInstanceState == null) {
             loadInitialFragment();
@@ -104,6 +118,34 @@ public class MainActivityNova extends AppCompatActivity {
     }
     
     /**
+     * Verifica e solicita permissões necessárias
+     */
+    private void checkAndRequestPermissions() {
+        Log.d(TAG, "=== VERIFICANDO PERMISSÕES ===");
+        
+        // Verificação completa de permissões
+        NotificationPermissionHelper.performCompleteCheck(this);
+        
+        // Log do status atual
+        String status = NotificationPermissionHelper.getNotificationStatus(this);
+        Log.d(TAG, status);
+    }
+    
+    /**
+     * Inicializa o serviço de notificações
+     */
+    private void initializeNotificationService() {
+        try {
+            Log.d(TAG, "=== INICIALIZANDO SERVIÇO DE NOTIFICAÇÕES ===");
+            notificationService = NotificationService.getInstance();
+            notificationService.initializeForCurrentUser();
+            Log.d(TAG, "✅ Serviço de notificações inicializado");
+        } catch (Exception e) {
+            Log.e(TAG, "❌ Erro ao inicializar serviço de notificações", e);
+        }
+    }
+    
+    /**
      * Configura a toolbar
      */
     private void setupToolbar() {
@@ -128,13 +170,19 @@ public class MainActivityNova extends AppCompatActivity {
     }
     
     /**
-     * Carrega o fragment inicial (Dashboard)
+     * Carrega o fragment inicial
      */
     private void loadInitialFragment() {
+        // Se deve abrir notificações, carregar AlertasFragment
+        if (ALERTAS_FRAGMENT.equals(currentFragmentTag)) {
+            navigateToFragment(ALERTAS_FRAGMENT, null);
+            Log.d(TAG, "Fragment inicial: Alertas (via notificação)");
+        } else {
         // Forçar carregamento do dashboard independentemente do estado atual
         currentFragmentTag = null; // Resetar para garantir carregamento
         navigateToFragment(DASHBOARD_FRAGMENT, null);
-        Log.d(TAG, "Fragment inicial carregado");
+            Log.d(TAG, "Fragment inicial: Dashboard");
+        }
     }
     
     /**
@@ -168,7 +216,6 @@ public class MainActivityNova extends AppCompatActivity {
         
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         
-        // Aplicar animações contextuais baseadas no tipo de transição
         applyContextualAnimations(transaction, fragmentTag, currentFragmentTag);
         
         transaction.replace(R.id.fragment_container, fragment, fragmentTag);
@@ -476,5 +523,37 @@ public class MainActivityNova extends AppCompatActivity {
             R.anim.slide_in_left,
             R.anim.slide_out_right
         );
+    }
+    
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        
+        if (requestCode == NotificationPermissionHelper.REQUEST_NOTIFICATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == android.content.pm.PackageManager.PERMISSION_GRANTED) {
+                Log.d(TAG, "✅ Permissão de notificação concedida");
+                // Reinicializar serviço de notificações
+                initializeNotificationService();
+            } else {
+                Log.w(TAG, "❌ Permissão de notificação negada");
+                // Mostrar explicação ao usuário
+                showPermissionExplanation();
+            }
+        }
+    }
+    
+    /**
+     * Mostra explicação sobre a importância das permissões
+     */
+    private void showPermissionExplanation() {
+        new android.app.AlertDialog.Builder(this)
+            .setTitle("Permissão de Notificação")
+            .setMessage("Para receber alertas importantes sobre leads e atividades, é necessário permitir notificações.\n\n" +
+                       "Você pode habilitar nas configurações do aplicativo.")
+            .setPositiveButton("Ir para Configurações", (dialog, which) -> {
+                NotificationPermissionHelper.openNotificationSettings(this);
+            })
+            .setNegativeButton("Agora Não", null)
+            .show();
     }
 } 

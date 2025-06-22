@@ -2,6 +2,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <!-- Cor principal para compatibilidade -->
+    <color name="colorPrimary">#14b8a6</color>
     <!-- Cores Primárias -->
     <color name="primary_green">#14b8a6</color>
     <color name="primary_green_dark">#388E3C</color>
@@ -31,6 +33,9 @@
     <!-- Cores Específicas -->
     <color name="logout_red">#F44336</color>
     <color name="divider_color">#E0E0E0</color>
+    
+    <!-- Cores para notificações -->
+    <color name="notification_unread_bg">#E3F2FD</color>
 
     <!-- Cores de Transparência -->
     <color name="transparent">#00000000</color>

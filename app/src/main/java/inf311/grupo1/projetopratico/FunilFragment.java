@@ -145,9 +145,7 @@ public class FunilFragment extends Fragment {
      */
     private void ativarBotao(Button botao) {
         if (botao != null) {
-            botao.setTextColor(Color.WHITE);
-            // Aqui você pode definir o background ativo se necessário
-            // botao.setBackgroundResource(R.drawable.period_selector_active);
+            botao.setSelected(true);
         }
     }
     
@@ -156,9 +154,7 @@ public class FunilFragment extends Fragment {
      */
     private void desativarBotao(Button botao) {
         if (botao != null) {
-            botao.setTextColor(getResources().getColor(R.color.text_primary));
-            // Aqui você pode definir o background inativo se necessário
-            // botao.setBackgroundResource(R.drawable.period_selector_inactive);
+            botao.setSelected(false);
         }
     }
     
