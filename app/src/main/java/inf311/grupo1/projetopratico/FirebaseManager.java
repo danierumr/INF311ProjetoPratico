@@ -6,10 +6,17 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Classe utilitária para gerenciar operações do Firebase
@@ -20,6 +27,7 @@ public class FirebaseManager {
     private static final String TAG = "FirebaseManager";
     private static FirebaseManager instance;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
     
     // Interfaces para callbacks
     public interface AuthCallback {
@@ -32,11 +40,17 @@ public class FirebaseManager {
         void onUserNotLoggedIn();
     }
     
+    public interface UserDataCallback {
+        void onUserDataLoaded(boolean isAdmin, String name, String email);
+        void onError(String errorMessage);
+    }
+    
     /**
      * Construtor privado para implementar Singleton
      */
     private FirebaseManager() {
         mAuth = FirebaseAuth.getInstance();
+        db = FirebaseFirestore.getInstance();
     }
     
     /**
@@ -235,5 +249,129 @@ public class FirebaseManager {
     public boolean isEmailVerified() {
         FirebaseUser user = getCurrentUser();
         return user != null && user.isEmailVerified();
+    }
+    
+    /**
+     * Busca dados do usuário no Firestore
+     * @param userUid UID do usuário
+     * @param callback Callback para retornar os dados
+     */
+    public void getUserData(String userUid, UserDataCallback callback) {
+        if (userUid == null || userUid.isEmpty()) {
+            Log.e(TAG, "UID do usuário é nulo ou vazio");
+            if (callback != null) {
+                callback.onError("UID do usuário inválido");
+            }
+            return;
+        }
+        
+        Log.d(TAG, "Buscando dados do usuário: " + userUid);
+        
+        db.collection("users")
+                .document(userUid)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot document) {
+                        if (document.exists()) {
+                            Log.d(TAG, "Documento do usuário encontrado");
+                            
+                            // Extrair dados do documento
+                            Boolean isAdmin = document.getBoolean("isAdmin");
+                            String name = document.getString("name");
+                            String email = document.getString("email");
+                            
+                            // Valores padrão se os campos não existirem
+                            boolean adminStatus = isAdmin != null ? isAdmin : false;
+                            String userName = name != null ? name : "";
+                            String userEmail = email != null ? email : "";
+                            
+                            Log.d(TAG, "Dados do usuário - Admin: " + adminStatus + ", Nome: " + userName);
+                            
+                            if (callback != null) {
+                                callback.onUserDataLoaded(adminStatus, userName, userEmail);
+                            }
+                        } else {
+                            Log.w(TAG, "Documento do usuário não encontrado");
+                            if (callback != null) {
+                                callback.onError("Dados do usuário não encontrados. Entre em contato com o administrador.");
+                            }
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Erro ao buscar dados do usuário", e);
+                        if (callback != null) {
+                            callback.onError("Erro ao carregar dados do usuário: " + e.getMessage());
+                        }
+                    }
+                });
+    }
+    
+    /**
+     * Busca dados do usuário atual no Firestore
+     * @param callback Callback para retornar os dados
+     */
+    public void getCurrentUserData(UserDataCallback callback) {
+        FirebaseUser currentUser = getCurrentUser();
+        if (currentUser == null) {
+            Log.e(TAG, "Nenhum usuário logado");
+            if (callback != null) {
+                callback.onError("Usuário não está logado");
+            }
+            return;
+        }
+        
+        getUserData(currentUser.getUid(), callback);
+    }
+    
+    /**
+     * Cria ou atualiza dados do usuário no Firestore
+     * @param userUid UID do usuário
+     * @param name Nome do usuário
+     * @param email Email do usuário
+     * @param isAdmin Se o usuário é administrador
+     * @param callback Callback para resultado da operação
+     */
+    public void createOrUpdateUserData(String userUid, String name, String email, boolean isAdmin, AuthCallback callback) {
+        if (userUid == null || userUid.isEmpty()) {
+            Log.e(TAG, "UID do usuário é nulo ou vazio");
+            if (callback != null) {
+                callback.onError("UID do usuário inválido");
+            }
+            return;
+        }
+        
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("name", name);
+        userData.put("email", email);
+        userData.put("isAdmin", isAdmin);
+        userData.put("createdAt", System.currentTimeMillis());
+        
+        Log.d(TAG, "Criando/atualizando dados do usuário: " + userUid);
+        
+        db.collection("users")
+                .document(userUid)
+                .set(userData)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.d(TAG, "Dados do usuário salvos com sucesso");
+                        if (callback != null) {
+                            callback.onSuccess(getCurrentUser());
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e(TAG, "Erro ao salvar dados do usuário", e);
+                        if (callback != null) {
+                            callback.onError("Erro ao salvar dados: " + e.getMessage());
+                        }
+                    }
+                });
     }
 } 

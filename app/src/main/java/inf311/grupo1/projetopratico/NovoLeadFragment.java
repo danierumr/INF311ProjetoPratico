@@ -252,7 +252,7 @@ public class NovoLeadFragment extends App_fragment {
             Contato novoLead = criarContatoFromForm();
             
             // Salvar usando o provedor de dados
-            boolean sucesso = leadsDataProvider.adicionarLead(novoLead, userEmail, isAdmin);
+            boolean sucesso = leadsDataProvider.adicionarLead(novoLead);
             
             if (sucesso) {
                 showSuccessDialog("Lead cadastrado com sucesso!");

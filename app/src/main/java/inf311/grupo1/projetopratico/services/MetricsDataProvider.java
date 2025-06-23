@@ -159,26 +159,7 @@ public class MetricsDataProvider {
         if (email == null) return "Consultor Atual";
         
         String nome = email.split("@")[0];
-        // Simula um nome completo baseado no email
-        switch (nome.toLowerCase()) {
-            case "ana":
-            case "ana.silva":
-                return "Ana Silva";
-            case "carlos":
-            case "carlos.santos":
-                return "Carlos Santos";
-            case "juliana":
-            case "juliana.costa":
-                return "Juliana Costa";
-            case "roberto":
-            case "roberto.lima":
-                return "Roberto Lima";
-            case "mariana":
-            case "mariana.souza":
-                return "Mariana Souza";
-            default:
-                return nome.substring(0, 1).toUpperCase() + nome.substring(1) + " Silva";
-        }
+        return nome.substring(0, 1).toUpperCase() + nome.substring(1);
     }
     
     /**

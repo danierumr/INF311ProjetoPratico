@@ -49,15 +49,23 @@
             </intent-filter>
         </activity>
 
-        <!-- Activity de login - ponto de entrada -->
+        <!-- Activity de splash - ponto de entrada -->
         <activity
-            android:name=".TelaLogin"
+            android:name=".SplashActivity"
             android:exported="true"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <!-- Activity de login -->
+        <activity
+            android:name=".TelaLogin"
+            android:exported="true"
+            android:screenOrientation="portrait">
         </activity>
 
         <!-- Firebase Cloud Messaging Service -->

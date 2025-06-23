@@ -11,6 +11,6 @@
     <item android:state_focused="true" android:color="@color/white" />
     
     <!-- Texto normal/não selecionado - verde para contraste com fundo branco -->
-    <item android:color="@color/primary_green" />
+    <item android:color="@color/white" />
     
 </selector> 

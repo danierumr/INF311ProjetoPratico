@@ -37,9 +37,11 @@ public class DashboardFragment extends App_fragment {
     private boolean isAdmin = false;
     private String userEmail;
     private String userUid;
+    private String userName;
     
     // Views
     private LinearLayout dashScrollLinear2;
+    private TextView welcomeMessage;
     
     // Serviços de dados
     private DashboardDataProvider dashboardDataProvider;
@@ -100,9 +102,10 @@ public class DashboardFragment extends App_fragment {
             isAdmin = args.getBoolean(AppConstants.KEY_IS_ADMIN, false);
             userEmail = args.getString(AppConstants.KEY_USER_EMAIL);
             userUid = args.getString(AppConstants.KEY_USER_UID);
+            userName = args.getString(AppConstants.KEY_USER_NAME);
         }
         
-        Log.d(TAG, "Dados do usuário - Email: " + userEmail + ", Admin: " + isAdmin);
+        Log.d(TAG, "Dados do usuário - Email: " + userEmail + ", Nome: " + userName + ", Admin: " + isAdmin);
     }
     
     /**
@@ -110,6 +113,7 @@ public class DashboardFragment extends App_fragment {
      */
     private void initializeViews(View view) {
         dashScrollLinear2 = view.findViewById(R.id.dash_scroll_linear2);
+        welcomeMessage = view.findViewById(R.id.welcome_message);
         Log.d(TAG, "Views inicializadas");
     }
     
@@ -197,12 +201,27 @@ public class DashboardFragment extends App_fragment {
      * Mostra informações do usuário autenticado
      */
     private void displayUserInfo() {
-        if (userEmail != null) {
-            String welcomeMessage = "Bem-vindo, " + userEmail + 
-                    (isAdmin ? " (Administrador)" : " (Consultor)");
-            Toast.makeText(getContext(), welcomeMessage, Toast.LENGTH_LONG).show();
-            
-            Log.d(TAG, "Usuário logado - Email: " + userEmail + ", Admin: " + isAdmin);
+        if (userName != null && !userName.isEmpty()) {
+            // Usar o nome do usuário se disponível
+            String welcomeText = "Bem-vindo, " + userName + "!";
+            if (welcomeMessage != null) {
+                welcomeMessage.setText(welcomeText);
+                Log.d(TAG, "Mensagem de boas-vindas definida: " + welcomeText);
+            }
+        } else if (userEmail != null) {
+            // Fallback para usar o email se o nome não estiver disponível
+            String emailName = userEmail.split("@")[0];
+            String welcomeText = "Bem-vindo, " + emailName + "!";
+            if (welcomeMessage != null) {
+                welcomeMessage.setText(welcomeText);
+                Log.d(TAG, "Mensagem de boas-vindas definida com email: " + welcomeText);
+            }
+        } else {
+            // Fallback genérico
+            if (welcomeMessage != null) {
+                welcomeMessage.setText("Bem-vindo!");
+                Log.d(TAG, "Mensagem de boas-vindas genérica definida");
+            }
         }
     }
     

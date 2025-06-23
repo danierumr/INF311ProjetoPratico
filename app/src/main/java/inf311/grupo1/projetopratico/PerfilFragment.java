@@ -47,12 +47,8 @@ public class PerfilFragment extends App_fragment {
     private TextView tvEsteMes;
     
     private TextView tvEmail;
-    private TextView tvTelefone;
     private TextView tvCargoInfo;
     
-    private LinearLayout llConfigEquipe;
-    private LinearLayout llConfigConta;
-    private LinearLayout llAjudaSuporte;
     private LinearLayout llSair;
 
     @Override
@@ -123,13 +119,9 @@ public class PerfilFragment extends App_fragment {
         
         // Informações pessoais
         tvEmail = view.findViewById(R.id.tv_email);
-        tvTelefone = view.findViewById(R.id.tv_telefone);
         tvCargoInfo = view.findViewById(R.id.tv_cargo_info);
         
         // Opções de configuração
-        llConfigEquipe = view.findViewById(R.id.ll_config_equipe);
-        llConfigConta = view.findViewById(R.id.ll_config_conta);
-        llAjudaSuporte = view.findViewById(R.id.ll_ajuda_suporte);
         llSair = view.findViewById(R.id.ll_sair);
         
         Log.d(TAG, "UI inicializada");
@@ -144,33 +136,6 @@ public class PerfilFragment extends App_fragment {
                 @Override
                 public void onClick(View v) {
                     onCameraClick();
-                }
-            });
-        }
-        
-        if (llConfigEquipe != null) {
-            llConfigEquipe.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onConfigEquipeClick();
-                }
-            });
-        }
-        
-        if (llConfigConta != null) {
-            llConfigConta.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onConfigContaClick();
-                }
-            });
-        }
-        
-        if (llAjudaSuporte != null) {
-            llAjudaSuporte.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onAjudaSuporteClick();
                 }
             });
         }
@@ -226,7 +191,6 @@ public class PerfilFragment extends App_fragment {
         if (tvNome != null) tvNome.setText(userProfile.getNomeExibicao());
         if (tvCargo != null) tvCargo.setText(userProfile.getCargoFormatado());
         if (tvEmail != null) tvEmail.setText(userProfile.getEmail());
-        if (tvTelefone != null) tvTelefone.setText(userProfile.getTelefone());
         if (tvCargoInfo != null) tvCargoInfo.setText(userProfile.getCargoFormatado());
         
         Log.d(TAG, "Informações básicas atualizadas para: " + userProfile.getNomeExibicao());
@@ -285,19 +249,14 @@ public class PerfilFragment extends App_fragment {
         if (tvCargo != null) tvCargo.setText(cargo);
         if (tvCargoInfo != null) tvCargoInfo.setText(cargo);
         
-        // Valores padrão para métricas
         if (tvTotalLeads != null) tvTotalLeads.setText("--");
         if (tvConvertidos != null) tvConvertidos.setText("--");
         if (tvTaxaConversao != null) tvTaxaConversao.setText("--");
         if (tvEsteMes != null) tvEsteMes.setText("--");
-        if (tvTelefone != null) tvTelefone.setText("(--) ----------");
         
         Log.d(TAG, "Dados básicos carregados");
     }
     
-    /**
-     * Atualiza as métricas do usuário (método público para compatibilidade)
-     */
     public void updateMetricas(int totalLeads, int convertidos, String taxaConversao, int esteMes) {
         Log.d(TAG, "Atualizando métricas: " + totalLeads + " leads, " + convertidos + " conversões");
         
@@ -307,15 +266,12 @@ public class PerfilFragment extends App_fragment {
         if (tvEsteMes != null) tvEsteMes.setText(String.valueOf(esteMes));
     }
     
-    /**
-     * Atualiza informações pessoais do usuário (método público para compatibilidade)
-     */
-    public void updateUserInfo(String nome, String email, String telefone, String cargo) {
+   
+    public void updateUserInfo(String nome, String email, String cargo) {
         Log.d(TAG, "Atualizando informações do usuário: " + nome);
         
         if (tvNome != null) tvNome.setText(nome);
         if (tvEmail != null) tvEmail.setText(email);
-        if (tvTelefone != null) tvTelefone.setText(telefone);
         if (tvCargo != null) tvCargo.setText(cargo);
         if (tvCargoInfo != null) tvCargoInfo.setText(cargo);
     }
@@ -345,43 +301,6 @@ public class PerfilFragment extends App_fragment {
         
         if (getContext() != null) {
             Toast.makeText(getContext(), "Funcionalidade de trocar foto", Toast.LENGTH_SHORT).show();
-        }
-    }
-    
-    /**
-     * Handler para configurações da equipe
-     */
-    private void onConfigEquipeClick() {
-        Log.d(TAG, "Clique em configurações da equipe");
-        
-        if (getContext() != null) {
-            if (isAdmin) {
-                Toast.makeText(getContext(), "Configurações da Equipe", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(getContext(), "Acesso restrito a administradores", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-    
-    /**
-     * Handler para configurações da conta
-     */
-    private void onConfigContaClick() {
-        Log.d(TAG, "Clique em configurações da conta");
-        
-        if (getContext() != null) {
-            Toast.makeText(getContext(), "Configurações da Conta", Toast.LENGTH_SHORT).show();
-        }
-    }
-    
-    /**
-     * Handler para ajuda e suporte
-     */
-    private void onAjudaSuporteClick() {
-        Log.d(TAG, "Clique em ajuda e suporte");
-        
-        if (getContext() != null) {
-            Toast.makeText(getContext(), "Ajuda e Suporte", Toast.LENGTH_SHORT).show();
         }
     }
     
