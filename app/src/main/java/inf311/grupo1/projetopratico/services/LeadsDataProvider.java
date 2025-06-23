@@ -25,7 +25,7 @@ public class LeadsDataProvider {
      * Obtém todos os leads do usuário
      * Futuramente este método fará uma chamada à API
      */
-    public List<Contato> getAllLeads(String userEmail, boolean isAdmin,App_main app) {
+    public List<Contato> getAllLeads(String userEmail, boolean isAdmin, App_main app) {
         List<Contato> leads = new ArrayList<>();
         
         // Simula dados dinâmicos - futuramente virá da API
@@ -262,18 +262,10 @@ public class LeadsDataProvider {
      * Adiciona um novo lead
      * Futuramente este método fará uma chamada à API
      */
-    public boolean adicionarLead(Contato novoLead, String userEmail, boolean isAdmin) {
+    public boolean adicionarLead(Contato novoLead) {
         try {
-            // TODO: Implementar chamada à API para salvar o lead
-            // Por enquanto, simula o salvamento
-            
-            // Validar dados do lead
-            if (novoLead == null || novoLead.nome == null || novoLead.nome.trim().isEmpty()) {
-                return false;
-            }
-            
-            // Simular salvamento bem-sucedido
-            // Em produção, aqui seria feita a chamada à API
+            // Cadastrar o lead via api
+            App_main.adicionarLead(novoLead);
             return true;
             
         } catch (Exception e) {

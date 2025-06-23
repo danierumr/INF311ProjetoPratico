@@ -10,18 +10,20 @@
 
     <LinearLayout
         android:id="@+id/logo_container"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="48dp"
         android:orientation="horizontal"
-        android:gravity="center_vertical">
+        android:gravity="center">
 
         <ImageView
-            android:layout_width="200dp"
-            android:layout_height="100dp"
+            android:layout_width="280dp"
+            android:layout_height="160dp"
             android:src="@drawable/logo_rubeus"
-            android:contentDescription="Logo Rubeus" />
+            android:contentDescription="Logo Rubeus"
+            android:scaleType="centerInside"
+            android:adjustViewBounds="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -100,49 +102,11 @@
             android:textColorHint="@color/text_hint"
             android:layout_marginBottom="32dp" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:id="@+id/linear_layout"
-            android:layout_marginBottom="32dp">
-
-            <Button
-                android:id="@+id/admin_btn"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:text="@string/admin"
-                android:onClick="set_as_admin"
-                android:background="@drawable/button_admin_selector"
-                android:textColor="@color/button_text_selector"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginEnd="8dp"
-                android:elevation="0dp" />
-
-            <Button
-                android:id="@+id/user_btn"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                android:text="@string/user"
-                android:onClick="set_as_user"
-                android:background="@drawable/button_user_selector"
-                android:textColor="@color/button_text_selector"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginStart="8dp"
-                android:elevation="0dp" />
-
-        </LinearLayout>
-
         <Button
             android:id="@+id/login_button"
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:text="@string/do_login"
-            android:onClick="to_dashboard"
             android:background="@drawable/login_button_background"
             android:textColor="@android:color/white"
             android:textSize="16sp"

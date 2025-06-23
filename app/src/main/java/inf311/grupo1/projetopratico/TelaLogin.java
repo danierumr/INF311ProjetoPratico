@@ -24,11 +24,6 @@ public class TelaLogin extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPassword;
     private Button btnLogin;
-    private Button btnAdmin;
-    private Button btnUser;
-    
-    // User type
-    private String userType = "consultor";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,24 +42,7 @@ public class TelaLogin extends AppCompatActivity {
         Log.d(TAG, "TelaLogin inicializada com Firebase Auth");
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Verificar se o usuário já está logado usando FirebaseManager
-        firebaseManager.checkCurrentUser(new FirebaseManager.UserCheckCallback() {
-            @Override
-            public void onUserLoggedIn(FirebaseUser user) {
-                Log.d(TAG, "Usuário já está logado: " + user.getEmail());
-                navigateToDashboard();
-            }
 
-            @Override
-            public void onUserNotLoggedIn() {
-                Log.d(TAG, "Nenhum usuário logado");
-                // Usuário não está logado, continuar na tela de login
-            }
-        });
-    }
 
     /**
      * Inicializa todos os elementos da interface do usuário
@@ -73,11 +51,6 @@ public class TelaLogin extends AppCompatActivity {
         etEmail = findViewById(R.id.email_edit);
         etPassword = findViewById(R.id.password_edit);
         btnLogin = findViewById(R.id.login_button);
-        btnAdmin = findViewById(R.id.admin_btn);
-        btnUser = findViewById(R.id.user_btn);
-        
-        // Configurar estado inicial dos botões
-        setUserTypeButtonsState();
     }
 
     /**
@@ -96,39 +69,6 @@ public class TelaLogin extends AppCompatActivity {
     }
 
     /**
-     * Método chamado quando o botão "Administrador" é clicado
-     */
-    public void set_as_admin(View v) {
-        userType = "administrador";
-        setUserTypeButtonsState();
-        Log.d(TAG, "Tipo de usuário definido como: Administrador");
-    }
-
-    /**
-     * Método chamado quando o botão "Consultor" é clicado
-     */
-    public void set_as_user(View v) {
-        userType = "consultor";
-        setUserTypeButtonsState();
-        Log.d(TAG, "Tipo de usuário definido como: Usuário");
-    }
-
-    /**
-     * Atualiza o estado visual dos botões de tipo de usuário
-     */
-    private void setUserTypeButtonsState() {
-        if (btnAdmin != null && btnUser != null) {
-            if (userType.equals("administrador")) {
-                btnAdmin.setSelected(true);
-                btnUser.setSelected(false);
-            } else {
-                btnAdmin.setSelected(false);
-                btnUser.setSelected(true);
-            }
-        }
-    }
-
-    /**
      * Realiza o processo de login com Firebase usando FirebaseManager
      */
     private void performLogin() {
@@ -140,17 +80,17 @@ public class TelaLogin extends AppCompatActivity {
             return;
         }
 
-        // Mostrar loading (desabilitar botão)
         setLoadingState(true);
 
         // Fazer login usando FirebaseManager
         firebaseManager.signInWithEmail(email, password, new FirebaseManager.AuthCallback() {
             @Override
             public void onSuccess(FirebaseUser user) {
-                setLoadingState(false);
                 Log.d(TAG, "Login realizado com sucesso para: " + user.getEmail());
                 Toast.makeText(TelaLogin.this, "Login realizado com sucesso!", Toast.LENGTH_SHORT).show();
-                navigateToDashboard();
+                
+                // Buscar dados do usuário no Firestore após login bem-sucedido
+                loadUserDataAndNavigate();
             }
 
             @Override
@@ -158,6 +98,33 @@ public class TelaLogin extends AppCompatActivity {
                 setLoadingState(false);
                 Log.e(TAG, "Erro no login: " + errorMessage);
                 Toast.makeText(TelaLogin.this, errorMessage, Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    /**
+     * Busca dados do usuário no Firestore e navega para o dashboard
+     */
+    private void loadUserDataAndNavigate() {
+        firebaseManager.getCurrentUserData(new FirebaseManager.UserDataCallback() {
+            @Override
+            public void onUserDataLoaded(boolean isAdmin, String name, String email) {
+                setLoadingState(false);
+                
+                Log.d(TAG, "Dados do usuário carregados - Admin: " + isAdmin + ", Nome: " + name);
+                
+                Data_master.admin = isAdmin;
+                
+                navigateToDashboard(isAdmin, name, email);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                setLoadingState(false);
+                Log.e(TAG, "Erro ao carregar dados do usuário: " + errorMessage);
+                Toast.makeText(TelaLogin.this, "Erro ao carregar dados do usuário: " + errorMessage, Toast.LENGTH_LONG).show();
+                
+                firebaseManager.signOut();
             }
         });
     }
@@ -211,44 +178,21 @@ public class TelaLogin extends AppCompatActivity {
         if (etPassword != null) {
             etPassword.setEnabled(!isLoading);
         }
-        
-        if (btnAdmin != null) {
-            btnAdmin.setEnabled(!isLoading);
-        }
-        
-        if (btnUser != null) {
-            btnUser.setEnabled(!isLoading);
-        }
     }
 
-    /**
-     * Navega para a tela do dashboard usando a estrutura de fragments
-     */
-    private void navigateToDashboard() {
-        Intent intent = new Intent(this, MainActivityNova.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+    
+    private void navigateToDashboard(boolean isAdmin, String name, String email) {
+        Intent intent = new Intent(TelaLogin.this, MainActivityNova.class);
         
-        // Determinar se é admin baseado no tipo de usuário selecionado
-        boolean isAdmin = userType.equals("administrador");
         intent.putExtra("is_admin", isAdmin);
+        intent.putExtra("user_email", email);
+        intent.putExtra("user_name", name);
+        intent.putExtra("user_uid", firebaseManager.getCurrentUserUid());
         
-        // Passar informações do usuário logado
-        String userEmail = firebaseManager.getCurrentUserEmail();
-        String userUid = firebaseManager.getCurrentUserUid();
-        
-        intent.putExtra("user_email", userEmail);
-        intent.putExtra("user_uid", userUid);
-        
-        Log.d(TAG, "Navegando para MainActivityNova (estrutura de fragments) - Usuário: " + userEmail + ", Admin: " + isAdmin);
+        Log.d(TAG, "Navegando para dashboard - Admin: " + isAdmin + ", Email: " + email);
         
         startActivity(intent);
-        finish(); // Fechar a tela de login
+        finish(); // Finalizar a activity de login
     }
 
-    /**
-     * Método para compatibilidade com o layout existente
-     */
-    public void to_dashboard(View v) {
-        performLogin();
-    }
 }

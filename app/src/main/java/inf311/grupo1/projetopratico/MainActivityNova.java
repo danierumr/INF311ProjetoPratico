@@ -30,6 +30,7 @@ public class MainActivityNova extends AppCompatActivity {
     private boolean isAdmin = false;
     private String userEmail;
     private String userUid;
+    private String userName;
     
     private static final String DASHBOARD_FRAGMENT = "dashboard_fragment";
     private static final String LEADS_FRAGMENT = "leads_fragment";
@@ -104,6 +105,7 @@ public class MainActivityNova extends AppCompatActivity {
         if (intent != null) {
             Data_master.admin  =isAdmin = intent.getBooleanExtra("is_admin", false);
             userEmail = intent.getStringExtra("user_email");
+            userName = intent.getStringExtra("user_name");
             Data_master.user_id = userUid = intent.getStringExtra("user_uid");
         }
         
@@ -115,7 +117,7 @@ public class MainActivityNova extends AppCompatActivity {
             }
         }
         
-        Log.d(TAG, "Dados do usuário - Email: " + userEmail + ", Admin: " + isAdmin);
+        Log.d(TAG, "Dados do usuário - Email: " + userEmail + ", Nome: " + userName + ", Admin: " + isAdmin);
     }
     
     /**
@@ -212,6 +214,7 @@ public class MainActivityNova extends AppCompatActivity {
         }
         userArgs.putString("user_email", userEmail);
         userArgs.putString("user_uid", userUid);
+        userArgs.putString("user_name", userName);
         userArgs.putBoolean("is_admin", isAdmin);
         fragment.setArguments(userArgs);
         

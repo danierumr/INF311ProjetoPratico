@@ -39,6 +39,18 @@
             android:layout_below="@+id/dash_title"
             android:layout_marginTop="4dp" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bem-vindo!"
+            android:id="@+id/welcome_message"
+            android:textSize="16sp"
+            android:textColor="@color/text_white"
+            android:textStyle="bold"
+            android:gravity="start"
+            android:layout_below="@+id/dash_subtitle"
+            android:layout_marginTop="8dp" />
+
     </RelativeLayout>
 
     <ScrollView

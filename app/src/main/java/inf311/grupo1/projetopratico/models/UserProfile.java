@@ -8,14 +8,14 @@ public class UserProfile {
     private String cargo;
     private boolean isAdmin;
     private String urlFoto;
-    private String dataCadastro;
+    private String createdAt;
     private UserMetrics metricas;
     
     public UserProfile() {}
     
     public UserProfile(String uid, String nome, String email, String telefone, 
                       String cargo, boolean isAdmin, String urlFoto, 
-                      String dataCadastro, UserMetrics metricas) {
+                      String createdAt, UserMetrics metricas) {
         this.uid = uid;
         this.nome = nome;
         this.email = email;
@@ -23,7 +23,7 @@ public class UserProfile {
         this.cargo = cargo;
         this.isAdmin = isAdmin;
         this.urlFoto = urlFoto;
-        this.dataCadastro = dataCadastro;
+        this.createdAt = createdAt;
         this.metricas = metricas;
     }
     
@@ -49,8 +49,8 @@ public class UserProfile {
     public String getUrlFoto() { return urlFoto; }
     public void setUrlFoto(String urlFoto) { this.urlFoto = urlFoto; }
     
-    public String getDataCadastro() { return dataCadastro; }
-    public void setDataCadastro(String dataCadastro) { this.dataCadastro = dataCadastro; }
+    public String getcreatedAt() { return createdAt; }
+    public void setcreatedAt(String createdAt) { this.createdAt = createdAt; }
     
     public UserMetrics getMetricas() { return metricas; }
     public void setMetricas(UserMetrics metricas) { this.metricas = metricas; }
