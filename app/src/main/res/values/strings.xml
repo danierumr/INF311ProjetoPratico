@@ -111,7 +111,7 @@
     </string-array>
 
     <string-array name="spinner2_options">
-        <item>pendente</item>
+        <item>Pendente</item>
         <item>Concluido</item>
         <item>Agendado</item>
     </string-array>
