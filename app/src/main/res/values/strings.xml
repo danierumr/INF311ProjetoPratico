@@ -80,4 +80,40 @@
     <string name="lead_filter_matriculados">Matriculados</string>
     <string name="lead_btn"> Adicionar Novo Lead</string>
 
+    <string name="acompanhamento_title">Acompanhamento</string>
+    <string name="acompanhamento_lead_nome">Nome do Lead</string>
+    <string name="acompanhamento_escola">Escola do Lead • Serie do lead</string>
+    <string name="acompanhamento_lead_status">Status:</string>
+    <string name="acompanhamento_registrar_atividade">Registrar nova atividade</string>
+    <string name="acompanhamento_ligacao_btn_text">Ligacao</string>
+    <string name="acompanhamento_email_btn_text">Email</string>
+    <string name="acompanhamento_reuniao_btn_text">Reuniao</string>
+    <string name="acompanhamento_nota_btn_text">Nota</string>
+    <string name="acompanhamento_text_caixa">Descreva a interacao...</string>
+    <string name="acompanhamento_data">Data</string>
+    <string name="acompanhamento_data_placeholder">06/20/2025</string>
+    <string name="acompanhamento_status">Status</string>
+    <string name="acompanhamento_add_atividade_btn">Adicionar atividade</string>
+    <string name="acompanhamento_historico_atividades">Historico de atividades:</string>
+    <string name="acompanhamento_historico_email">email • Concluido • 10:15:00 AM</string>
+    <string name="acompanhamento_historico_descricao">Enviado material informativo sobre a escola e valores.</string>
+    <string name="acompanhamento_proximos_passos">Proximos passos</string>
+    <string name="acompanhamento_proximos_passos_text1">Agendar visita a escola</string>
+    <string name="acompanhamento_proximos_passos_text2">enviar material informativo</string>
+
+    <string-array name="spinner_options">
+        <item>Novo Lead</item>
+        <item>Contatado</item>
+        <item>Interessado</item>
+        <item>Visita agendada</item>
+        <item>Convertido</item>
+        <item>Perdido</item>
+    </string-array>
+
+    <string-array name="spinner2_options">
+        <item>pendente</item>
+        <item>Concluido</item>
+        <item>Agendado</item>
+    </string-array>
+
 </resources>

@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/fragment_acompanhamento"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/background_gray_light"
+    android:fitsSystemWindows="true"
+    tools:context=".AcompanhamentoFragment">
+
+    <RelativeLayout
+        android:id="@+id/acompanhamento_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/primary_green"
+        android:paddingVertical="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
+
+        <TextView
+            android:id="@+id/leads_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="@string/acompanhamento_title"
+            android:textColor="@color/text_white"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/acompanhamento_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/acompanhamento_header"
+        android:background="@color/background_gray_light"
+        android:foregroundGravity="top"
+        android:padding="16dp">
+
+        <RelativeLayout
+            android:id="@+id/acompanhamento_lead_basics"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/acompanhamento_header">
+
+            <TextView
+                android:id="@+id/acompanhamento_lead_nome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="start"
+                android:text="@string/acompanhamento_lead_nome"
+                android:textSize="8pt" />
+
+            <TextView
+                android:id="@+id/acompanhamento_escola"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/acompanhamento_lead_nome"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="start"
+                android:text="@string/dlead_escola"
+
+                />
+
+            <LinearLayout
+                android:id="@+id/acompanhamento_status_lead"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/acompanhamento_escola"
+                android:layout_marginBottom="24dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/acompanhamento_lead_status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="start"
+                    android:text="@string/acompanhamento_lead_status" />
+
+                <Spinner
+                    android:id="@+id/acompanhamento_spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:spinnerMode="dropdown" />
+
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/acompanhamento_div1"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/acompanhamento_status_lead"
+                android:layout_marginTop="2dp">
+
+            </com.google.android.material.divider.MaterialDivider>
+
+            <TextView
+                android:id="@+id/acompanhamento_nova_atividade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/acompanhamento_div1"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="start"
+                android:text="@string/acompanhamento_registrar_atividade"
+                android:textSize="7pt" />
+
+            <HorizontalScrollView
+                android:id="@+id/acompanhamento_horizontal_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/acompanhamento_nova_atividade"
+                android:layout_marginTop="8dp"
+                android:background="@color/background_gray_light">
+
+                <LinearLayout
+                    android:id="@+id/acompanhamento_atividades_container"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/acompanhamento_ligacao_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="@string/acompanhamento_ligacao_btn_text" />
+
+                    <Button
+                        android:id="@+id/acompanhamento_email_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="@string/acompanhamento_email_btn_text" />
+
+                    <Button
+                        android:id="@+id/acompanhamento_reuniao_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="@string/acompanhamento_reuniao_btn_text" />
+
+                    <Button
+                        android:id="@+id/acompanhamento_nota_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:text="@string/acompanhamento_nota_btn_text" />
+
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <EditText
+                android:id="@+id/acompanhamento_descricao"
+                android:layout_width="match_parent"
+                android:layout_height="120dp"
+                android:layout_below="@id/acompanhamento_horizontal_scroll"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="top"
+                android:inputType="text|textMultiLine"
+                android:padding="16dp"
+                android:hint="@string/acompanhamento_text_caixa"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_hint"
+                android:textSize="16sp"
+                android:background="@android:color/transparent" />
+
+            <HorizontalScrollView
+                android:id="@+id/acompanhamento_horizontal_scroll2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/acompanhamento_descricao"
+                android:layout_marginTop="8dp">
+
+                <LinearLayout
+                    android:id="@+id/acompanhamento_abaixo_caixa_texto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:gravity="end"
+                    android:orientation="horizontal">
+
+                    <RelativeLayout
+                        android:id="@+id/acompanhamento_layout_abaixo_caixa_texto"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="80dp"
+                        android:gravity="start">
+
+                        <TextView
+                            android:id="@+id/acompanhamento_data_texto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="@string/acompanhamento_data" />
+
+                        <Button
+                            android:id="@+id/acompanhamento_calendario_btn"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/acompanhamento_data_texto"
+                            android:layout_marginStart="12dp"
+                            android:text="@string/acompanhamento_data_placeholder" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/acompanhamento_layout_abaixo_caixa_texto2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+
+                        >
+
+                        <TextView
+                            android:id="@+id/acompanhamento_status_texto"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:text="@string/acompanhamento_status" />
+
+                        <Spinner
+                            android:id="@+id/acompanhamento_spinner2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="48dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:spinnerMode="dropdown" />
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <Button
+                android:id="@+id/acompanhamento_add_activity_btn"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@id/acompanhamento_horizontal_scroll2"
+                android:text="@string/acompanhamento_add_atividade_btn"
+                android:textSize="10pt" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/acompanhamento_div2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/acompanhamento_add_activity_btn"
+                android:layout_marginTop="2dp">
+
+            </com.google.android.material.divider.MaterialDivider>
+
+            <TextView
+                android:id="@+id/acompanhamento_historico_atividade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/acompanhamento_div2"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="start"
+                android:text="@string/acompanhamento_historico_atividades"
+                android:textSize="7pt" />
+
+            <TextView
+                android:id="@+id/acompanhamento_informacoes_atividade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/acompanhamento_historico_atividade"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="start"
+                android:text="@string/acompanhamento_historico_email"
+                android:textSize="5pt" />
+
+            <TextView
+                android:id="@+id/acompanhamento_detalhes_atividade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/acompanhamento_informacoes_atividade"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="start"
+                android:text="@string/acompanhamento_historico_descricao"
+                android:textSize="7pt" />
+
+            <TextView
+                android:id="@+id/acompanhamento_data_atividade"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/acompanhamento_detalhes_atividade"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="8dp"
+                android:gravity="start"
+                android:text="@string/acompanhamento_data_placeholder"
+                android:textSize="5pt" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/acompanhamento_div3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_below="@id/acompanhamento_data_atividade"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="125dp">
+
+            </com.google.android.material.divider.MaterialDivider>
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>

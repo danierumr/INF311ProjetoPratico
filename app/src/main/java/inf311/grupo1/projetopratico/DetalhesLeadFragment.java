@@ -191,13 +191,16 @@ public class DetalhesLeadFragment extends App_fragment {
      */
     private void registrarAtividade() {
         Log.d(TAG, "Registrando atividade para lead: " + contato.nome);
-        
-        // TODO: Implementar tela de registro de atividade
-        // Por enquanto, apenas mostra uma mensagem
+        if (contato != null && getActivity() instanceof MainActivityNova){
+            MainActivityNova mainActivity = (MainActivityNova) getActivity();
+            mainActivity.navigateToAcompanhamento(contato);
+            Log.d(TAG, "Navegando para acompanhamento do lead: " + contato.nome);
+        }
+        /*
         if (getActivity() != null) {
             Toast.makeText(getActivity(), "Funcionalidade de registro de atividade em desenvolvimento", 
                           Toast.LENGTH_LONG).show();
-        }
+        }*/
     }
     
     /**
