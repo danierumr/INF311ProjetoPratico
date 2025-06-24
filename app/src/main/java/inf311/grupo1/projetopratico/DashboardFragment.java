@@ -59,6 +59,9 @@ public class DashboardFragment extends App_fragment {
         
         // Obter informações do usuário dos argumentos
         getUserDataFromArguments();
+
+        // Carregar dados do dashboard
+        loadDashboardData();
         
         Log.d(TAG, "DashboardFragment iniciado para usuário: " + userEmail);
         
@@ -71,9 +74,6 @@ public class DashboardFragment extends App_fragment {
         
         // Inicializar views
         initializeViews(view);
-        
-        // Carregar dados do dashboard
-        loadDashboardData();
         
         // Configurar interface
         setupUI();
@@ -159,7 +159,7 @@ public class DashboardFragment extends App_fragment {
         } catch (Exception e) {
             Log.e(TAG, "Erro ao carregar leads recentes", e);
             showError("Erro ao carregar leads");
-            contatos = new ArrayList<>(); // Fallback para lista vazia
+            contatos = new ArrayList<>();
         }
     }
     
@@ -271,7 +271,6 @@ public class DashboardFragment extends App_fragment {
         String st_name = cont.nome;
         String st_alert = determineLeadPriority(cont);
         String st_status = cont.interesse;
-        String st_visita = "Agendar visita";
 
         TextView name = new TextView(getContext());
         name.setId(View.generateViewId());
@@ -309,7 +308,6 @@ public class DashboardFragment extends App_fragment {
         vt_para.topMargin = dp_8;
         vt_para.addRule(RelativeLayout.BELOW, alert.getId());
         visita.setLayoutParams(vt_para);
-        visita.setText(st_visita);
         visita.setGravity(Gravity.END);
 
         RelativeLayout rl = new RelativeLayout(getContext());
@@ -351,15 +349,12 @@ public class DashboardFragment extends App_fragment {
      * Determina a prioridade do lead baseado nos dados
      */
     private String determineLeadPriority(Contato lead) {
-        // Lógica dinâmica para determinar prioridade
-        if (lead.interesse.contains("Matrícula imediata")) {
-            return "Urgente";
-        } else if (lead.interesse.contains("Conhecer")) {
+        if (lead.interesse.toLowerCase().contains("Interessado")) {
             return "Alta";
-        } else if (lead.interesse.contains("Informações")) {
+        } else if (lead.interesse.toLowerCase().contains("Potencial")) {
             return "Média";
         } else {
-            return "Baixa";
+            return "Normal";
         }
     }
     

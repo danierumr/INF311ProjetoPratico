@@ -49,8 +49,8 @@ public class LeadsFragment extends App_fragment {
     private LinearLayout leadsContainer;
     
     // Filter chips
-    private Chip chipTodos, chipNovos, chipContatados, chipInteressados, 
-                chipAgendados, chipVisitaram, chipMatriculados;
+    private Chip chipTodos, chipPotenciais, chipInteressados, chipInscritosParciais, 
+    chipInscritos, chipConfirmados, chipConvocados, chipMatriculados;
     
     // Estado de cadastro ativo
     private static boolean isCadastroAtivo = false;
@@ -140,12 +140,13 @@ public class LeadsFragment extends App_fragment {
         
         // Inicializar chips de filtro
         chipTodos = view.findViewById(R.id.leads_filter1);
-        chipNovos = view.findViewById(R.id.leads_filter2);
-        chipContatados = view.findViewById(R.id.leads_filter3);
-        chipInteressados = view.findViewById(R.id.leads_filter4);
-        chipAgendados = view.findViewById(R.id.leads_filter5);
-        chipVisitaram = view.findViewById(R.id.leads_filter6);
-        chipMatriculados = view.findViewById(R.id.leads_filter7);
+        chipPotenciais = view.findViewById(R.id.leads_filter2);
+        chipInteressados = view.findViewById(R.id.leads_filter3);
+        chipInscritosParciais = view.findViewById(R.id.leads_filter4);
+        chipInscritos = view.findViewById(R.id.leads_filter5);
+        chipConfirmados = view.findViewById(R.id.leads_filter6);
+        chipConvocados = view.findViewById(R.id.leads_filter7);
+        chipMatriculados = view.findViewById(R.id.leads_filter8);
         
         Log.d(TAG, "UI inicializada");
     }
@@ -201,11 +202,12 @@ public class LeadsFragment extends App_fragment {
         };
         
         if (chipTodos != null) chipTodos.setOnClickListener(filterListener);
-        if (chipNovos != null) chipNovos.setOnClickListener(filterListener);
-        if (chipContatados != null) chipContatados.setOnClickListener(filterListener);
+        if (chipPotenciais != null) chipPotenciais.setOnClickListener(filterListener);
         if (chipInteressados != null) chipInteressados.setOnClickListener(filterListener);
-        if (chipAgendados != null) chipAgendados.setOnClickListener(filterListener);
-        if (chipVisitaram != null) chipVisitaram.setOnClickListener(filterListener);
+        if (chipInscritosParciais != null) chipInscritosParciais.setOnClickListener(filterListener);
+        if (chipInscritos != null) chipInscritos.setOnClickListener(filterListener);
+        if (chipConfirmados != null) chipConfirmados.setOnClickListener(filterListener);
+        if (chipConvocados != null) chipConvocados.setOnClickListener(filterListener);
         if (chipMatriculados != null) chipMatriculados.setOnClickListener(filterListener);
         
         Log.d(TAG, "Chips de filtro configurados");
@@ -326,8 +328,12 @@ public class LeadsFragment extends App_fragment {
             // Por exemplo, atualizar TextViews com os valores das estatísticas
             
             Log.d(TAG, "Estatísticas carregadas - Total: " + stats.getTotal() +
-                      ", Novos: " + stats.getNovos() +
+                      ", Potenciais: " + stats.getPotenciais() +
                       ", Interessados: " + stats.getInteressados() +
+                      ", Inscritos Parciais: " + stats.getInscritosParciais() +
+                      ", Inscritos: " + stats.getInscritos() +
+                      ", Confirmados: " + stats.getConfirmados() +
+                      ", Convocados: " + stats.getConvocados() +
                       ", Matriculados: " + stats.getMatriculados());
                       
         } catch (Exception e) {
@@ -537,11 +543,12 @@ public class LeadsFragment extends App_fragment {
      */
     private void resetAllChips() {
         if (chipTodos != null) chipTodos.setChecked(false);
-        if (chipNovos != null) chipNovos.setChecked(false);
-        if (chipContatados != null) chipContatados.setChecked(false);
+        if (chipPotenciais != null) chipPotenciais.setChecked(false);
         if (chipInteressados != null) chipInteressados.setChecked(false);
-        if (chipAgendados != null) chipAgendados.setChecked(false);
-        if (chipVisitaram != null) chipVisitaram.setChecked(false);
+        if (chipInscritosParciais != null) chipInscritosParciais.setChecked(false);
+        if (chipInscritos != null) chipInscritos.setChecked(false);
+        if (chipConfirmados != null) chipConfirmados.setChecked(false);
+        if (chipConvocados != null) chipConvocados.setChecked(false);
         if (chipMatriculados != null) chipMatriculados.setChecked(false);
     }
 } 

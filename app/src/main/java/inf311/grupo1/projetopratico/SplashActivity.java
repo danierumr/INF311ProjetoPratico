@@ -25,10 +25,8 @@ public class SplashActivity extends AppCompatActivity {
         
         Log.d(TAG, "SplashActivity iniciada");
         
-        // Inicializar Firebase Manager
         firebaseManager = FirebaseManager.getInstance();
         
-        // Verificar autenticação imediatamente (sem delay desnecessário)
         checkAuthenticationAndNavigate();
     }
     

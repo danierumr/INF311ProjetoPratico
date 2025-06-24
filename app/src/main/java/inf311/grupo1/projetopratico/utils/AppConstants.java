@@ -16,9 +16,9 @@ public class AppConstants {
     
     // Status possíveis dos leads
     public static final String[] STATUS_LEADS = {
-        "Novo", "Contatado", "Interessado", "Agendado", "Visitou", "Matriculado"
+        "Potencial", "Interessado", "Inscrito parcial", "Inscrito", "Confirmado", "Convocado", "Matriculado"
     };
-    
+  
     // Prioridades dos leads
     public static final String[] PRIORIDADES = {
         "Baixa", "Média", "Alta", "Urgente"
@@ -95,7 +95,7 @@ public class AppConstants {
     public static final String DATE_FORMAT_ISO = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
     
     // API Endpoints (se houver)
-    public static final String BASE_URL = "https://api.captamax.com/";
+    public static final String BASE_URL = "";
     public static final String ENDPOINT_LEADS = "leads";
     public static final String ENDPOINT_NOTIFICATIONS = "notifications";
     

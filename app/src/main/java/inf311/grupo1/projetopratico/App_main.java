@@ -172,6 +172,7 @@ public class App_main extends  Application
         contatos = conts;
     }
 
+    
     public static ArrayList<Contato> get_id_contacts(JSONObject obj,boolean admin) throws org.json.JSONException
     {
 
@@ -249,7 +250,7 @@ public class App_main extends  Application
      */
     public static void adicionarLead(Contato contato) throws IOException{
         Log.w("App_main","Início do processo de cadastro do lead");
-        HashMap<String, String> params = new HashMap<>();
+        HashMap<String, Object> params = new HashMap<>();
         params.put("origem", Data_master.origem);
         params.put("token", Data_master.token);
 
@@ -258,78 +259,19 @@ public class App_main extends  Application
         params.put("telefonePrincipal", contato.telefone);
         params.put("escolaOrigem",contato.escola);
         
-        JSONObject personalizedFieldsObj = new JSONObject();
-        JSONObject mainObj = new JSONObject();
-        JSONArray referIds = new JSONArray();
-        try {
-            personalizedFieldsObj.put("campopersonalizado_1_compl_cont",contato.responsavel);
-            referIds.put(Data_master.user_id);
-            personalizedFieldsObj.put("campopersonalizado_3_compl_cont",referIds);
-
-            mainObj.put("origem", Data_master.origem);
-            mainObj.put("token", Data_master.token);
-
-            mainObj.put("nome", contato.nome);
-            mainObj.put("emailPrincipal", contato.email);
-            mainObj.put("telefonePrincipal", contato.telefone);
-            mainObj.put("escolaOrigem",contato.escola);
-            mainObj.put("camposPersonalizados",personalizedFieldsObj);
-
-            Log.w("App_main",mainObj.toString());
-
-        }
-        catch (org.json.JSONException j)
-        {
-             Log.w("App_main","Erro ao parsear json para o cadastro do lead");
-        }
-
-
         params.put("camposPersonalizados[campopersonalizado_4_compl_cont][0]", Data_master.user_id);
         params.put("camposPersonalizados[campopersonalizado_1_compl_cont]", contato.responsavel);
 
-
-        StringBuilder sbParams = new StringBuilder();
-        int i = 0;
-        for (String key : params.keySet()) {
-            try {
-                if (i != 0) {
-                    sbParams.append("&");
-                }
-                sbParams.append(key).append("=").append(URLEncoder.encode(params.get(key), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            i++;
-        }
-
         String url = "https://crmufvgrupo1.apprubeus.com.br/api/Contato/cadastro";
-        URL urlObj = new URL(url);
-        Log.w("App_main","Mandando o request de cadastro do lead");
-        HttpURLConnection conn = (HttpURLConnection) urlObj.openConnection();
-
-        conn.setDoOutput(true);
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Accept-Charset", "UTF-8");
-        conn.setReadTimeout(10000);
-        conn.setConnectTimeout(15000);
-        conn.connect();
-        Log.w("App_main",sbParams.toString());
-        String paramsString =  sbParams.toString();
-        DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
-        wr.writeBytes(paramsString);
-        wr.flush();
-        wr.close();
-
-        InputStream in = new BufferedInputStream(conn.getInputStream());
-        BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-        StringBuilder result = new StringBuilder();
-        String line;
-        while ((line = reader.readLine()) != null) {
-            result.append(line);
+       
+        try{
+            String result = do_api_call(params, url);
+            Log.w("App_main",result);
+        } catch (IOException e) {
+            Log.w("App_main", "Erro ao cadastrar lead: " + e.getMessage());
         }
 
         Log.w("App_main","Fim do request de cadastro do lead");
-        Log.w("App_main",result.toString());
     }
 
 }
