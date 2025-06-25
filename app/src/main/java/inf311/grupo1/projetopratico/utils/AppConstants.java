@@ -25,20 +25,13 @@ public class AppConstants {
     };
     
     // Estágios do funil de vendas
-    public static final String[] ESTAGIOS_FUNIL = {
-        "Prospecção", "Qualificação", "Proposta", "Negociação", "Fechamento"
-    };
+    public static final String[] ESTAGIOS_FUNIL = STATUS_LEADS;
     
     // Cores padrão para gráficos
     public static final String[] CORES_GRAFICOS = {
         "#14b8a6", "#F44336", "#2196F3", "#FF9800", "#E91E63", 
         "#9C27B0", "#673AB7", "#3F51B5", "#009688", "#4CAF50"
     };
-    
-    // Intervalos de tempo para análises
-    public static final String INTERVALO_SEMANAL = "semanal";
-    public static final String INTERVALO_MENSAL = "mensal";
-    public static final String INTERVALO_TRIMESTRAL = "trimestral";
     
     // Limites de paginação
     public static final int LIMITE_LEADS_DASHBOARD = 5;

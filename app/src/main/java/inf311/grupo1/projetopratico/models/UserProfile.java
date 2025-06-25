@@ -4,25 +4,21 @@ public class UserProfile {
     private String uid;
     private String nome;
     private String email;
-    private String telefone;
     private String cargo;
     private boolean isAdmin;
-    private String urlFoto;
     private String createdAt;
     private UserMetrics metricas;
     
     public UserProfile() {}
     
-    public UserProfile(String uid, String nome, String email, String telefone, 
-                      String cargo, boolean isAdmin, String urlFoto, 
+    public UserProfile(String uid, String nome, String email, 
+                      String cargo, boolean isAdmin, 
                       String createdAt, UserMetrics metricas) {
         this.uid = uid;
         this.nome = nome;
         this.email = email;
-        this.telefone = telefone;
         this.cargo = cargo;
         this.isAdmin = isAdmin;
-        this.urlFoto = urlFoto;
         this.createdAt = createdAt;
         this.metricas = metricas;
     }
@@ -37,17 +33,11 @@ public class UserProfile {
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
     
-    public String getTelefone() { return telefone; }
-    public void setTelefone(String telefone) { this.telefone = telefone; }
-    
     public String getCargo() { return cargo; }
     public void setCargo(String cargo) { this.cargo = cargo; }
     
     public boolean isAdmin() { return isAdmin; }
     public void setAdmin(boolean admin) { isAdmin = admin; }
-    
-    public String getUrlFoto() { return urlFoto; }
-    public void setUrlFoto(String urlFoto) { this.urlFoto = urlFoto; }
     
     public String getcreatedAt() { return createdAt; }
     public void setcreatedAt(String createdAt) { this.createdAt = createdAt; }

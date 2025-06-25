@@ -181,13 +181,18 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Leads List Section -->
-    <ScrollView
-        android:id="@+id/lead_scroll_view2"
+    <!-- SwipeRefreshLayout com Leads List Section -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/leads_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/filter_card"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="16dp">
+
+        <ScrollView
+            android:id="@+id/lead_scroll_view2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
         android:background="@color/background_gray_light">
 
         <LinearLayout
@@ -204,6 +209,8 @@
         </LinearLayout>
 
     </ScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <!-- Floating Action Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton

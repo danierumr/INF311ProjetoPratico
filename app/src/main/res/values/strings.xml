@@ -44,7 +44,7 @@
     <string name="dash_novo">Novo lead</string>
     <string name="dash_metrica">Metricas da equipe</string>
     <string name="dash_metrica_sub">Visualize o desempenho de toda a equipe</string>
-    <string name="dash_taxa_conversao">Taxa de Conversão</string>
+    <string name="dash_taxa_conversao">% de conversão</string>
     <string name="dash_tempo_resposta">Tempo de Resposta</string>
     <string name="dash_interacoes">Interações</string>
     <string name="dash_meta_mensal">Meta Mensal</string>

@@ -6,21 +6,16 @@ public class DashboardMetrics {
     private int leadsContatados;
     private int leadsConvertidos;
     private double taxaConversao;
-    private int atividadesHoje;
-    private int visitasAgendadas;
     
     public DashboardMetrics() {}
     
     public DashboardMetrics(int totalLeads, int leadsNovos, int leadsContatados, 
-                           int leadsConvertidos, double taxaConversao, 
-                           int atividadesHoje, int visitasAgendadas) {
+                           int leadsConvertidos, double taxaConversao) {
         this.totalLeads = totalLeads;
         this.leadsNovos = leadsNovos;
         this.leadsContatados = leadsContatados;
         this.leadsConvertidos = leadsConvertidos;
         this.taxaConversao = taxaConversao;
-        this.atividadesHoje = atividadesHoje;
-        this.visitasAgendadas = visitasAgendadas;
     }
     
     // Getters e Setters
@@ -38,10 +33,4 @@ public class DashboardMetrics {
     
     public double getTaxaConversao() { return taxaConversao; }
     public void setTaxaConversao(double taxaConversao) { this.taxaConversao = taxaConversao; }
-    
-    public int getAtividadesHoje() { return atividadesHoje; }
-    public void setAtividadesHoje(int atividadesHoje) { this.atividadesHoje = atividadesHoje; }
-    
-    public int getVisitasAgendadas() { return visitasAgendadas; }
-    public void setVisitasAgendadas(int visitasAgendadas) { this.visitasAgendadas = visitasAgendadas; }
 } 

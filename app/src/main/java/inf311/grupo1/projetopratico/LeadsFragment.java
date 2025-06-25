@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -47,6 +48,7 @@ public class LeadsFragment extends App_fragment {
     private SearchView searchView;
     private FloatingActionButton fabAddLead;
     private LinearLayout leadsContainer;
+    private SwipeRefreshLayout swipeRefreshLayout;
     
     // Filter chips
     private Chip chipTodos, chipPotenciais, chipInteressados, chipInscritosParciais, 
@@ -137,6 +139,7 @@ public class LeadsFragment extends App_fragment {
         searchView = view.findViewById(R.id.lead_search_bar);
         fabAddLead = view.findViewById(R.id.fab_add_lead);
         leadsContainer = view.findViewById(R.id.lead_scroll_linear2);
+        swipeRefreshLayout = view.findViewById(R.id.leads_swipe_refresh);
         
         // Inicializar chips de filtro
         chipTodos = view.findViewById(R.id.leads_filter1);
@@ -148,7 +151,37 @@ public class LeadsFragment extends App_fragment {
         chipConvocados = view.findViewById(R.id.leads_filter7);
         chipMatriculados = view.findViewById(R.id.leads_filter8);
         
+        // Configurar pull to refresh
+        setupPullToRefresh();
+        
         Log.d(TAG, "UI inicializada");
+    }
+    
+    /**
+     * Configura o pull to refresh
+     */
+    private void setupPullToRefresh() {
+        if (swipeRefreshLayout != null) {
+            // Configurar cores do loading
+            swipeRefreshLayout.setColorSchemeResources(
+                R.color.primary_green,
+                R.color.secondary_green,
+                R.color.accent_green
+            );
+            
+            // Configurar o listener de refresh
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Log.d(TAG, "Pull to refresh ativado - atualizando leads");
+                    refreshLeads();
+                }
+            });
+            
+            Log.d(TAG, "Pull to refresh configurado para leads");
+        } else {
+            Log.w(TAG, "SwipeRefreshLayout não encontrado");
+        }
     }
     
     /**
@@ -308,13 +341,71 @@ public class LeadsFragment extends App_fragment {
      * Atualiza os dados dos leads
      */
     public void refreshLeads() {
-        Log.d(TAG, "Atualizando dados dos leads");
+        Log.d(TAG, "Iniciando atualização dos dados dos leads");
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(true);
+        }
+        
+        // Executar o carregamento de dados em thread separada para não bloquear a UI
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+        try {
+            // Forçar atualização dos dados da API sempre no pull to refresh
+            if (app_pointer != null) {
+                Log.d(TAG, "Forçando atualização da API via pull to refresh");
+                        app_pointer.forceUpdate(); // Executado em thread separada
+                    }
+                    
+                    // Voltar para a UI thread para atualizar a interface
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+            // Resetar filtros
         currentFilter = "todos";
         resetAllChips();
         if (chipTodos != null) {
             chipTodos.setChecked(true);
         }
+            
+            // Recarregar leads
         loadLeads();
+            
+            Log.d(TAG, "Leads atualizados com sucesso");
+            
+        } catch (Exception e) {
+                                    Log.e(TAG, "Erro ao atualizar interface dos leads", e);
+            showError("Erro ao atualizar leads");
+        } finally {
+            // Parar o loading do SwipeRefreshLayout
+                                    if (swipeRefreshLayout != null) {
+                swipeRefreshLayout.setRefreshing(false);
+                Log.d(TAG, "Pull to refresh finalizado");
+            }
+        }
+                            }
+                        });
+                    }
+                    
+                } catch (Exception e) {
+                    Log.e(TAG, "Erro ao atualizar dados da API", e);
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showError("Erro ao atualizar leads");
+                                if (swipeRefreshLayout != null) {
+                                    swipeRefreshLayout.setRefreshing(false);
+                                    Log.d(TAG, "Pull to refresh finalizado com erro");
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        }).start();
     }
     
     /**

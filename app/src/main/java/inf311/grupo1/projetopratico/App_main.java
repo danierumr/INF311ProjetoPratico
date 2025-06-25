@@ -30,9 +30,6 @@ public class App_main extends  Application
     public ArrayList<Contato> contatos;
     public boolean updated;
 
-    public Integer iteractions;
-    public Integer conversions;
-
     @Override
     public void onCreate() {
         super.onCreate();
@@ -40,10 +37,6 @@ public class App_main extends  Application
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        iteractions=0;
-        conversions=0;
-
-
     }
 
     public static String do_api_call(@NonNull HashMap<String, Object> params, String url) throws IOException
@@ -95,8 +88,8 @@ public class App_main extends  Application
 
     public void update()
     {
+        Log.d("App_main", "Iniciando atualização dos dados da API");
 
-        updated=true;
         ArrayList<Contato> conts = new ArrayList<Contato>();
 
         String url = "";
@@ -113,6 +106,7 @@ public class App_main extends  Application
         }
         catch (IOException c)
         {
+            Log.e("App_main", "Erro na chamada da API listarPessoas", c);
             return;
         }
 
@@ -122,7 +116,7 @@ public class App_main extends  Application
         try
         {
             obj = new JSONObject(ret);
-            conts = get_id_contacts(obj,Data_master.admin);
+            conts = get_id_contacts(obj, Data_master.admin);
         }
 
         catch (org.json.JSONException j) {
@@ -144,15 +138,8 @@ public class App_main extends  Application
 
                         if(objo.getBoolean("success"))
                         {
-                            iteractions+=1;
                             c.interesse = objo.getJSONArray("dados").getJSONObject(0).getString("etapaNome");
-
-                            if(objo.getJSONArray("dados").getJSONObject(0).getString("etapa").equals("5"))
-                            {
-                                conversions+=1;
-                            }
                         }
-
 
                     }
 
@@ -170,48 +157,40 @@ public class App_main extends  Application
             }
         }
         contatos = conts;
+        
+        // Definir updated como true apenas no final após sucesso
+        updated = true;
+        Log.d("App_main", "Atualização dos dados da API concluída com sucesso. Total de contatos: " + contatos.size());
+    }
+    
+    /**
+     * Força uma nova atualização dos dados da API, ignorando o flag updated
+     */
+    public void forceUpdate() {
+        Log.d("App_main", "Forçando atualização dos dados da API");
+        updated = false; // Resetar o flag para forçar atualização
+        update(); // Executar atualização
     }
 
     
     public static ArrayList<Contato> get_id_contacts(JSONObject obj,boolean admin) throws org.json.JSONException
     {
-
-        var users =obj.getJSONObject("dados").getJSONArray("dados");
+        var users = obj.getJSONObject("dados").getJSONArray("dados");
         ArrayList<Contato> conts = new ArrayList<Contato>();
 
-        for(int a=0;a<users.length();a++)
+        for(int a=0; a<users.length(); a++)
         {
-
             var ob = users.getJSONObject(a);
-
-                /*if(ob.getString("nome").equals("Joao android III"))
-                {
-                     Log.w("myApp",ob.toString());
-                }
-
-                else{
-                    continue;
-                }*/
-
-
-
-
-
-
-
             var ob_custom = ob.getJSONObject("camposPersonalizados");
 
-            if(ob_custom.isNull("campopersonalizado_4_compl_cont")){continue;}
+            if(ob_custom.isNull("campopersonalizado_4_compl_cont")){
+                continue;
+            }
 
-
-            var ob_array = ob_custom.
-                    getJSONArray("campopersonalizado_4_compl_cont");
-
-
-
+            var ob_array = ob_custom.getJSONArray("campopersonalizado_4_compl_cont");
             boolean user = false;
 
-            for(int b=0;b< ob_array.length();b++)
+            for(int b=0; b< ob_array.length(); b++)
             {
                 if(Objects.equals(ob_array.getString(b), Data_master.user_id) || admin)
                 {
@@ -225,13 +204,9 @@ public class App_main extends  Application
                 Contato c = new Contato(users.getJSONObject(a));
                 conts.add(c);
             }
-
         }
 
-
-
-
-        return  conts;
+        return conts;
     }
 
 

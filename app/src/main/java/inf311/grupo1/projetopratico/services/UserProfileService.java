@@ -1,15 +1,32 @@
 package inf311.grupo1.projetopratico.services;
 
+import android.util.Log;
+
+import inf311.grupo1.projetopratico.App_main;
+import inf311.grupo1.projetopratico.Contato;
 import inf311.grupo1.projetopratico.models.UserMetrics;
 import inf311.grupo1.projetopratico.models.UserProfile;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 public class UserProfileService {
     
+    private static final String TAG = "UserProfileService";
     private static UserProfileService instance;
+    
+    // Status possíveis dos leads baseados na API Rubeus
+    private static final String STATUS_POTENCIAL = "Potencial";
+    private static final String STATUS_INTERESSADO = "Interessado";
+    private static final String STATUS_INSCRITO_PARCIAL = "Inscrito parcial";
+    private static final String STATUS_INSCRITO = "Inscrito";
+    private static final String STATUS_CONFIRMADO = "Confirmado";
+    private static final String STATUS_CONVOCADO = "Convocado";
+    private static final String STATUS_MATRICULADO = "Matriculado";
     
     private UserProfileService() {}
     
@@ -21,140 +38,197 @@ public class UserProfileService {
     }
     
     /**
-     * Obtém o perfil completo do usuário
-     * Futuramente este método fará uma chamada à API
+     * Obtém o perfil completo do usuário baseado nos dados reais da API
+     */
+    public UserProfile getUserProfile(String userUid, String userEmail, boolean isAdmin, App_main app) {
+        try {
+            // Obter métricas baseadas nos dados reais
+            UserMetrics metricas = getUserMetrics(userEmail, isAdmin, app);
+            
+            return new UserProfile(
+                userUid,
+                extractNameFromEmail(userEmail),
+                userEmail,
+                isAdmin ? "Administrador" : "Consultor de Vendas",
+                isAdmin,
+                getCurrentDate(),
+                metricas
+            );
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao obter perfil do usuário", e);
+            // Retornar perfil básico em caso de erro
+            return new UserProfile(
+                userUid,
+                extractNameFromEmail(userEmail),
+                userEmail,
+                isAdmin ? "Administrador" : "Consultor de Vendas",
+                isAdmin,
+                getCurrentDate(),
+                new UserMetrics(0, 0, 0.0, 0, 0, 0)
+            );
+        }
+    }
+    
+    /**
+     * Obtém o perfil completo do usuário (sobrecarga para compatibilidade)
      */
     public UserProfile getUserProfile(String userUid, String userEmail, boolean isAdmin) {
+        Log.w(TAG, "Método getUserProfile chamado sem App_main - usando dados básicos");
+        Log.w(TAG, "Use getUserProfile(userUid, userEmail, isAdmin, app) para obter dados reais");
+        
         // Simula dados dinâmicos - futuramente virá da API
-        UserMetrics metricas = getUserMetrics(userEmail, isAdmin);
+        UserMetrics metricas = getUserMetrics(userEmail, isAdmin, null);
         
         return new UserProfile(
             userUid,
             extractNameFromEmail(userEmail),
             userEmail,
-            generatePhoneNumber(userEmail), // Simula telefone baseado no email
             isAdmin ? "Administrador" : "Consultor de Vendas",
             isAdmin,
-            null, // URL da foto - pode ser implementado com upload de imagem
             getCurrentDate(),
             metricas
         );
     }
     
     /**
-     * Obtém as métricas específicas do usuário
-     * Futuramente este método fará uma chamada à API
+     * Obtém as métricas específicas do usuário baseadas nos dados reais da API
      */
-    public UserMetrics getUserMetrics(String userEmail, boolean isAdmin) {
-        // Simula dados dinâmicos baseados no tipo de usuário
-        if (isAdmin) {
+    public UserMetrics getUserMetrics(String userEmail, boolean isAdmin, App_main app) {
+        try {
+            // Garantir que os dados estejam atualizados
+            if (!app.updated) {
+                app.update();
+            }
+            
+            List<Contato> contatos = app.get_leads();
+            if (contatos == null) {
+                contatos = new ArrayList<>();
+            }
+            
+            // Calcular métricas baseadas nos dados reais
+            int totalLeads = contatos.size();
+            int convertidos = contarLeadsConvertidos(contatos);
+            double taxaConversao = totalLeads > 0 ? (double) convertidos / totalLeads * 100.0 : 0.0;
+            
+            // Leads deste mês
+            int esteMes = contarLeadsEsteMes(contatos);
+            
+            // Meta mensal baseada no tipo de usuário e performance atual
+            int metaMensal = calcularMetaMensal(totalLeads, isAdmin);
+            
+            // Dias trabalhados (baseado em dias com atividade)
+            int diasTrabalhados = calcularDiasTrabalhados(contatos);
+            
+            Log.d(TAG, "Métricas do usuário calculadas - Total: " + totalLeads + 
+                      ", Convertidos: " + convertidos + 
+                      ", Taxa: " + String.format("%.1f%%", taxaConversao) +
+                      ", Este mês: " + esteMes);
+            
             return new UserMetrics(
-                156, // total leads (soma da equipe)
-                44,  // convertidos (soma da equipe)
-                28.2, // taxa conversão
-                23,  // este mês
-                50,  // meta mensal
-                22   // dias trabalhados
+                totalLeads,
+                convertidos,
+                taxaConversao,
+                esteMes,
+                metaMensal,
+                diasTrabalhados
             );
-        } else {
-            return new UserMetrics(
-                48,  // total leads individuais
-                18,  // convertidos individuais
-                25.0, // taxa conversão
-                8,   // este mês
-                15,  // meta mensal individual
-                22   // dias trabalhados
-            );
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao calcular métricas do usuário", e);
+            // Retornar métricas zeradas em caso de erro
+            return new UserMetrics(0, 0, 0.0, 0, 0, 0);
         }
     }
     
-    /**
-     * Atualiza as métricas do usuário
-     * Futuramente este método fará uma chamada à API
-     */
-    public void updateUserMetrics(String userUid, UserMetrics novasMetricas) {
-        // TODO: Implementar atualização via API
-        // Por enquanto apenas simula o sucesso da operação
+   
+    
+    // Métodos auxiliares privados
+    
+    private int contarLeadsConvertidos(List<Contato> contatos) {
+        // Considerar convertidos: "Matriculado"
+        return (int) contatos.stream()
+                .filter(c -> STATUS_MATRICULADO.equals(c.interesse))
+                .count();
     }
     
-    /**
-     * Atualiza informações do perfil do usuário
-     * Futuramente este método fará uma chamada à API
-     */
-    public void updateUserProfile(String userUid, String nome, String telefone) {
-        // TODO: Implementar atualização via API
-        // Por enquanto apenas simula o sucesso da operação
+    private int contarLeadsEsteMes(List<Contato> contatos) {
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date inicioMes = cal.getTime();
+        
+        return (int) contatos.stream()
+                .filter(c -> c.ultimo_contato != null && c.ultimo_contato.after(inicioMes))
+                .count();
     }
     
-    /**
-     * Obtém estatísticas detalhadas do usuário para análise
-     * Futuramente este método fará uma chamada à API
-     */
-    public UserDetailedStats getUserDetailedStats(String userEmail, boolean isAdmin) {
+    private int calcularMetaMensal(int totalLeads, boolean isAdmin) {
         if (isAdmin) {
-            return new UserDetailedStats(
-                156, // leads total
-                89,  // leads ativos
-                23,  // leads este mês
-                44,  // conversões total
-                12,  // conversões este mês
-                28.2, // taxa conversão
-                5.2,  // média leads por dia
-                1.8,  // média conversões por dia
-                12,   // dias consecutivos com atividade
-                "Excelente performance!"
-            );
+            // Meta baseada no tamanho da equipe
+            return Math.max(50, totalLeads / 4); // 25% do total como meta
         } else {
-            return new UserDetailedStats(
-                48,  // leads total
-                28,  // leads ativos
-                8,   // leads este mês
-                18,  // conversões total
-                3,   // conversões este mês
-                25.0, // taxa conversão
-                2.2,  // média leads por dia
-                0.5,  // média conversões por dia
-                8,    // dias consecutivos com atividade
-                "Você está indo muito bem!"
-            );
+            // Meta individual baseada na performance atual
+            return Math.max(15, totalLeads / 8); // 12.5% do total como meta
         }
+    }
+    
+    private int calcularDiasTrabalhados(List<Contato> contatos) {
+        if (contatos.isEmpty()) return 0;
+        
+        // Contar dias únicos com atividade baseado na data de último contato
+        return contatos.stream()
+                .filter(c -> c.ultimo_contato != null)
+                .map(c -> {
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(c.ultimo_contato);
+                    cal.set(Calendar.HOUR_OF_DAY, 0);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    cal.set(Calendar.MILLISECOND, 0);
+                    return cal.getTime();
+                })
+                .collect(java.util.stream.Collectors.toSet())
+                .size();
     }
     
     /**
      * Extrai nome a partir do email
      */
     private String extractNameFromEmail(String email) {
-        if (email == null) return "Usuário";
+        if (email == null || !email.contains("@")) {
+            return "Usuário";
+        }
         
-        String nome = email.split("@")[0];
-        nome = nome.replace(".", " ");
+        String localPart = email.substring(0, email.indexOf("@"));
         
-        String[] partes = nome.split(" ");
+        // Remover números e caracteres especiais, capitalizar primeira letra
+        String nome = localPart.replaceAll("[0-9._-]", " ")
+                              .trim()
+                              .replaceAll("\\s+", " ");
+        
+        if (nome.isEmpty()) {
+            return "Usuário";
+        }
+        
+        // Capitalizar primeira letra de cada palavra
+        String[] palavras = nome.split(" ");
         StringBuilder nomeFormatado = new StringBuilder();
         
-        for (String parte : partes) {
-            if (parte.length() > 0) {
-                nomeFormatado.append(parte.substring(0, 1).toUpperCase())
-                            .append(parte.substring(1).toLowerCase())
-                            .append(" ");
+        for (String palavra : palavras) {
+            if (!palavra.isEmpty()) {
+                if (nomeFormatado.length() > 0) {
+                    nomeFormatado.append(" ");
+                }
+                nomeFormatado.append(palavra.substring(0, 1).toUpperCase())
+                            .append(palavra.substring(1).toLowerCase());
             }
         }
         
-        return nomeFormatado.toString().trim();
-    }
-    
-    /**
-     * Gera um número de telefone baseado no email (simulação)
-     */
-    private String generatePhoneNumber(String email) {
-        if (email == null) return "(11) 99999-9999";
-        
-        // Simula geração de telefone baseado no hash do email
-        int hash = Math.abs(email.hashCode());
-        int ddd = 11 + (hash % 89); // DDDs de 11 a 99
-        int numero = 90000000 + (hash % 9999999);
-        
-        return String.format("(%02d) %d-%04d", ddd, numero / 10000, numero % 10000);
+        return nomeFormatado.toString();
     }
     
     /**
@@ -163,49 +237,5 @@ public class UserProfileService {
     private String getCurrentDate() {
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         return sdf.format(new Date());
-    }
-    
-    /**
-     * Classe para estatísticas detalhadas do usuário
-     */
-    public static class UserDetailedStats {
-        private int leadsTotal;
-        private int leadsAtivos;
-        private int leadsEsteMes;
-        private int conversoesTotal;
-        private int conversoesEsteMes;
-        private double taxaConversao;
-        private double mediaLeadsPorDia;
-        private double mediaConversoesPorDia;
-        private int diasConsecutivosAtivo;
-        private String mensagemMotivacional;
-        
-        public UserDetailedStats(int leadsTotal, int leadsAtivos, int leadsEsteMes,
-                               int conversoesTotal, int conversoesEsteMes, double taxaConversao,
-                               double mediaLeadsPorDia, double mediaConversoesPorDia,
-                               int diasConsecutivosAtivo, String mensagemMotivacional) {
-            this.leadsTotal = leadsTotal;
-            this.leadsAtivos = leadsAtivos;
-            this.leadsEsteMes = leadsEsteMes;
-            this.conversoesTotal = conversoesTotal;
-            this.conversoesEsteMes = conversoesEsteMes;
-            this.taxaConversao = taxaConversao;
-            this.mediaLeadsPorDia = mediaLeadsPorDia;
-            this.mediaConversoesPorDia = mediaConversoesPorDia;
-            this.diasConsecutivosAtivo = diasConsecutivosAtivo;
-            this.mensagemMotivacional = mensagemMotivacional;
-        }
-        
-        // Getters
-        public int getLeadsTotal() { return leadsTotal; }
-        public int getLeadsAtivos() { return leadsAtivos; }
-        public int getLeadsEsteMes() { return leadsEsteMes; }
-        public int getConversoesTotal() { return conversoesTotal; }
-        public int getConversoesEsteMes() { return conversoesEsteMes; }
-        public double getTaxaConversao() { return taxaConversao; }
-        public double getMediaLeadsPorDia() { return mediaLeadsPorDia; }
-        public double getMediaConversoesPorDia() { return mediaConversoesPorDia; }
-        public int getDiasConsecutivosAtivo() { return diasConsecutivosAtivo; }
-        public String getMensagemMotivacional() { return mensagemMotivacional; }
     }
 } 

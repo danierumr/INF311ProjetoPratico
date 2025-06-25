@@ -15,11 +15,17 @@ import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.github.mikephil.charting.charts.PieChart;
+
+import inf311.grupo1.projetopratico.models.ChartData;
 import inf311.grupo1.projetopratico.models.DashboardMetrics;
 import inf311.grupo1.projetopratico.services.DashboardDataProvider;
+import inf311.grupo1.projetopratico.services.MetricsDataProvider;
 import inf311.grupo1.projetopratico.utils.AppConstants;
 import inf311.grupo1.projetopratico.utils.App_fragment;
+import inf311.grupo1.projetopratico.utils.PieChartHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -42,9 +48,18 @@ public class DashboardFragment extends App_fragment {
     // Views
     private LinearLayout dashScrollLinear2;
     private TextView welcomeMessage;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private PieChart dashPieChart;
+    
+    // TextViews das métricas do dashboard - IDs atualizados
+    private TextView tvTotalLeads;
+    private TextView tvConvertidos;
+    private TextView tvTaxaConversao;
+    private TextView tvEsteMes;
     
     // Serviços de dados
     private DashboardDataProvider dashboardDataProvider;
+    private MetricsDataProvider metricsDataProvider;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,9 +75,6 @@ public class DashboardFragment extends App_fragment {
         // Obter informações do usuário dos argumentos
         getUserDataFromArguments();
 
-        // Carregar dados do dashboard
-        loadDashboardData();
-        
         Log.d(TAG, "DashboardFragment iniciado para usuário: " + userEmail);
         
         return view;
@@ -75,14 +87,14 @@ public class DashboardFragment extends App_fragment {
         // Inicializar views
         initializeViews(view);
         
-        // Configurar interface
-        setupUI();
-        
         // Mostrar informações do usuário
         displayUserInfo();
         
         // Configurar listeners
         setupListeners(view);
+        
+        // Carregar dados após inicializar as views
+        loadDashboardData();
     }
     
     /**
@@ -90,6 +102,7 @@ public class DashboardFragment extends App_fragment {
      */
     private void initializeServices() {
         dashboardDataProvider = DashboardDataProvider.getInstance();
+        metricsDataProvider = MetricsDataProvider.getInstance();
         Log.d(TAG, "Serviços inicializados");
     }
     
@@ -114,20 +127,104 @@ public class DashboardFragment extends App_fragment {
     private void initializeViews(View view) {
         dashScrollLinear2 = view.findViewById(R.id.dash_scroll_linear2);
         welcomeMessage = view.findViewById(R.id.welcome_message);
-        Log.d(TAG, "Views inicializadas");
+        swipeRefreshLayout = view.findViewById(R.id.dashboard_swipe_refresh);
+        dashPieChart = view.findViewById(R.id.dash_pie_chart);
+        
+        // Inicializar TextViews das métricas com os novos IDs
+        tvTotalLeads = view.findViewById(R.id.tv_total_leads);
+        tvConvertidos = view.findViewById(R.id.tv_convertidos);
+        tvTaxaConversao = view.findViewById(R.id.tv_taxa_conversao);
+        tvEsteMes = view.findViewById(R.id.tv_este_mes);
+        
+        // Ocultar gráfico de pizza para usuários não-admin
+        View pieChartCard = view.findViewById(R.id.dash_pie_chart_card);
+        if (pieChartCard != null) {
+            pieChartCard.setVisibility(isAdmin ? View.VISIBLE : View.GONE);
+            Log.d(TAG, "Gráfico de pizza " + (isAdmin ? "visível" : "oculto") + " para usuário " + (isAdmin ? "admin" : "não-admin"));
+        }
+        
+        // Ocultar botão de métricas da equipe para usuários não-admin
+        View btnMetricas = view.findViewById(R.id.dash_btn_metricas);
+        View btnFunil = view.findViewById(R.id.dash_btn_funil);
+        if (btnMetricas != null && btnFunil != null) {
+            if (isAdmin) {
+                btnMetricas.setVisibility(View.VISIBLE);
+                // Manter layout original com dois botões
+                LinearLayout.LayoutParams paramsMetricas = (LinearLayout.LayoutParams) btnMetricas.getLayoutParams();
+                paramsMetricas.weight = 1;
+                btnMetricas.setLayoutParams(paramsMetricas);
+                
+                LinearLayout.LayoutParams paramsFunil = (LinearLayout.LayoutParams) btnFunil.getLayoutParams();
+                paramsFunil.weight = 1;
+                btnFunil.setLayoutParams(paramsFunil);
+            } else {
+                btnMetricas.setVisibility(View.GONE);
+                // Fazer o botão de funil ocupar toda a largura
+                LinearLayout.LayoutParams paramsFunil = (LinearLayout.LayoutParams) btnFunil.getLayoutParams();
+                paramsFunil.weight = 1;
+                paramsFunil.setMarginStart(0); // Remover margem esquerda
+                btnFunil.setLayoutParams(paramsFunil);
+            }
+            Log.d(TAG, "Botão de métricas " + (isAdmin ? "visível" : "oculto") + " para usuário " + (isAdmin ? "admin" : "não-admin"));
+        }
+        
+        // Configurar pull to refresh
+        setupPullToRefresh();
+        
+        Log.d(TAG, "Views inicializadas para usuário " + (isAdmin ? "admin" : "não-admin"));
+    }
+    
+    /**
+     * Configura o pull to refresh
+     */
+    private void setupPullToRefresh() {
+        if (swipeRefreshLayout != null) {
+            // Configurar cores do loading
+            swipeRefreshLayout.setColorSchemeResources(
+                R.color.primary_green,
+                R.color.secondary_green,
+                R.color.accent_green
+            );
+            
+            // Configurar o listener de refresh
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Log.d(TAG, "Pull to refresh ativado - atualizando dados do dashboard");
+                    refreshDashboardData();
+                }
+            });
+            
+            Log.d(TAG, "Pull to refresh configurado para o dashboard");
+        } else {
+            Log.w(TAG, "SwipeRefreshLayout não encontrado");
+        }
     }
     
     /**
      * Carrega os dados do dashboard usando o provedor de dados
      */
     private void loadDashboardData() {
+        Log.d(TAG, "Iniciando carregamento de dados do dashboard");
+        
         // Carregar métricas do dashboard
         loadDashboardMetrics();
         
         // Carregar leads recentes
         loadRecentLeads();
         
-        Log.d(TAG, "Dados do dashboard carregados");
+        // Carregar dados do gráfico de pizza apenas para admins
+        if (isAdmin) {
+            loadPieChartData();
+            Log.d(TAG, "Carregando gráfico de pizza para usuário admin");
+        } else {
+            Log.d(TAG, "Pulando carregamento do gráfico de pizza para usuário não-admin");
+        }
+        
+        // Atualizar interface após carregar os dados
+        setupUI();
+        
+        Log.d(TAG, "Dados do dashboard carregados e interface atualizada");
     }
     
     /**
@@ -135,13 +232,39 @@ public class DashboardFragment extends App_fragment {
      */
     private void loadDashboardMetrics() {
         try {
-            DashboardMetrics metrics = dashboardDataProvider.getDashboardMetrics(userEmail, isAdmin);
-            displayDashboardMetrics(metrics);
-            
-            Log.d(TAG, "Métricas carregadas - Total leads: " + metrics.getTotalLeads());
+            // Garantir que o app_pointer esteja disponível e atualizado
+            if (app_pointer != null) {
+                // Verificar se dados precisam ser atualizados (só atualiza se necessário)
+                if (!app_pointer.updated) {
+                    Log.d(TAG, "Atualizando dados da API antes de carregar métricas");
+                    app_pointer.update();
+                }
+                
+                // Usar o novo método que aceita App_main para obter dados reais
+                DashboardMetrics metrics = dashboardDataProvider.getDashboardMetrics(userEmail, isAdmin, app_pointer);
+                displayDashboardMetrics(metrics);
+                
+                Log.d(TAG, "Métricas carregadas com dados reais - Total leads: " + metrics.getTotalLeads());
+            } else {
+                Log.w(TAG, "app_pointer não disponível, usando fallback");
+                // Fallback para método sem App_main em caso de app_pointer não disponível
+                DashboardMetrics metrics = dashboardDataProvider.getDashboardMetrics(userEmail, isAdmin);
+                displayDashboardMetrics(metrics);
+                Log.w(TAG, "Usando dados simulados como fallback");
+            }
         } catch (Exception e) {
             Log.e(TAG, "Erro ao carregar métricas do dashboard", e);
-            showError("Erro ao carregar métricas");
+            // Fallback para método sem App_main em caso de erro
+            try {
+                DashboardMetrics metrics = dashboardDataProvider.getDashboardMetrics(userEmail, isAdmin);
+                displayDashboardMetrics(metrics);
+                Log.w(TAG, "Usando dados simulados como fallback após erro");
+            } catch (Exception e2) {
+                Log.e(TAG, "Erro no fallback", e2);
+                showError("Erro ao carregar métricas");
+                // Exibir métricas zeradas como último recurso
+                displayDashboardMetrics(new DashboardMetrics(0, 0, 0, 0, 0.0));
+            }
         }
     }
     
@@ -150,16 +273,30 @@ public class DashboardFragment extends App_fragment {
      */
     private void loadRecentLeads() {
         try {
-            contatos = dashboardDataProvider.getLeadsRecentes(userEmail, isAdmin, 
-                                                            AppConstants.LIMITE_LEADS_DASHBOARD,
-                    app_pointer);
-            cont_dict = new HashMap<>();
-            
-            Log.d(TAG, "Leads recentes carregados: " + contatos.size() + " leads");
+            // Garantir que o app_pointer esteja disponível e atualizado
+            if (app_pointer != null) {
+                // Verificar se dados precisam ser atualizados (só atualiza se necessário)
+                if (!app_pointer.updated) {
+                    Log.d(TAG, "Atualizando dados da API antes de carregar leads");
+                    app_pointer.update();
+                }
+                
+                contatos = dashboardDataProvider.getLeadsRecentes(userEmail, isAdmin, 
+                                                                AppConstants.LIMITE_LEADS_DASHBOARD,
+                        app_pointer);
+                cont_dict = new HashMap<>();
+                
+                Log.d(TAG, "Leads recentes carregados com dados reais: " + contatos.size() + " leads");
+            } else {
+                Log.w(TAG, "app_pointer não disponível para carregar leads recentes");
+                contatos = new ArrayList<>();
+                cont_dict = new HashMap<>();
+            }
         } catch (Exception e) {
             Log.e(TAG, "Erro ao carregar leads recentes", e);
             showError("Erro ao carregar leads");
             contatos = new ArrayList<>();
+            cont_dict = new HashMap<>();
         }
     }
     
@@ -167,15 +304,41 @@ public class DashboardFragment extends App_fragment {
      * Exibe as métricas do dashboard na interface
      */
     private void displayDashboardMetrics(DashboardMetrics metrics) {
-        // TODO: Implementar atualização das views com as métricas
-        // Aqui você atualizaria os TextViews dos cards com os valores das métricas
-        // Por exemplo:
-        // TextView tvTotalLeads = findViewById(R.id.tv_total_leads);
-        // tvTotalLeads.setText(String.valueOf(metrics.getTotalLeads()));
+        if (metrics == null) {
+            Log.w(TAG, "Métricas nulas recebidas");
+            return;
+        }
         
-        Log.d(TAG, "Métricas exibidas - Total: " + metrics.getTotalLeads() + 
-                  ", Conversões: " + metrics.getLeadsConvertidos() + 
-                  ", Taxa: " + metrics.getTaxaConversao() + "%");
+        try {
+            // Card 1: Total de Leads
+            if (tvTotalLeads != null) {
+                tvTotalLeads.setText(String.valueOf(metrics.getTotalLeads()));
+            }
+            
+            // Card 2: Conversões - CORRIGIDO para usar leadsConvertidos
+            if (tvConvertidos != null) {
+                tvConvertidos.setText(String.valueOf(metrics.getLeadsConvertidos()));
+            }
+            
+            // Card 3: Taxa de Conversão
+            if (tvTaxaConversao != null) {
+                tvTaxaConversao.setText(String.format("%.1f%%", metrics.getTaxaConversao()));
+            }
+            
+            // Card 4: Leads Este Mês
+            if (tvEsteMes != null) {
+                tvEsteMes.setText(String.valueOf(metrics.getLeadsNovos()));
+            }
+            
+            Log.d(TAG, "Interface atualizada com métricas reais - " +
+                      "Total Leads: " + metrics.getTotalLeads() + 
+                      ", Conversões: " + metrics.getLeadsConvertidos() +
+                      ", Taxa Conversão: " + String.format("%.1f%%", metrics.getTaxaConversao()) + 
+                      ", Este Mês: " + metrics.getLeadsNovos());
+                      
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao atualizar interface com métricas", e);
+        }
     }
 
     /**
@@ -362,9 +525,79 @@ public class DashboardFragment extends App_fragment {
      * Atualiza os dados do dashboard
      */
     public void refreshDashboardData() {
-        Log.d(TAG, "Atualizando dados do dashboard");
-        loadDashboardData();
-        setupUI();
+        Log.d(TAG, "Iniciando atualização dos dados do dashboard");
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(true);
+        }
+        
+        // Executar o carregamento de dados em thread separada para não bloquear a UI
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+        try {
+            // Forçar atualização dos dados da API sempre no pull to refresh
+            if (app_pointer != null) {
+                Log.d(TAG, "Forçando atualização da API via pull to refresh");
+                        app_pointer.forceUpdate(); // Executado em thread separada
+                    }
+                    
+                    // Voltar para a UI thread para atualizar a interface
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+            // Recarregar métricas
+            loadDashboardMetrics();
+            
+            // Recarregar leads recentes
+            loadRecentLeads();
+            
+            // Atualizar interface
+            setupUI();
+                                    
+                                    // Carregar dados atualizados na UI thread
+                                    loadDashboardData();
+                                    
+                                    // Carregar dados do gráfico de pizza também apenas para admins
+                                    if (isAdmin) {
+                                        loadPieChartData();
+                                        Log.d(TAG, "Recarregando gráfico de pizza para usuário admin");
+                                    }
+            
+            Log.d(TAG, "Dashboard atualizado com sucesso");
+            
+        } catch (Exception e) {
+                                    Log.e(TAG, "Erro ao atualizar interface do dashboard", e);
+            showError("Erro ao atualizar dados");
+        } finally {
+            // Parar o loading do SwipeRefreshLayout
+                                    if (swipeRefreshLayout != null) {
+                swipeRefreshLayout.setRefreshing(false);
+                Log.d(TAG, "Pull to refresh finalizado");
+            }
+        }
+                            }
+                        });
+                    }
+                    
+                } catch (Exception e) {
+                    Log.e(TAG, "Erro ao atualizar dados da API", e);
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showError("Erro ao atualizar dados");
+                                if (swipeRefreshLayout != null) {
+                                    swipeRefreshLayout.setRefreshing(false);
+                                    Log.d(TAG, "Pull to refresh finalizado com erro");
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        }).start();
     }
     
     /**
@@ -422,5 +655,105 @@ public class DashboardFragment extends App_fragment {
 
     public boolean isCurrentUserAdmin() {
         return isAdmin;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "DashboardFragment onResume - verificando estado dos dados");
+        
+        // Verificar se temos dados carregados e se estão atualizados
+        boolean temDadosCarregados = false;
+        
+        // Verificar se temos contatos carregados
+        boolean temContatos = (contatos != null && !contatos.isEmpty());
+        
+        // Verificar se as métricas foram carregadas (verificar se não são valores padrão/zerados)
+        boolean temMetricas = false;
+        if (tvTaxaConversao != null) {
+            String taxaText = tvTaxaConversao.getText().toString().trim();
+            // Considerar que temos métricas se o texto não está vazio e não é apenas "0" ou "0.0%"
+            temMetricas = !taxaText.isEmpty() && 
+                         !taxaText.equals("0") && 
+                         !taxaText.equals("0.0%") && 
+                         !taxaText.equals("0%") && 
+                         !taxaText.equals("25%"); // Valor padrão do layout
+        }
+        
+        // Verificar se o app_pointer está disponível e se os dados estão atualizados
+        boolean appPointerDisponivel = (app_pointer != null);
+        boolean dadosAtualizados = appPointerDisponivel && app_pointer.updated;
+        
+        temDadosCarregados = temContatos || temMetricas;
+        
+        Log.d(TAG, "Estado detalhado - " +
+                  "Contatos: " + (contatos != null ? contatos.size() : 0) + 
+                  ", Tem contatos: " + temContatos + 
+                  ", Tem métricas: " + temMetricas + 
+                  ", Taxa conversão atual: '" + (tvTaxaConversao != null ? tvTaxaConversao.getText().toString() : "null") + "'" +
+                  ", App pointer disponível: " + appPointerDisponivel +
+                  ", Dados API atualizados: " + dadosAtualizados);
+        
+        // Recarregar se:
+        // 1. Não temos dados carregados OU
+        // 2. App pointer não está disponível OU  
+        // 3. Dados da API não estão atualizados
+        if (!temDadosCarregados || !appPointerDisponivel || !dadosAtualizados) {
+            String motivo = !temDadosCarregados ? "sem dados carregados" : 
+                           !appPointerDisponivel ? "app_pointer não disponível" : 
+                           "dados API desatualizados";
+            
+            Log.d(TAG, "Recarregando dados do dashboard - Motivo: " + motivo);
+            loadDashboardData();
+        } else {
+            Log.d(TAG, "Dados já estão carregados e atualizados, mantendo estado atual");
+        }
+    }
+
+    /**
+     * Carrega dados para o gráfico de pizza do dashboard
+     */
+    private void loadPieChartData() {
+        Log.d(TAG, "Carregando dados do gráfico de pizza para o dashboard");
+        
+        metricsDataProvider.getPieChartData(userEmail, isAdmin, app_pointer, 
+            new MetricsDataProvider.PieChartCallback() {
+                @Override
+                public void onSuccess(ChartData.PieChartData data) {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setupDashboardPieChart(data);
+                            }
+                        });
+                    }
+                }
+                
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "Erro ao carregar dados do gráfico de pizza: " + error);
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Usar dados de fallback
+                                ChartData.PieChartData fallback = 
+                                    metricsDataProvider.getPieChartData(userEmail, isAdmin);
+                                setupDashboardPieChart(fallback);
+                            }
+                        });
+                    }
+                }
+            });
+    }
+    
+    /**
+     * Configura o gráfico de pizza do dashboard
+     */
+    private void setupDashboardPieChart(ChartData.PieChartData chartData) {
+        // Usar a classe utilitária com configurações específicas para o dashboard
+        PieChartHelper.setupPieChart(dashPieChart, chartData, true);
+        Log.d(TAG, "Gráfico de pizza do dashboard configurado");
     }
 } 
