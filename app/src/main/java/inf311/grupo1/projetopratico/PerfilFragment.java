@@ -33,6 +33,7 @@ import inf311.grupo1.projetopratico.services.MetricsDataProvider;
 import inf311.grupo1.projetopratico.services.UserProfileService;
 import inf311.grupo1.projetopratico.utils.AppConstants;
 import inf311.grupo1.projetopratico.utils.App_fragment;
+import inf311.grupo1.projetopratico.utils.BarChartHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,14 +53,16 @@ public class PerfilFragment extends App_fragment {
     private UserProfileService userProfileService;
     private MetricsDataProvider metricsDataProvider;
     
+    // Elementos da UI
     private CircleImageView ivAvatar;
-    private ImageView ivCamera;
     private TextView tvNome;
     private TextView tvCargo;
     
+    // Informações pessoais
     private TextView tvEmail;
     private TextView tvCargoInfo;
     
+    // Configurações
     private LinearLayout llSair;
     private BarChart perfilBarChart;
 
@@ -120,7 +123,6 @@ public class PerfilFragment extends App_fragment {
     private void initViews(View view) {
         // Avatar e informações básicas
         ivAvatar = view.findViewById(R.id.iv_avatar);
-        ivCamera = view.findViewById(R.id.iv_camera);
         tvNome = view.findViewById(R.id.tv_nome);
         tvCargo = view.findViewById(R.id.tv_cargo);
         
@@ -141,15 +143,6 @@ public class PerfilFragment extends App_fragment {
      * Configura os listeners dos elementos clicáveis
      */
     private void setupClickListeners() {
-        if (ivCamera != null) {
-            ivCamera.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    onCameraClick();
-                }
-            });
-        }
-        
         if (llSair != null) {
             llSair.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -255,17 +248,6 @@ public class PerfilFragment extends App_fragment {
     private void showError(String message) {
         if (getContext() != null) {
             Toast.makeText(getContext(), message, Toast.LENGTH_SHORT).show();
-        }
-    }
-    
-    /**
-     * Handler para clique na câmera (trocar foto)
-     */
-    private void onCameraClick() {
-        Log.d(TAG, "Clique na câmera - trocar foto");
-        
-        if (getContext() != null) {
-            Toast.makeText(getContext(), "Funcionalidade de trocar foto", Toast.LENGTH_SHORT).show();
         }
     }
     
@@ -394,7 +376,7 @@ public class PerfilFragment extends App_fragment {
     }
     
     /**
-     * Configura o gráfico de barras individual com os dados do usuário
+     * Configura o gráfico de barras individual moderno com os dados do usuário
      */
     private void setupIndividualBarChart(ChartData.BarChartData chartData) {
         try {
@@ -420,76 +402,17 @@ public class PerfilFragment extends App_fragment {
                 dadosUsuario = chartData.getConsultores().get(0);
             } else if (dadosUsuario == null) {
                 // Criar dados básicos se não houver dados
-                dadosUsuario = new ChartData.ConsultorData("Você", 0, 0, "#14b8a6");
+                dadosUsuario = BarChartHelper.createFallbackUserData(nomeUsuario);
             }
             
-            List<BarEntry> leadsEntries = new ArrayList<>();
-            List<BarEntry> conversoesEntries = new ArrayList<>();
-            List<String> labels = new ArrayList<>();
+            // Usar a classe utilitária modernizada para gráficos de barras do perfil
+            BarChartHelper.setupProfileBarChart(perfilBarChart, dadosUsuario);
             
-            // Adicionar dados do usuário
-            leadsEntries.add(new BarEntry(0, dadosUsuario.getLeads()));
-            conversoesEntries.add(new BarEntry(0, dadosUsuario.getConversoes()));
-            labels.add("Meus Dados");
-
-            BarDataSet leadsDataSet = new BarDataSet(leadsEntries, "Leads");
-            leadsDataSet.setColor(android.graphics.Color.parseColor("#14b8a6"));
-
-            BarDataSet conversoesDataSet = new BarDataSet(conversoesEntries, "Conversões");
-            conversoesDataSet.setColor(android.graphics.Color.parseColor("#F44336"));
-
-            List<IBarDataSet> dataSets = new ArrayList<>();
-            dataSets.add(leadsDataSet);
-            dataSets.add(conversoesDataSet);
-
-            BarData data = new BarData(dataSets);
-            data.setValueTextSize(12f);
-            data.setValueFormatter(new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value) {
-                    return String.valueOf((int) value);
-                }
-            });
-
-            perfilBarChart.setData(data);
+            Log.d(TAG, "Gráfico de barras moderno do perfil configurado para: " + dadosUsuario.getNome() +
+                      " - Leads: " + dadosUsuario.getLeads() + ", Conversões: " + dadosUsuario.getConversoes());
             
-            // Configurar aparência
-            perfilBarChart.getDescription().setEnabled(false);
-            perfilBarChart.setFitBars(true);
-
-            // Configurar eixos
-            XAxis xAxis = perfilBarChart.getXAxis();
-            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-            xAxis.setDrawGridLines(false);
-            xAxis.setGranularity(1f);
-            xAxis.setValueFormatter(new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value) {
-                    int index = (int) value;
-                    return index < labels.size() ? labels.get(index) : "";
-                }
-            });
-
-            YAxis leftAxis = perfilBarChart.getAxisLeft();
-            leftAxis.setDrawGridLines(true);
-            leftAxis.setAxisMinimum(0f);
-
-            perfilBarChart.getAxisRight().setEnabled(false);
-
-            // Configurar legenda
-            Legend legend = perfilBarChart.getLegend();
-            legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-            legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-            legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-            legend.setDrawInside(false);
-            
-            perfilBarChart.invalidate();
-            
-            Log.d(TAG, "Gráfico de barras individual configurado - Leads: " + dadosUsuario.getLeads() + 
-                      ", Conversões: " + dadosUsuario.getConversoes());
-                      
         } catch (Exception e) {
-            Log.e(TAG, "Erro ao configurar gráfico de barras individual", e);
+            Log.e(TAG, "Erro ao configurar gráfico de barras moderno do perfil", e);
         }
     }
     

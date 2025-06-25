@@ -33,6 +33,7 @@ import inf311.grupo1.projetopratico.models.ChartData;
 import inf311.grupo1.projetopratico.services.MetricsDataProvider;
 import inf311.grupo1.projetopratico.utils.AppConstants;
 import inf311.grupo1.projetopratico.utils.App_fragment;
+import inf311.grupo1.projetopratico.utils.BarChartHelper;
 import inf311.grupo1.projetopratico.utils.PieChartHelper;
 
 import java.util.ArrayList;
@@ -66,6 +67,7 @@ public class MetricasFragment extends App_fragment {
     
     // Estado de carregamento
     private boolean isLoadingData = false;
+    private boolean isLoadingIndividualPerformance = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -157,6 +159,18 @@ public class MetricasFragment extends App_fragment {
         
         // Container de desempenho individual (limpar cards estáticos)
         individualPerformanceContainer = view.findViewById(R.id.metricas_individual_performance_container);
+        
+        // Botão de refresh no header
+        View refreshButton = view.findViewById(R.id.btn_refresh_metrics);
+        if (refreshButton != null) {
+            refreshButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d(TAG, "Botão de refresh clicado");
+                    refreshAllData();
+                }
+            });
+        }
         
         Log.d(TAG, "Views inicializadas");
     }
@@ -403,10 +417,10 @@ public class MetricasFragment extends App_fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                // Usar dados de fallback
-                                List<ChartData.ConsultorData> fallback = 
-                                    metricsDataProvider.getPieChartData(userEmail, isAdmin).getConsultores();
-                                updateIndividualPerformanceDisplay(fallback);
+                                // Usar dados de fallback para o gráfico de pizza
+                                ChartData.PieChartData fallback = 
+                                    metricsDataProvider.getFallbackPieChartData(userEmail, isAdmin);
+                                setupPieChart(fallback);
                             }
                         });
                     }
@@ -456,12 +470,19 @@ public class MetricasFragment extends App_fragment {
      * Carrega dados de desempenho individual
      */
     private void loadIndividualPerformance() {
+        if (isLoadingIndividualPerformance) {
+            Log.d(TAG, "Já carregando desempenho individual, ignorando nova solicitação");
+            return;
+        }
+        
+        isLoadingIndividualPerformance = true;
         Log.d(TAG, "Carregando dados de desempenho individual");
         
         metricsDataProvider.getIndividualPerformanceData(userEmail, isAdmin, app_pointer, 
             new MetricsDataProvider.IndividualPerformanceCallback() {
                 @Override
                 public void onSuccess(List<ChartData.ConsultorData> consultores) {
+                    isLoadingIndividualPerformance = false;
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -474,6 +495,7 @@ public class MetricasFragment extends App_fragment {
                 
                 @Override
                 public void onError(String error) {
+                    isLoadingIndividualPerformance = false;
                     Log.e(TAG, "Erro ao carregar desempenho individual: " + error);
                     if (getActivity() != null) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -491,15 +513,27 @@ public class MetricasFragment extends App_fragment {
     }
     
     /**
-     * Configura o gráfico de pizza com os dados fornecidos
+     * Configura o gráfico de pizza moderno com os dados fornecidos
      */
     private void setupPieChart(ChartData.PieChartData chartData) {
-        // Usar a classe utilitária para configurar o gráfico
-        PieChartHelper.setupPieChart(pieChart, chartData, false);
+        try {
+            if (pieChart == null || chartData == null) {
+                Log.w(TAG, "PieChart ou dados são null");
+                return;
+            }
+            
+            // Usar a classe utilitária modernizada com configuração específica para métricas
+            PieChartHelper.setupMetricsPieChart(pieChart, chartData);
+            
+            Log.d(TAG, "Gráfico de pizza moderno das métricas configurado com sucesso");
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao configurar gráfico de pizza moderno das métricas", e);
+        }
     }
 
     /**
-     * Configura o gráfico de barras com os dados fornecidos
+     * Configura o gráfico de barras moderno com os dados fornecidos
      */
     private void setupBarChart(ChartData.BarChartData chartData) {
         try {
@@ -507,76 +541,16 @@ public class MetricasFragment extends App_fragment {
                 Log.w(TAG, "BarChart ou dados são null");
                 return;
             }
-        
-        List<BarEntry> leadsEntries = new ArrayList<>();
-            List<BarEntry> conversoesEntries = new ArrayList<>();
-            List<String> labels = new ArrayList<>();
             
-            for (int i = 0; i < chartData.getConsultores().size(); i++) {
-                ChartData.ConsultorData consultor = chartData.getConsultores().get(i);
-                leadsEntries.add(new BarEntry(i, consultor.getLeads()));
-                conversoesEntries.add(new BarEntry(i, consultor.getConversoes()));
-                labels.add(consultor.getNome());
-        }
-
-        BarDataSet leadsDataSet = new BarDataSet(leadsEntries, "Leads");
-        leadsDataSet.setColor(Color.parseColor("#14b8a6"));
-
-            BarDataSet conversoesDataSet = new BarDataSet(conversoesEntries, "Conversões");
-            conversoesDataSet.setColor(Color.parseColor("#F44336"));
-
-        List<IBarDataSet> dataSets = new ArrayList<>();
-        dataSets.add(leadsDataSet);
-            dataSets.add(conversoesDataSet);
-
-            BarData data = new BarData(dataSets);
-            data.setValueTextSize(10f);
-            data.setValueFormatter(new ValueFormatter() {
-                @Override
-                public String getFormattedValue(float value) {
-                    return String.valueOf((int) value);
-                }
-            });
-
-            barChart.setData(data);
+            // Usar a classe utilitária modernizada para gráficos de barras da equipe
+            BarChartHelper.setupTeamBarChart(barChart, chartData);
             
-            // Configurar aparência
-            barChart.getDescription().setEnabled(false);
-            barChart.setFitBars(true);
-
-        // Configurar eixos
-        XAxis xAxis = barChart.getXAxis();
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setDrawGridLines(false);
-        xAxis.setGranularity(1f);
-        xAxis.setValueFormatter(new ValueFormatter() {
-            @Override
-            public String getFormattedValue(float value) {
-                int index = (int) value;
-                    return index < labels.size() ? labels.get(index) : "";
-            }
-        });
-
-        YAxis leftAxis = barChart.getAxisLeft();
-        leftAxis.setDrawGridLines(true);
-        leftAxis.setAxisMinimum(0f);
-
-            barChart.getAxisRight().setEnabled(false);
-
-            // Configurar legenda
-        Legend legend = barChart.getLegend();
-            legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
-            legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
-            legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
-            legend.setDrawInside(false);
-            
-        barChart.invalidate();
-        
-            Log.d(TAG, "Gráfico de barras configurado com " + labels.size() + " consultores");
+            Log.d(TAG, "Gráfico de barras moderno das métricas configurado com " + 
+                      chartData.getConsultores().size() + " consultores");
                       
         } catch (Exception e) {
-            Log.e(TAG, "Erro ao configurar gráfico de barras", e);
-    }
+            Log.e(TAG, "Erro ao configurar gráfico de barras moderno das métricas", e);
+        }
     }
 
     /**
@@ -584,39 +558,67 @@ public class MetricasFragment extends App_fragment {
      */
     private void updateIndividualPerformanceDisplay(List<ChartData.ConsultorData> consultores) {
         try {
-        if (individualPerformanceContainer == null) {
+            if (individualPerformanceContainer == null) {
                 Log.w(TAG, "Container de desempenho individual é null");
-            return;
-        }
+                return;
+            }
             
-            // Limpar cards existentes (manter apenas o TextView do título)
+            if (consultores == null || consultores.isEmpty()) {
+                Log.w(TAG, "Lista de consultores é null ou vazia");
+                // Limpar container mesmo assim
+                clearStaticPerformanceCards();
+                return;
+            }
+            
+            Log.d(TAG, "Atualizando desempenho individual com " + consultores.size() + " consultores");
+            
+            // SEMPRE limpar container antes de adicionar novos cards
             clearStaticPerformanceCards();
             
             // Adicionar novos cards dinamicamente
             for (ChartData.ConsultorData consultor : consultores) {
-                addIndividualPerformanceCard(consultor);
+                if (consultor != null) {
+                    addIndividualPerformanceCard(consultor);
+                }
             }
             
-            Log.d(TAG, "Desempenho individual atualizado com " + consultores.size() + " consultores");
+            Log.d(TAG, "Desempenho individual atualizado com sucesso");
             
         } catch (Exception e) {
             Log.e(TAG, "Erro ao atualizar desempenho individual", e);
+            // Em caso de erro, pelo menos limpar o container
+            try {
+                clearStaticPerformanceCards();
+            } catch (Exception ex) {
+                Log.e(TAG, "Erro ao limpar container após falha", ex);
+            }
         }
     }
     
     /**
-     * Remove cards estáticos de desempenho, mantendo apenas o TextView do título
+     * Remove todos os cards dinâmicos de desempenho do container
      */
     private void clearStaticPerformanceCards() {
         if (individualPerformanceContainer == null) return;
         
-        // Remover todos os filhos exceto o primeiro (TextView do título)
-        int childCount = individualPerformanceContainer.getChildCount();
-        if (childCount > 1) {
-            individualPerformanceContainer.removeViews(1, childCount - 1);
+        try {
+            // Remover TODOS os filhos do container, pois todos são cards dinâmicos
+            int childCount = individualPerformanceContainer.getChildCount();
+            if (childCount > 0) {
+                individualPerformanceContainer.removeAllViews();
+                Log.d(TAG, "Removidos " + childCount + " cards dinâmicos de desempenho");
+            } else {
+                Log.d(TAG, "Container de desempenho já estava vazio");
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao limpar cards de desempenho", e);
+            // Tentar remoção forçada em caso de erro
+            try {
+                individualPerformanceContainer.removeAllViews();
+            } catch (Exception ex) {
+                Log.e(TAG, "Erro na remoção forçada", ex);
+            }
         }
-        
-        Log.d(TAG, "Cards estáticos de desempenho removidos");
     }
     
     /**
@@ -626,87 +628,121 @@ public class MetricasFragment extends App_fragment {
         try {
             if (getContext() == null || individualPerformanceContainer == null) return;
         
-            // Criar CardView
-        CardView cardView = new CardView(getContext());
-        LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
-            LinearLayout.LayoutParams.MATCH_PARENT,
-            LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-        cardParams.setMargins(0, 0, 0, dpToPx(8));
-        cardView.setLayoutParams(cardParams);
-        cardView.setRadius(dpToPx(12));
-        cardView.setCardElevation(dpToPx(4));
-        
-            // Criar LinearLayout horizontal
-            LinearLayout horizontalLayout = new LinearLayout(getContext());
-            horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
-            horizontalLayout.setPadding(dpToPx(16), dpToPx(16), dpToPx(16), dpToPx(16));
-        
-            // Avatar View
-            View avatarView = new View(getContext());
-        LinearLayout.LayoutParams avatarParams = new LinearLayout.LayoutParams(
-            dpToPx(48), dpToPx(48)
-        );
-            avatarParams.setMargins(0, 0, dpToPx(16), 0);
-            avatarView.setLayoutParams(avatarParams);
-            avatarView.setBackgroundResource(R.drawable.circle_avatar);
-            avatarView.setBackgroundTintList(
-                getContext().getColorStateList(android.R.color.holo_green_dark)
+            // Criar CardView moderno
+            CardView cardView = new CardView(getContext());
+            LinearLayout.LayoutParams cardParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
             );
+            cardParams.setMargins(0, 0, 0, dpToPx(12));
+            cardView.setLayoutParams(cardParams);
+            cardView.setRadius(dpToPx(16));
+            cardView.setCardElevation(dpToPx(6));
+            cardView.setCardBackgroundColor(getResources().getColor(R.color.background_white));
             
-            // Tentar definir cor personalizada do avatar
-            try {
-                int color = Color.parseColor(consultor.getCor());
-                avatarView.setBackgroundTintList(android.content.res.ColorStateList.valueOf(color));
-            } catch (Exception e) {
-                // Usar cor padrão se houver erro no parsing
-                Log.w(TAG, "Erro ao definir cor do avatar: " + consultor.getCor());
-            }
+            // Criar LinearLayout principal
+            LinearLayout mainLayout = new LinearLayout(getContext());
+            mainLayout.setOrientation(LinearLayout.HORIZONTAL);
+            mainLayout.setPadding(dpToPx(20), dpToPx(20), dpToPx(20), dpToPx(20));
+            mainLayout.setGravity(android.view.Gravity.CENTER_VERTICAL);
+        
+            // Avatar container com CardView
+            CardView avatarContainer = new CardView(getContext());
+            LinearLayout.LayoutParams avatarContainerParams = new LinearLayout.LayoutParams(
+                dpToPx(56), dpToPx(56)
+            );
+            avatarContainerParams.setMargins(0, 0, dpToPx(16), 0);
+            avatarContainer.setLayoutParams(avatarContainerParams);
+            avatarContainer.setRadius(dpToPx(28));
+            avatarContainer.setCardElevation(dpToPx(3));
+            avatarContainer.setCardBackgroundColor(getResources().getColor(R.color.background_gradient_start));
             
-            // LinearLayout vertical para nome e métricas
-            LinearLayout verticalLayout = new LinearLayout(getContext());
-            verticalLayout.setOrientation(LinearLayout.VERTICAL);
-            LinearLayout.LayoutParams verticalParams = new LinearLayout.LayoutParams(
+            // Ícone do avatar
+            android.widget.ImageView avatarIcon = new android.widget.ImageView(getContext());
+            LinearLayout.LayoutParams iconParams = new LinearLayout.LayoutParams(
+                dpToPx(28), dpToPx(28)
+            );
+            avatarIcon.setLayoutParams(iconParams);
+            avatarIcon.setImageResource(R.drawable.ic_user_modern);
+            avatarIcon.setColorFilter(getResources().getColor(R.color.primary_green));
+            avatarIcon.setScaleType(android.widget.ImageView.ScaleType.CENTER_INSIDE);
+            
+            // Definir gravity para centralizar o ícone
+            CardView.LayoutParams avatarIconParams = new CardView.LayoutParams(
+                dpToPx(28), dpToPx(28)
+            );
+            avatarIconParams.gravity = android.view.Gravity.CENTER;
+            avatarIcon.setLayoutParams(avatarIconParams);
+            
+            avatarContainer.addView(avatarIcon);
+            
+            // LinearLayout vertical para informações
+            LinearLayout infoLayout = new LinearLayout(getContext());
+            infoLayout.setOrientation(LinearLayout.VERTICAL);
+            LinearLayout.LayoutParams infoParams = new LinearLayout.LayoutParams(
                 0, LinearLayout.LayoutParams.WRAP_CONTENT
-        );
-            verticalParams.weight = 1;
-            verticalLayout.setLayoutParams(verticalParams);
+            );
+            infoParams.weight = 1;
+            infoParams.setMargins(0, 0, dpToPx(16), 0);
+            infoLayout.setLayoutParams(infoParams);
         
             // TextView nome
             TextView nomeTextView = new TextView(getContext());
             nomeTextView.setText(consultor.getNome());
             nomeTextView.setTextColor(getResources().getColor(R.color.text_primary));
             nomeTextView.setTextSize(16);
-            nomeTextView.setTypeface(null, android.graphics.Typeface.BOLD);
-        
+            nomeTextView.setTypeface(nomeTextView.getTypeface(), android.graphics.Typeface.BOLD);
+            nomeTextView.setMaxLines(1);
+            
             // TextView métricas
             TextView metricsTextView = new TextView(getContext());
             String metricsText = consultor.getLeads() + " leads • " + consultor.getConversoes() + " conversões";
             metricsTextView.setText(metricsText);
             metricsTextView.setTextColor(getResources().getColor(R.color.text_secondary));
             metricsTextView.setTextSize(14);
+            metricsTextView.setMaxLines(1);
+            
+            // Margem entre nome e métricas
+            LinearLayout.LayoutParams metricsParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            metricsParams.setMargins(0, dpToPx(4), 0, 0);
+            metricsTextView.setLayoutParams(metricsParams);
         
-            verticalLayout.addView(nomeTextView);
-            verticalLayout.addView(metricsTextView);
-        
+            infoLayout.addView(nomeTextView);
+            infoLayout.addView(metricsTextView);
+            
+            // Container para a taxa de conversão
+            CardView taxaContainer = new CardView(getContext());
+            LinearLayout.LayoutParams taxaContainerParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT
+            );
+            taxaContainer.setLayoutParams(taxaContainerParams);
+            taxaContainer.setRadius(dpToPx(12));
+            taxaContainer.setCardElevation(0);
+            taxaContainer.setCardBackgroundColor(getResources().getColor(R.color.background_gradient_start));
+            
             // TextView taxa de conversão
             TextView taxaTextView = new TextView(getContext());
             double taxa = consultor.getLeads() > 0 ? 
                 (double) consultor.getConversoes() / consultor.getLeads() * 100.0 : 0.0;
             taxaTextView.setText(String.format("%.1f%%", taxa));
             taxaTextView.setTextColor(getResources().getColor(R.color.primary_green));
-            taxaTextView.setTextSize(16);
-            taxaTextView.setTypeface(null, android.graphics.Typeface.BOLD);
+            taxaTextView.setTextSize(14);
+            taxaTextView.setTypeface(taxaTextView.getTypeface(), android.graphics.Typeface.BOLD);
+            taxaTextView.setPadding(dpToPx(12), dpToPx(8), dpToPx(12), dpToPx(8));
+            
+            taxaContainer.addView(taxaTextView);
         
             // Montar hierarquia
-            horizontalLayout.addView(avatarView);
-            horizontalLayout.addView(verticalLayout);
-            horizontalLayout.addView(taxaTextView);
+            mainLayout.addView(avatarContainer);
+            mainLayout.addView(infoLayout);
+            mainLayout.addView(taxaContainer);
             
-            cardView.addView(horizontalLayout);
-        individualPerformanceContainer.addView(cardView);
+            cardView.addView(mainLayout);
+            individualPerformanceContainer.addView(cardView);
         
-            Log.d(TAG, "Card adicionado para: " + consultor.getNome() + 
+            Log.d(TAG, "Card moderno adicionado para: " + consultor.getNome() + 
               " - " + consultor.getLeads() + " leads, " + consultor.getConversoes() + " conversões");
             
         } catch (Exception e) {
@@ -743,6 +779,10 @@ public class MetricasFragment extends App_fragment {
     public void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "MetricasFragment onDestroy");
+        
+        // Reset das flags de carregamento
+        isLoadingData = false;
+        isLoadingIndividualPerformance = false;
         
         // Cleanup
         swipeRefreshLayout = null;

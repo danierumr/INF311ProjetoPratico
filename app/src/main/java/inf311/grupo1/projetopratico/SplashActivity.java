@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import inf311.grupo1.projetopratico.services.MetricsDataProvider;
+
 /**
  * Activity de splash que verifica o estado de autenticação
  * e redireciona para a tela apropriada
@@ -27,7 +29,41 @@ public class SplashActivity extends AppCompatActivity {
         
         firebaseManager = FirebaseManager.getInstance();
         
+        // Limpar todos os caches antes de verificar autenticação
+        clearAllCaches();
+        
         checkAuthenticationAndNavigate();
+    }
+    
+    /**
+     * Limpa todos os caches do sistema para garantir dados atualizados
+     */
+    private void clearAllCaches() {
+        Log.d(TAG, "=== LIMPANDO TODOS OS CACHES ===");
+        
+        try {
+            // Limpar cache do MetricsDataProvider
+            MetricsDataProvider metricsProvider = MetricsDataProvider.getInstance();
+            metricsProvider.clearCache();
+            Log.d(TAG, "✅ Cache do MetricsDataProvider limpo");
+            
+            // Forçar reset do App_main se disponível
+            App_main app = (App_main) getApplication();
+            if (app != null) {
+                app.updated = false; // Forçar nova atualização dos dados
+                Log.d(TAG, "✅ App_main marcado para atualização forçada");
+            }
+            
+            // Limpar Data_master para evitar dados do usuário anterior
+            Data_master.admin = false;
+            Data_master.user_id = null;
+            Log.d(TAG, "✅ Data_master limpo");
+            
+            Log.d(TAG, "=== LIMPEZA DE CACHES CONCLUÍDA ===");
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao limpar caches", e);
+        }
     }
     
     /**
@@ -66,6 +102,9 @@ public class SplashActivity extends AppCompatActivity {
                 Data_master.admin = isAdmin;
                 Data_master.user_id = firebaseManager.getCurrentUserUid();
                 
+                // Forçar atualização dos leads para este usuário
+                forceUpdateLeadsData();
+                
                 // Navegar para o dashboard com os dados do usuário
                 navigateToDashboard(isAdmin, name, email);
             }
@@ -78,6 +117,33 @@ public class SplashActivity extends AppCompatActivity {
                 navigateToLogin();
             }
         });
+    }
+    
+    /**
+     * Força atualização dos dados dos leads para o usuário atual
+     */
+    private void forceUpdateLeadsData() {
+        Log.d(TAG, "=== FORÇANDO ATUALIZAÇÃO DOS LEADS ===");
+        
+        try {
+            App_main app = (App_main) getApplication();
+            if (app != null) {
+                // Executar em thread separada para não bloquear a UI
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            app.forceUpdate(); // Força nova busca na API
+                            Log.d(TAG, "✅ Leads atualizados com sucesso na SplashScreen");
+                        } catch (Exception e) {
+                            Log.e(TAG, "❌ Erro ao atualizar leads na SplashScreen", e);
+                        }
+                    }
+                }).start();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao forçar atualização dos leads", e);
+        }
     }
     
     /**

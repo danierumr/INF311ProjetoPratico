@@ -236,6 +236,7 @@ public class App_main extends  Application
         
         params.put("camposPersonalizados[campopersonalizado_4_compl_cont][0]", Data_master.user_id);
         params.put("camposPersonalizados[campopersonalizado_1_compl_cont]", contato.responsavel);
+        params.put("camposPersonalizados[campopersonalizado_6_compl_cont]", contato.serie);
 
         String url = "https://crmufvgrupo1.apprubeus.com.br/api/Contato/cadastro";
        

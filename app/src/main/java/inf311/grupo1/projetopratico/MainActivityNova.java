@@ -59,6 +59,9 @@ public class MainActivityNova extends AppCompatActivity {
         
         getUserData();
         
+        // Limpar caches para garantir dados atualizados para o usuário atual
+        clearCachesForCurrentUser();
+        
         // Verificar e solicitar permissões ANTES de inicializar notificações
         checkAndRequestPermissions();
         
@@ -182,10 +185,41 @@ public class MainActivityNova extends AppCompatActivity {
             navigateToFragment(ALERTAS_FRAGMENT, null);
             Log.d(TAG, "Fragment inicial: Alertas (via notificação)");
         } else {
-        // Forçar carregamento do dashboard independentemente do estado atual
-        currentFragmentTag = null; // Resetar para garantir carregamento
-        navigateToFragment(DASHBOARD_FRAGMENT, null);
+            // Forçar carregamento do dashboard independentemente do estado atual
+            currentFragmentTag = null; // Resetar para garantir carregamento
+            
+            // Forçar atualização dos dados antes de carregar o dashboard inicial
+            forceUpdateDataForInitialLoad();
+            
+            navigateToFragment(DASHBOARD_FRAGMENT, null);
             Log.d(TAG, "Fragment inicial: Dashboard");
+        }
+    }
+    
+    /**
+     * Força atualização dos dados para o carregamento inicial
+     */
+    private void forceUpdateDataForInitialLoad() {
+        Log.d(TAG, "=== FORÇANDO ATUALIZAÇÃO PARA CARREGAMENTO INICIAL ===");
+        
+        try {
+            App_main app = (App_main) getApplication();
+            if (app != null) {
+                // Executar em thread separada para não bloquear a UI
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            app.forceUpdate(); // Força nova busca na API
+                            Log.d(TAG, "✅ Dados atualizados com sucesso para carregamento inicial");
+                        } catch (Exception e) {
+                            Log.e(TAG, "❌ Erro ao atualizar dados para carregamento inicial", e);
+                        }
+                    }
+                }).start();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao forçar atualização para carregamento inicial", e);
         }
     }
     
@@ -352,28 +386,68 @@ public class MainActivityNova extends AppCompatActivity {
      * Reseta todos os botões da toolbar para o estado padrão
      */
     private void resetToolbarButtons() {
-        resetButton(R.id.toolbar_btn1_icon, R.id.toolbar_btn1_text);
-        resetButton(R.id.toolbar_btn2_icon, R.id.toolbar_btn2_text);
-        resetButton(R.id.toolbar_btn4_icon, R.id.toolbar_btn4_text);
-        resetButton(R.id.toolbar_btn5_icon, R.id.toolbar_btn5_text);
+        resetModernButton(R.id.toolbar_btn1);
+        resetModernButton(R.id.toolbar_btn2);
+        resetModernButton(R.id.toolbar_btn4);
+        resetModernButton(R.id.toolbar_btn5);
         
         Log.d(TAG, "Botões da toolbar resetados");
     }
     
     /**
-     * Reseta um botão específico para o estado inativo
+     * Reseta um botão moderno para o estado inativo
      */
-    private void resetButton(int iconId, int textId) {
-        if (toolbar != null) {
-            android.widget.ImageView icon = toolbar.findViewById(iconId);
-            android.widget.TextView text = toolbar.findViewById(textId);
-            
-            if (icon != null) {
-                icon.setColorFilter(getResources().getColor(R.color.icon_gray));
+    private void resetModernButton(int buttonId) {
+        if (toolbar == null) return;
+        
+        androidx.cardview.widget.CardView button = toolbar.findViewById(buttonId);
+        if (button == null) return;
+        
+        // Encontrar os elementos internos
+        android.widget.ImageView icon = null;
+        android.widget.TextView text = null;
+        androidx.cardview.widget.CardView iconCard = null;
+        
+        // Navegar pela hierarquia para encontrar os elementos
+        android.view.ViewGroup container = (android.view.ViewGroup) button.getChildAt(0);
+        if (container != null) {
+            for (int i = 0; i < container.getChildCount(); i++) {
+                android.view.View child = container.getChildAt(i);
+                if (child instanceof androidx.cardview.widget.CardView) {
+                    iconCard = (androidx.cardview.widget.CardView) child;
+                    // Procurar o ícone dentro do card
+                    if (iconCard.getChildCount() > 0) {
+                        android.view.View cardChild = iconCard.getChildAt(0);
+                        if (cardChild instanceof android.widget.ImageView) {
+                            icon = (android.widget.ImageView) cardChild;
+                        } else if (cardChild instanceof android.view.ViewGroup) {
+                            // Para o caso do FrameLayout dos alertas
+                            android.view.ViewGroup frame = (android.view.ViewGroup) cardChild;
+                            for (int j = 0; j < frame.getChildCount(); j++) {
+                                if (frame.getChildAt(j) instanceof android.widget.ImageView) {
+                                    icon = (android.widget.ImageView) frame.getChildAt(j);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } else if (child instanceof android.widget.TextView) {
+                    text = (android.widget.TextView) child;
+                }
             }
-            if (text != null) {
-                text.setTextColor(getResources().getColor(R.color.text_secondary));
-            }
+        }
+        
+        // Aplicar estilo inativo
+        if (iconCard != null) {
+            iconCard.setCardBackgroundColor(getResources().getColor(R.color.background_white));
+            iconCard.setCardElevation(2.0f);
+        }
+        if (icon != null) {
+            icon.setColorFilter(getResources().getColor(R.color.text_secondary));
+        }
+        if (text != null) {
+            text.setTextColor(getResources().getColor(R.color.text_secondary));
+            text.setTypeface(null, android.graphics.Typeface.NORMAL);
         }
     }
     
@@ -383,31 +457,63 @@ public class MainActivityNova extends AppCompatActivity {
     private void highlightToolbarButton(int buttonId) {
         if (toolbar == null) return;
         
-        if (buttonId == R.id.toolbar_btn1) {
-            highlightButton(R.id.toolbar_btn1_icon, R.id.toolbar_btn1_text);
-        } else if (buttonId == R.id.toolbar_btn2) {
-            highlightButton(R.id.toolbar_btn2_icon, R.id.toolbar_btn2_text);
-        } else if (buttonId == R.id.toolbar_btn4) {
-            highlightButton(R.id.toolbar_btn4_icon, R.id.toolbar_btn4_text);
-        } else if (buttonId == R.id.toolbar_btn5) {
-            highlightButton(R.id.toolbar_btn5_icon, R.id.toolbar_btn5_text);
-        }
+        highlightModernButton(buttonId);
         
         Log.d(TAG, "Botão da toolbar destacado: " + buttonId);
     }
     
     /**
-     * Destaca um botão específico (ícone e texto)
+     * Destaca um botão moderno específico
      */
-    private void highlightButton(int iconId, int textId) {
-        android.widget.ImageView icon = toolbar.findViewById(iconId);
-        android.widget.TextView text = toolbar.findViewById(textId);
+    private void highlightModernButton(int buttonId) {
+        androidx.cardview.widget.CardView button = toolbar.findViewById(buttonId);
+        if (button == null) return;
         
+        // Encontrar os elementos internos
+        android.widget.ImageView icon = null;
+        android.widget.TextView text = null;
+        androidx.cardview.widget.CardView iconCard = null;
+        
+        // Navegar pela hierarquia para encontrar os elementos
+        android.view.ViewGroup container = (android.view.ViewGroup) button.getChildAt(0);
+        if (container != null) {
+            for (int i = 0; i < container.getChildCount(); i++) {
+                android.view.View child = container.getChildAt(i);
+                if (child instanceof androidx.cardview.widget.CardView) {
+                    iconCard = (androidx.cardview.widget.CardView) child;
+                    // Procurar o ícone dentro do card
+                    if (iconCard.getChildCount() > 0) {
+                        android.view.View cardChild = iconCard.getChildAt(0);
+                        if (cardChild instanceof android.widget.ImageView) {
+                            icon = (android.widget.ImageView) cardChild;
+                        } else if (cardChild instanceof android.view.ViewGroup) {
+                            // Para o caso do FrameLayout dos alertas
+                            android.view.ViewGroup frame = (android.view.ViewGroup) cardChild;
+                            for (int j = 0; j < frame.getChildCount(); j++) {
+                                if (frame.getChildAt(j) instanceof android.widget.ImageView) {
+                                    icon = (android.widget.ImageView) frame.getChildAt(j);
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                } else if (child instanceof android.widget.TextView) {
+                    text = (android.widget.TextView) child;
+                }
+            }
+        }
+        
+        // Aplicar estilo ativo
+        if (iconCard != null) {
+            iconCard.setCardBackgroundColor(getResources().getColor(R.color.primary_green));
+            iconCard.setCardElevation(4.0f);
+        }
         if (icon != null) {
-            icon.setColorFilter(getResources().getColor(R.color.icon_green));
+            icon.setColorFilter(getResources().getColor(R.color.text_white));
         }
         if (text != null) {
-            text.setTextColor(getResources().getColor(R.color.icon_green));
+            text.setTextColor(getResources().getColor(R.color.primary_green));
+            text.setTypeface(null, android.graphics.Typeface.BOLD);
         }
     }
     
@@ -586,5 +692,32 @@ public class MainActivityNova extends AppCompatActivity {
             })
             .setNegativeButton("Agora Não", null)
             .show();
+    }
+    
+    /**
+     * Limpa os caches para garantir dados atualizados para o usuário atual
+     */
+    private void clearCachesForCurrentUser() {
+        Log.d(TAG, "=== LIMPANDO CACHES PARA USUÁRIO ATUAL ===");
+        
+        try {
+            // Limpar cache do MetricsDataProvider
+            inf311.grupo1.projetopratico.services.MetricsDataProvider metricsProvider = 
+                inf311.grupo1.projetopratico.services.MetricsDataProvider.getInstance();
+            metricsProvider.clearCache();
+            Log.d(TAG, "✅ Cache do MetricsDataProvider limpo na MainActivityNova");
+            
+            // Forçar reset do App_main para nova atualização
+            App_main app = (App_main) getApplication();
+            if (app != null) {
+                app.updated = false; // Marcar para atualização forçada
+                Log.d(TAG, "✅ App_main marcado para atualização forçada na MainActivityNova");
+            }
+            
+            Log.d(TAG, "=== LIMPEZA DE CACHES NA MAINACTIVITY CONCLUÍDA ===");
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao limpar caches na MainActivityNova", e);
+        }
     }
 } 

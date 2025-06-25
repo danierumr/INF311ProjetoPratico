@@ -3,6 +3,7 @@ package inf311.grupo1.projetopratico.models;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import com.google.firebase.Timestamp;
+import inf311.grupo1.projetopratico.R;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -192,13 +193,13 @@ public class Notification {
     
     public int getTypeIcon() {
         switch (getType()) {
-            case TYPE_NEW_LEAD: return android.R.drawable.ic_dialog_email;
-            case TYPE_LEAD_UPDATE: return android.R.drawable.ic_dialog_info;
-            case TYPE_ACTIVITY_REMINDER: return android.R.drawable.ic_dialog_alert;
-            case TYPE_GOAL_ACHIEVEMENT: return android.R.drawable.ic_dialog_info;
-            case TYPE_SYSTEM_ALERT: return android.R.drawable.ic_dialog_alert;
-            case TYPE_TEAM_UPDATE: return android.R.drawable.ic_dialog_info;
-            default: return android.R.drawable.ic_dialog_info;
+            case TYPE_NEW_LEAD: return R.drawable.ic_lead_new;
+            case TYPE_LEAD_UPDATE: return R.drawable.ic_lead_update;
+            case TYPE_ACTIVITY_REMINDER: return R.drawable.ic_reminder;
+            case TYPE_GOAL_ACHIEVEMENT: return R.drawable.ic_goal_achievement;
+            case TYPE_SYSTEM_ALERT: return R.drawable.ic_system_alert;
+            case TYPE_TEAM_UPDATE: return R.drawable.ic_team_update;
+            default: return R.drawable.ic_notifications_active;
         }
     }
     

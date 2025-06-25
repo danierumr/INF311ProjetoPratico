@@ -12,7 +12,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.material.button.MaterialButton;
 
 import java.util.Date;
 
@@ -28,10 +32,21 @@ public class DetalhesLeadFragment extends App_fragment {
     
     private Contato contato;
     
+    // UI Elements - Header
+    private CardView btnQuickCall, btnQuickEmail;
+    
+    // UI Elements - Profile Card
     private TextView nomeTextView, escolaTextView, estagioTextView, prioridadeTextView;
-    private TextView responsavelTextView, emailTextView, telefoneTextView;
-    private TextView interesseTextView, ultimoContatoTextView, observacoesTextView;
-    private Button registrarAtividadeBtn;
+    private TextView ultimoContatoTextView;
+    private CardView statusChip;
+    
+    // UI Elements - Contact Card
+    private TextView responsavelTextView, emailTextView, telefoneTextView, interesseTextView;
+    private CardView btnEmailAction, btnPhoneAction;
+    
+    // UI Elements - Notes and Actions
+    private TextView observacoesTextView;
+    private MaterialButton registrarAtividadeBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +70,7 @@ public class DetalhesLeadFragment extends App_fragment {
         initializeUI(view);
         preencherDados();
         setupListeners();
+        updateContactButtonsState();
     }
     
     /**
@@ -96,19 +112,28 @@ public class DetalhesLeadFragment extends App_fragment {
      * Inicializa os elementos da UI
      */
     private void initializeUI(View view) {
+        // Header buttons
+        btnQuickCall = view.findViewById(R.id.btn_quick_call);
+        btnQuickEmail = view.findViewById(R.id.btn_quick_email);
+        
+        // Profile card elements
         nomeTextView = view.findViewById(R.id.detalhes_lead_name);
         escolaTextView = view.findViewById(R.id.detalhes_lead_escola);
         estagioTextView = view.findViewById(R.id.detalhes_lead_estagio_edit);
         prioridadeTextView = view.findViewById(R.id.detalhes_lead_prioridade_edit);
+        ultimoContatoTextView = view.findViewById(R.id.detalhes_lead_ult_cont_edit);
+        statusChip = view.findViewById(R.id.status_chip);
         
+        // Contact card elements
         responsavelTextView = view.findViewById(R.id.detalhes_lead_resp_edit);
         emailTextView = view.findViewById(R.id.detalhes_lead_email_edit);
         telefoneTextView = view.findViewById(R.id.detalhes_lead_tel_edit);
         interesseTextView = view.findViewById(R.id.detalhes_lead_interesse_edit);
-        ultimoContatoTextView = view.findViewById(R.id.detalhes_lead_ult_cont_edit);
+        btnEmailAction = view.findViewById(R.id.btn_email_action);
+        btnPhoneAction = view.findViewById(R.id.btn_phone_action);
         
+        // Notes and actions
         observacoesTextView = view.findViewById(R.id.detalhes_lead_obser_body);
-        
         registrarAtividadeBtn = view.findViewById(R.id.detalhes_lead_btn);
         
         Log.d(TAG, "UI inicializada");
@@ -121,24 +146,45 @@ public class DetalhesLeadFragment extends App_fragment {
         if (contato == null) return;
         
         try {
-            nomeTextView.setText(contato.nome);
-            escolaTextView.setText(contato.escola + " • " + contato.serie);
+            // Profile information
+            nomeTextView.setText(contato.nome != null ? contato.nome : "Nome não informado");
             
-            estagioTextView.setText(getEstagioLead());
+            String schoolInfo = "";
+            if (contato.escola != null && !contato.escola.isEmpty()) {
+                schoolInfo = contato.escola;
+                if (contato.serie != null && !contato.serie.isEmpty()) {
+                    schoolInfo += " • " + contato.serie;
+                }
+            } else {
+                schoolInfo = "Escola não informada";
+            }
+            escolaTextView.setText(schoolInfo);
+            
+            // Status information
+            String estagio = getEstagioLead();
+            estagioTextView.setText(estagio);
+            updateStatusChip(estagio);
+            
             prioridadeTextView.setText(getPrioridadeLead());
             
-            responsavelTextView.setText(contato.responsavel);
-            emailTextView.setText(contato.email);
-            telefoneTextView.setText(contato.telefone);
-            interesseTextView.setText(contato.interesse);
+            // Last contact
+            if (contato.ultimo_contato != null) {
+                CharSequence tempoRelativo = DateUtils.getRelativeTimeSpanString(
+                        contato.ultimo_contato.getTime(), 
+                        System.currentTimeMillis(), 
+                        DateUtils.MINUTE_IN_MILLIS);
+                ultimoContatoTextView.setText(tempoRelativo);
+            } else {
+                ultimoContatoTextView.setText("Sem contato registrado");
+            }
             
-            Date now = new Date();
-            CharSequence tempoRelativo = DateUtils.getRelativeTimeSpanString(
-                    contato.ultimo_contato.getTime(), 
-                    now.getTime(), 
-                    DateUtils.MINUTE_IN_MILLIS);
-            ultimoContatoTextView.setText(tempoRelativo);
+            // Contact information
+            responsavelTextView.setText(contato.responsavel != null ? contato.responsavel : "Não informado");
+            emailTextView.setText(contato.email != null ? contato.email : "Email não informado");
+            telefoneTextView.setText(contato.telefone != null ? contato.telefone : "Telefone não informado");
+            interesseTextView.setText(contato.interesse != null ? contato.interesse : "Interesse não informado");
             
+            // Notes
             String observacoes = getObservacoesLead();
             observacoesTextView.setText(observacoes);
             
@@ -153,9 +199,122 @@ public class DetalhesLeadFragment extends App_fragment {
     }
     
     /**
+     * Atualiza a cor do chip de status baseado no estágio
+     */
+    private void updateStatusChip(String estagio) {
+        if (statusChip == null || getContext() == null) return;
+        
+        int backgroundColor;
+        if (estagio.contains("Novo")) {
+            backgroundColor = ContextCompat.getColor(getContext(), R.color.text_secondary);
+        } else if (estagio.contains("Potencial")) {
+            backgroundColor = ContextCompat.getColor(getContext(), R.color.azul_barra);
+        } else if (estagio.contains("Interessado")) {
+            backgroundColor = ContextCompat.getColor(getContext(), R.color.lilas_barra);
+        } else if (estagio.contains("Inscrito")) {
+            backgroundColor = ContextCompat.getColor(getContext(), R.color.roxo_barra);
+        } else if (estagio.contains("Confirmado")) {
+            backgroundColor = ContextCompat.getColor(getContext(), R.color.magenta_barra);
+        } else if (estagio.contains("Convocado")) {
+            backgroundColor = ContextCompat.getColor(getContext(), R.color.warning_orange);
+        } else if (estagio.contains("Matriculado")) {
+            backgroundColor = ContextCompat.getColor(getContext(), R.color.success_green);
+        } else {
+            backgroundColor = ContextCompat.getColor(getContext(), R.color.primary_green);
+        }
+        
+        statusChip.setCardBackgroundColor(backgroundColor);
+    }
+    
+    /**
+     * Atualiza o estado dos botões de contato baseado na disponibilidade dos dados
+     */
+    private void updateContactButtonsState() {
+        if (contato == null) return;
+        
+        boolean hasValidEmail = isEmailValido(contato.email);
+        boolean hasValidPhone = isTelefoneValido(contato.telefone);
+        
+        updateButtonState(btnQuickCall, hasValidPhone);
+        updateButtonState(btnQuickEmail, hasValidEmail);
+        
+        updateButtonState(btnPhoneAction, hasValidPhone);
+        updateButtonState(btnEmailAction, hasValidEmail);
+        
+        Log.d(TAG, "Estado dos botões atualizado - Email válido: " + hasValidEmail + ", Telefone válido: " + hasValidPhone);
+    }
+    
+    /**
+     * Atualiza o estado visual de um botão baseado na disponibilidade
+     */
+    private void updateButtonState(CardView button, boolean isEnabled) {
+        if (button == null) return;
+        
+        button.setAlpha(isEnabled ? 1.0f : 0.5f);
+        button.setClickable(true); // Manter clicável para mostrar feedback
+    }
+    
+    /**
      * Configura os listeners dos elementos
      */
     private void setupListeners() {
+        // Quick action buttons
+        if (btnQuickCall != null) {
+            btnQuickCall.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handlePhoneAction();
+                }
+            });
+        }
+        
+        if (btnQuickEmail != null) {
+            btnQuickEmail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handleEmailAction();
+                }
+            });
+        }
+        
+        // Contact card action buttons
+        if (btnPhoneAction != null) {
+            btnPhoneAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handlePhoneAction();
+                }
+            });
+        }
+        
+        if (btnEmailAction != null) {
+            btnEmailAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handleEmailAction();
+                }
+            });
+        }
+        
+        // Contact text fields (backward compatibility)
+        if (emailTextView != null) {
+            emailTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handleEmailAction();
+                }
+            });
+        }
+        
+        if (telefoneTextView != null) {
+            telefoneTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    handlePhoneAction();
+                }
+            });
+        }
+        
         if (registrarAtividadeBtn != null) {
             registrarAtividadeBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -165,25 +324,33 @@ public class DetalhesLeadFragment extends App_fragment {
             });
         }
         
-        if (emailTextView != null) {
-            emailTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    abrirEmail(contato.email);
-                }
-            });
-        }
-        
-        if (telefoneTextView != null) {
-            telefoneTextView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    ligarTelefone(contato.telefone);
-                }
-            });
-        }
-        
         Log.d(TAG, "Listeners configurados");
+    }
+    
+    /**
+     * Manipula ação de telefone
+     */
+    private void handlePhoneAction() {
+        if (contato == null) return;
+        
+        if (isTelefoneValido(contato.telefone)) {
+            ligarTelefone(contato.telefone);
+        } else {
+            Toast.makeText(getContext(), "Telefone não informado para " + contato.nome, Toast.LENGTH_SHORT).show();
+        }
+    }
+    
+    /**
+     * Manipula ação de email
+     */
+    private void handleEmailAction() {
+        if (contato == null) return;
+        
+        if (isEmailValido(contato.email)) {
+            abrirEmail(contato.email);
+        } else {
+            Toast.makeText(getContext(), "Email não informado para " + contato.nome, Toast.LENGTH_SHORT).show();
+        }
     }
     
     /**
@@ -196,11 +363,6 @@ public class DetalhesLeadFragment extends App_fragment {
             mainActivity.navigateToAcompanhamento(contato);
             Log.d(TAG, "Navegando para acompanhamento do lead: " + contato.nome);
         }
-        /*
-        if (getActivity() != null) {
-            Toast.makeText(getActivity(), "Funcionalidade de registro de atividade em desenvolvimento", 
-                          Toast.LENGTH_LONG).show();
-        }*/
     }
     
     /**
@@ -244,40 +406,120 @@ public class DetalhesLeadFragment extends App_fragment {
     }
     
     /**
-     * Retorna o estágio do lead a partir do interesse
+     * Verifica se o telefone é válido
+     */
+    private boolean isTelefoneValido(String telefone) {
+        return telefone != null && 
+               !telefone.trim().isEmpty() && 
+               !telefone.equalsIgnoreCase("null") &&
+               !telefone.equalsIgnoreCase("undefined") &&
+               !telefone.equals("0") &&
+               !telefone.trim().equals("-") &&
+               !telefone.contains("não informado");
+    }
+    
+    /**
+     * Verifica se o email é válido
+     */
+    private boolean isEmailValido(String email) {
+        return email != null && 
+               !email.trim().isEmpty() && 
+               !email.equalsIgnoreCase("null") &&
+               !email.equalsIgnoreCase("undefined") &&
+               !email.contains("não informado") &&
+               email.contains("@");
+    }
+    
+    /**
+     * Retorna o estágio do lead baseado no interesse
      */
     private String getEstagioLead() {
-        if (contato.interesse.toLowerCase().contains("Potencial")) {
-            return "Novo";
-        } else if (contato.interesse.toLowerCase().contains("Interessado")) {
-            return "Morno";
+        if (contato.interesse == null) return "🆕 Novo";
+        
+        String interesse = contato.interesse.toLowerCase();
+        if (interesse.contains("potencial")) {
+            return "🌱 Potencial";
+        } else if (interesse.contains("interessado")) {
+            return "✨ Interessado";
+        } else if (interesse.contains("inscrito")) {
+            return "📝 Inscrito";
+        } else if (interesse.contains("confirmado")) {
+            return "✅ Confirmado";
+        } else if (interesse.contains("matriculado")) {
+            return "🎯 Matriculado";
+        } else if (interesse.contains("convocado")) {
+            return "📢 Convocado";
         } else {
-            return "Quente";
+            return "🆕 Novo";
         }
     }
     
     /**
-     * Retorna a prioridade do lead a partir do interesse
+     * Retorna a prioridade do lead baseado no interesse e último contato
      */
     private String getPrioridadeLead() {
-        if (contato.interesse.toLowerCase().contains("Interessado")) {
-            return "Alta";
-        } else if (contato.interesse.toLowerCase().contains("Potencial")) {
-            return "Média";
+        if (contato.interesse == null) return "⚪ Normal";
+        
+        String interesse = contato.interesse.toLowerCase();
+        
+        if (contato.ultimo_contato != null) {
+            long daysSinceContact = (System.currentTimeMillis() - contato.ultimo_contato.getTime()) / (1000 * 60 * 60 * 24);
+            if (daysSinceContact <= 1) {
+                return "🔴 Urgente"; // Contato muito recente
+            }
+        }
+        
+        // Verificar prioridade por interesse
+        if (interesse.contains("potencial") || interesse.contains("inscrito")) {
+            return "🔴 Urgente";
+        } else if (interesse.contains("interessado") || interesse.contains("convocado")) {
+            return "🟠 Alta";
+        } else if (interesse.contains("matriculado")) {
+            return "🟡 Média";
         } else {
-            return "Normal";
+            return "⚪ Normal";
         }
     }
-    
-    /**
-     * Retorna as observações do lead (simulado)
-     * Em produção, isso viria da API
-     */
+   
     private String getObservacoesLead() {
-        // Placeholder - em produção viria da API
-        return "Lead com status " + contato.interesse.toLowerCase() + 
-               ". Aluno da " + contato.escola +
-               ". Responsável: " + contato.responsavel + ".";
+        StringBuilder observacoes = new StringBuilder();
+        
+        observacoes.append("📊 Status atual: ").append(contato.interesse != null ? contato.interesse : "não definido").append("\n\n");
+        
+        if (contato.escola != null && !contato.escola.isEmpty()) {
+            observacoes.append("🏫 Estudante da: ").append(contato.escola);
+            if (contato.serie != null && !contato.serie.isEmpty()) {
+                observacoes.append(" (").append(contato.serie).append(")");
+            }
+            observacoes.append("\n\n");
+        }
+        
+        if (contato.responsavel != null && !contato.responsavel.isEmpty() && !contato.responsavel.equals(contato.nome)) {
+            observacoes.append("👨‍👩‍👧‍👦 Responsável: ").append(contato.responsavel).append("\n\n");
+        }
+        
+        if (contato.ultimo_contato != null) {
+            observacoes.append("📞 Último contato realizado em ")
+                      .append(DateUtils.formatDateTime(getContext(), 
+                          contato.ultimo_contato.getTime(), 
+                          DateUtils.FORMAT_SHOW_DATE | DateUtils.FORMAT_SHOW_TIME))
+                      .append("\n\n");
+        } else {
+            observacoes.append("❌ Nenhum contato registrado até o momento\n\n");
+        }
+        
+        String estagio = getEstagioLead();
+        if (estagio.contains("Novo") || estagio.contains("Potencial")) {
+            observacoes.append("💡 Dica: Realizar primeiro contato para avaliar interesse");
+        } else if (estagio.contains("Interessado")) {
+            observacoes.append("💡 Dica: Agendar visita à escola ou reunião presencial");
+        } else if (estagio.contains("Inscrito") || estagio.contains("Confirmado")) {
+            observacoes.append("💡 Dica: Acompanhar processo de matrícula");
+        } else if (estagio.contains("Matriculado")) {
+            observacoes.append("🎉 Parabéns! Lead convertido com sucesso");
+        }
+        
+        return observacoes.toString();
     }
     
     @Override
@@ -286,9 +528,6 @@ public class DetalhesLeadFragment extends App_fragment {
         Log.d(TAG, "DetalhesLeadFragment destruído");
     }
     
-    /**
-     * Getters para informações do usuário (compatibilidade)
-     */
     public String getCurrentUserEmail() {
         return userEmail;
     }

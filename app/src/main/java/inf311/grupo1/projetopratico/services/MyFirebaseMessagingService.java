@@ -46,8 +46,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
     private static final String CHANNEL_ID = "captamax_notifications";
-    private static final String CHANNEL_NAME = "CaptaMax Notificações";
-    private static final String CHANNEL_DESCRIPTION = "Notificações do sistema CaptaMax";
+    private static final String CHANNEL_NAME = "captaMax Notificações";
+    private static final String CHANNEL_DESCRIPTION = "Notificações do sistema captaMax";
 
     @Override
     public void onCreate() {
@@ -109,7 +109,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private void testLocalNotification() {
         Log.d(TAG, "=== TESTANDO NOTIFICAÇÃO LOCAL ===");
         try {
-            showSimpleNotification("CaptaMax - Sistema Ativo", 
+            showSimpleNotification("captaMax - Sistema Ativo", 
                 "Serviço de notificações inicializado com sucesso!");
         } catch (Exception e) {
             Log.e(TAG, "Erro no teste de notificação local", e);
@@ -184,7 +184,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 Log.w(TAG, "⚠️ Mensagem sem dados nem notificação - criando fallback");
                 Notification fallbackNotification = createFallbackNotification(remoteMessage.getMessageId());
                 saveNotificationToFirestore(fallbackNotification);
-                showSimpleNotification("CaptaMax", "Nova notificação recebida");
+                showSimpleNotification("captaMax", "Nova notificação recebida");
             }
             
             // Registrar recebimento bem-sucedido
@@ -202,7 +202,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             }
             
             // Mostrar notificação de erro para debug
-            showSimpleNotification("CaptaMax - Erro de Processamento", 
+            showSimpleNotification("captaMax - Erro de Processamento", 
                 "Erro ao processar notificação: " + e.getMessage());
         }
     }
@@ -255,7 +255,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             
             if (title == null || body == null) {
                 Log.w(TAG, "⚠️ Data message incompleto - título ou corpo ausente");
-                title = title != null ? title : "CaptaMax";
+                title = title != null ? title : "captaMax";
                 body = body != null ? body : "Nova notificação";
             }
             
@@ -289,7 +289,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             String title = notification.getTitle();
             String body = notification.getBody();
             
-            if (title == null) title = "CaptaMax";
+            if (title == null) title = "captaMax";
             if (body == null) body = "Nova notificação";
             
             Log.d(TAG, "📝 Processando - Título: " + title + ", Corpo: " + body);
@@ -327,7 +327,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } catch (Exception e) {
             Log.e(TAG, "❌ Erro ao processar notification message", e);
             // Fallback seguro
-            String title = notification.getTitle() != null ? notification.getTitle() : "CaptaMax";
+            String title = notification.getTitle() != null ? notification.getTitle() : "captaMax";
             String body = notification.getBody() != null ? notification.getBody() : "Nova notificação";
             showSimpleNotification(title, body);
         }
@@ -344,7 +344,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         String type = data.getOrDefault("type", Notification.TYPE_SYSTEM_ALERT);
         String priority = data.getOrDefault("priority", Notification.PRIORITY_NORMAL);
         
-        if (title == null) title = "CaptaMax";
+        if (title == null) title = "captaMax";
         if (body == null) body = "Nova notificação";
         
         Log.d(TAG, "📋 Dados: " + title + " | " + body + " | " + type + " | " + priority);
@@ -629,10 +629,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     }
 
     private Notification createFallbackNotification(String messageId) {
-        return new Notification("CaptaMax", "Nova notificação recebida", Notification.TYPE_SYSTEM_ALERT, Notification.PRIORITY_NORMAL, messageId);
+        return new Notification("captaMax", "Nova notificação recebida", Notification.TYPE_SYSTEM_ALERT, Notification.PRIORITY_NORMAL, messageId);
     }
 
     private Notification createErrorNotification(Exception e, String messageId) {
-        return new Notification("CaptaMax - Erro", "Erro ao processar notificação: " + e.getMessage(), Notification.TYPE_SYSTEM_ALERT, Notification.PRIORITY_URGENT, messageId);
+        return new Notification("captaMax - Erro", "Erro ao processar notificação: " + e.getMessage(), Notification.TYPE_SYSTEM_ALERT, Notification.PRIORITY_URGENT, messageId);
     }
 } 
