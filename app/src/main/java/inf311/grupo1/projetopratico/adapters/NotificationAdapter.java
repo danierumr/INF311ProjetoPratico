@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -103,38 +104,30 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
     }
 
     public class NotificationViewHolder extends RecyclerView.ViewHolder {
-        private CardView cardNotification;
-        private View priorityIndicator;
         private ImageView ivNotificationIcon;
+        private ImageView ivUnreadIndicator;
         private TextView tvNotificationTitle;
+        private TextView tvNotificationMessage;
         private TextView tvNotificationTime;
-        private TextView tvNotificationBody;
         private TextView tvNotificationType;
-        private TextView tvNotificationPriority;
-        private View unreadIndicator;
-        private ImageView ivNotificationAction;
 
         public NotificationViewHolder(@NonNull View itemView) {
             super(itemView);
             
-            cardNotification = itemView.findViewById(R.id.card_notification);
-            priorityIndicator = itemView.findViewById(R.id.priority_indicator);
             ivNotificationIcon = itemView.findViewById(R.id.iv_notification_icon);
+            ivUnreadIndicator = itemView.findViewById(R.id.iv_unread_indicator);
             tvNotificationTitle = itemView.findViewById(R.id.tv_notification_title);
+            tvNotificationMessage = itemView.findViewById(R.id.tv_notification_message);
             tvNotificationTime = itemView.findViewById(R.id.tv_notification_time);
-            tvNotificationBody = itemView.findViewById(R.id.tv_notification_body);
             tvNotificationType = itemView.findViewById(R.id.tv_notification_type);
-            tvNotificationPriority = itemView.findViewById(R.id.tv_notification_priority);
-            unreadIndicator = itemView.findViewById(R.id.unread_indicator);
-            ivNotificationAction = itemView.findViewById(R.id.iv_notification_action);
         }
 
         public void bind(Notification notification) {
             // Título
             tvNotificationTitle.setText(notification.getTitle());
             
-            // Corpo
-            tvNotificationBody.setText(notification.getBody());
+            // Mensagem
+            tvNotificationMessage.setText(notification.getBody());
             
             // Tempo
             tvNotificationTime.setText(notification.getFormattedTime());
@@ -142,18 +135,11 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             // Tipo
             tvNotificationType.setText(notification.getTypeDisplayName());
             
-            // Prioridade
-            tvNotificationPriority.setText(notification.getPriority());
-            
             // Ícone do tipo
             ivNotificationIcon.setImageResource(notification.getTypeIcon());
-            ivNotificationIcon.setColorFilter(notification.getPriorityColor());
             
-            // Indicador de prioridade
-            priorityIndicator.setBackgroundColor(notification.getPriorityColor());
-            
-            // Badge de prioridade com cor dinâmica
-            setPriorityBadgeStyle(tvNotificationPriority, notification);
+            // Configurar cores por prioridade
+            setupPriorityColors(notification);
             
             // Estado de leitura
             setupReadState(notification);
@@ -162,67 +148,71 @@ public class NotificationAdapter extends RecyclerView.Adapter<NotificationAdapte
             setupClickListeners(notification);
         }
 
-        private void setPriorityBadgeStyle(TextView badge, Notification notification) {
-            int backgroundColor;
-            int textColor;
+        private void setupPriorityColors(Notification notification) {
+            int iconColor, badgeColor, badgeBackgroundColor;
             
             switch (notification.getPriority()) {
                 case Notification.PRIORITY_URGENT:
-                    backgroundColor = ContextCompat.getColor(context, R.color.error_red);
-                    textColor = Color.WHITE;
+                    iconColor = ContextCompat.getColor(context, R.color.notification_high_priority);
+                    badgeColor = ContextCompat.getColor(context, R.color.notification_high_priority);
+                    badgeBackgroundColor = ContextCompat.getColor(context, R.color.notification_high_priority_bg);
                     break;
                 case Notification.PRIORITY_HIGH:
-                    backgroundColor = ContextCompat.getColor(context, R.color.warning_orange);
-                    textColor = Color.WHITE;
-                    break;
-                case Notification.PRIORITY_NORMAL:
-                    backgroundColor = ContextCompat.getColor(context, R.color.info_blue);
-                    textColor = Color.WHITE;
+                    iconColor = ContextCompat.getColor(context, R.color.notification_medium_priority);
+                    badgeColor = ContextCompat.getColor(context, R.color.notification_medium_priority);
+                    badgeBackgroundColor = ContextCompat.getColor(context, R.color.notification_medium_priority_bg);
                     break;
                 case Notification.PRIORITY_LOW:
-                    backgroundColor = ContextCompat.getColor(context, R.color.text_secondary);
-                    textColor = Color.WHITE;
+                    iconColor = ContextCompat.getColor(context, R.color.notification_low_priority);
+                    badgeColor = ContextCompat.getColor(context, R.color.notification_low_priority);
+                    badgeBackgroundColor = ContextCompat.getColor(context, R.color.notification_low_priority_bg);
                     break;
+                case Notification.PRIORITY_NORMAL:
                 default:
-                    backgroundColor = ContextCompat.getColor(context, R.color.text_secondary);
-                    textColor = Color.WHITE;
+                    iconColor = ContextCompat.getColor(context, R.color.notification_info_priority);
+                    badgeColor = ContextCompat.getColor(context, R.color.notification_info_priority);
+                    badgeBackgroundColor = ContextCompat.getColor(context, R.color.notification_info_priority_bg);
                     break;
             }
             
-            badge.setBackgroundColor(backgroundColor);
-            badge.setTextColor(textColor);
+            // Aplicar cores ao ícone
+            ivNotificationIcon.setColorFilter(iconColor);
+            
+            // Aplicar cores ao badge do tipo
+            tvNotificationType.setTextColor(badgeColor);
+            
+            // Aplicar cor de fundo ao container do ícone
+            CardView iconContainer = itemView.findViewById(R.id.icon_container);
+            if (iconContainer != null) {
+                iconContainer.setCardBackgroundColor(badgeBackgroundColor);
+            }
+            
+            // Aplicar cor de fundo ao badge do tipo
+            ViewParent typeBadgeParent = tvNotificationType.getParent();
+            if (typeBadgeParent instanceof CardView) {
+                ((CardView) typeBadgeParent).setCardBackgroundColor(badgeBackgroundColor);
+            }
         }
 
         private void setupReadState(Notification notification) {
             if (notification.isRead()) {
                 // Notificação lida
-                cardNotification.setCardBackgroundColor(Color.WHITE);
-                unreadIndicator.setVisibility(View.GONE);
+                ivUnreadIndicator.setVisibility(View.GONE);
                 tvNotificationTitle.setAlpha(0.8f);
-                tvNotificationBody.setAlpha(0.7f);
+                tvNotificationMessage.setAlpha(0.7f);
             } else {
                 // Notificação não lida
-                cardNotification.setCardBackgroundColor(
-                    ContextCompat.getColor(context, R.color.notification_unread_bg)
-                );
-                unreadIndicator.setVisibility(View.VISIBLE);
+                ivUnreadIndicator.setVisibility(View.VISIBLE);
                 tvNotificationTitle.setAlpha(1.0f);
-                tvNotificationBody.setAlpha(1.0f);
+                tvNotificationMessage.setAlpha(1.0f);
             }
         }
 
         private void setupClickListeners(Notification notification) {
-            // Click no card inteiro
-            cardNotification.setOnClickListener(v -> {
+            // Click no item inteiro
+            itemView.setOnClickListener(v -> {
                 if (clickListener != null) {
                     clickListener.onNotificationClick(notification);
-                }
-            });
-            
-            // Click no botão de ação
-            ivNotificationAction.setOnClickListener(v -> {
-                if (actionListener != null) {
-                    actionListener.onShowMenu(notification, v);
                 }
             });
         }

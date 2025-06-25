@@ -27,11 +27,48 @@ public class AppConstants {
     // Estágios do funil de vendas
     public static final String[] ESTAGIOS_FUNIL = STATUS_LEADS;
     
-    // Cores padrão para gráficos
+    // Cores modernas e harmônicas para gráficos - paleta expandida com 30 cores bem diferenciadas
     public static final String[] CORES_GRAFICOS = {
-        "#14b8a6", "#F44336", "#2196F3", "#FF9800", "#E91E63", 
-        "#9C27B0", "#673AB7", "#3F51B5", "#009688", "#4CAF50"
+        "#14b8a6", // Verde principal - teal-500
+        "#0d9488", // Verde escuro - teal-600
+        "#06b6d4", // Ciano moderno - sky-500
+        "#0ea5e9", // Azul claro - sky-600
+        "#3b82f6", // Azul vibrante - blue-500
+        "#2563eb", // Azul escuro - blue-600
+        "#6366f1", // Índigo - indigo-500
+        "#4f46e5", // Índigo escuro - indigo-600
+        "#8b5cf6", // Violeta - violet-500
+        "#7c3aed", // Violeta escuro - violet-600
+        "#a855f7", // Roxo - purple-500
+        "#9333ea", // Roxo escuro - purple-600
+        "#ec4899", // Rosa - pink-500
+        "#db2777", // Rosa escuro - pink-600
+        "#f43f5e", // Vermelho rosa - rose-500
+        "#e11d48", // Vermelho escuro - rose-600
+        "#f59e0b", // Laranja - amber-500
+        "#d97706", // Laranja escuro - amber-600
+        "#eab308", // Amarelo - yellow-500
+        "#10b981", // Verde esmeralda - emerald-500
+        "#059669", // Verde esmeralda escuro - emerald-600
+        "#84cc16", // Lima - lime-500
+        "#65a30d", // Lima escuro - lime-600
+        "#22c55e", // Verde claro - green-500
+        "#16a34a", // Verde claro escuro - green-600
+        "#ef4444", // Vermelho - red-500
+        "#dc2626", // Vermelho escuro - red-600
+        "#f97316", // Laranja vivo - orange-500
+        "#ea580c", // Laranja vivo escuro - orange-600
+        "#8b5cf6"  // Extra violeta - violet-500
     };
+    
+    // Cores específicas para tipos de dados em gráficos
+    public static final String COR_LEADS = "#14b8a6";           // Verde principal
+    public static final String COR_CONVERSOES = "#0d9488";      // Verde escuro
+    public static final String COR_POTENCIAL = "#06b6d4";       // Ciano
+    public static final String COR_INTERESSADO = "#3b82f6";     // Azul
+    public static final String COR_INSCRITO = "#6366f1";        // Índigo
+    public static final String COR_CONFIRMADO = "#8b5cf6";      // Violeta
+    public static final String COR_MATRICULADO = "#10b981";     // Verde esmeralda
     
     // Limites de paginação
     public static final int LIMITE_LEADS_DASHBOARD = 5;
@@ -64,7 +101,7 @@ public class AppConstants {
     
     // Notification Channel
     public static final String NOTIFICATION_CHANNEL_ID = "captamax_notifications";
-    public static final String NOTIFICATION_CHANNEL_NAME = "CaptaMax Notificações";
+    public static final String NOTIFICATION_CHANNEL_NAME = "captaMax Notificações";
     
     // Shared Preferences
     public static final String PREFS_NAME = "CaptaMaxPrefs";

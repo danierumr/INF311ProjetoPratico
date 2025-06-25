@@ -68,6 +68,14 @@
             android:screenOrientation="portrait">
         </activity>
 
+        <!-- Activity de recuperação de senha -->
+        <activity
+            android:name=".EsqueciSenhaActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:parentActivityName=".TelaLogin">
+        </activity>
+
         <!-- Firebase Cloud Messaging Service -->
         <service
             android:name=".services.MyFirebaseMessagingService"

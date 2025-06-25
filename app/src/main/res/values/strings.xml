@@ -1,6 +1,6 @@
 <resources>
     <string name="hello">Hello World! AAAAAAAAA</string>
-    <string name="app_name">CaptaMax</string>
+    <string name="app_name">captaMax</string>
     <string name="btn">Agendar atividade</string>
     <string name="btn2">Listar eventos</string>
     <string name="btn3">Listar oportunidades</string>
@@ -116,5 +116,35 @@
         <item>Concluido</item>
         <item>Agendado</item>
     </string-array>
+
+    <!-- Strings para tela de recuperação de senha -->
+    <string name="recuperar_senha_title">Recuperar Senha</string>
+    <string name="esqueceu_senha_title">Esqueceu sua senha?</string>
+    <string name="esqueceu_senha_subtitle">Não se preocupe! Digite seu email abaixo e enviaremos um link para redefinir sua senha.</string>
+    <string name="email_recuperacao_hint">Email</string>
+    <string name="btn_enviar_email_recuperacao">Enviar Email de Recuperação</string>
+    <string name="btn_voltar_login">Voltar ao Login</string>
+    <string name="dicas_importantes">💡 Dicas importantes:</string>
+    <string name="dicas_recuperacao">• Verifique sua caixa de entrada e spam\n• O link expira em 24 horas\n• Se não receber, verifique se o email está correto</string>
+    <string name="email_enviado_sucesso">Email de recuperação enviado com sucesso!\n\nVerifique sua caixa de entrada e spam.</string>
+    <string name="enviando_email">Enviando email de recuperação...</string>
+    <string name="aguarde_envio">Aguarde o envio do email...</string>
+
+    <!-- Strings para tela de detalhes do lead modernizada -->
+    <string name="detalhes_lead_subtitle_moderna">Perfil completo e ações rápidas</string>
+    <string name="secao_informacoes_contato">📞 Informações de Contato</string>
+    <string name="secao_observacoes_moderna">📝 Observações e Notas</string>
+    <string name="secao_atividades_moderna">🎯 Histórico e Atividades</string>
+    <string name="status_chip_novo">🆕 Novo</string>
+    <string name="status_chip_potencial">🌱 Potencial</string>
+    <string name="status_chip_interessado">✨ Interessado</string>
+    <string name="status_chip_inscrito">📝 Inscrito</string>
+    <string name="status_chip_confirmado">✅ Confirmado</string>
+    <string name="status_chip_convocado">📢 Convocado</string>
+    <string name="status_chip_matriculado">🎯 Matriculado</string>
+    <string name="prioridade_urgente">🔴 Urgente</string>
+    <string name="prioridade_alta">🟠 Alta</string>
+    <string name="prioridade_media">🟡 Média</string>
+    <string name="prioridade_normal">⚪ Normal</string>
 
 </resources>

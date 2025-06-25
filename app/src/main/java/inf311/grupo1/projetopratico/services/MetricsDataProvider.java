@@ -88,7 +88,9 @@ public class MetricsDataProvider {
                     }
                     
                     List<ChartData.ConsultorData> consultorDataList = new ArrayList<>();
-                    String[] cores = {"#14b8a6", "#F44336", "#2196F3", "#FF9800", "#E91E63", "#9C27B0", "#4CAF50", "#FF5722"};
+                    
+                    // Usar as novas cores harmônicas do AppConstants
+                    String[] cores = AppConstants.CORES_GRAFICOS;
                     int corIndex = 0;
                     
                     for (ConsultorFirebase consultor : consultores) {
@@ -145,7 +147,9 @@ public class MetricsDataProvider {
                     }
                     
                     List<ChartData.ConsultorData> consultorDataList = new ArrayList<>();
-                    String[] cores = {"#14b8a6", "#F44336", "#2196F3", "#FF9800", "#E91E63", "#9C27B0", "#4CAF50", "#FF5722"};
+                    
+                    // Usar as novas cores harmônicas do AppConstants
+                    String[] cores = AppConstants.CORES_GRAFICOS;
                     int corIndex = 0;
                     
                     for (ConsultorFirebase consultor : consultores) {
@@ -198,7 +202,9 @@ public class MetricsDataProvider {
                     }
                     
                     List<ChartData.ConsultorData> consultorDataList = new ArrayList<>();
-                    String[] cores = {"#14b8a6", "#F44336", "#2196F3", "#FF9800", "#E91E63", "#9C27B0", "#4CAF50", "#FF5722"};
+                    
+                    // Usar as novas cores harmônicas do AppConstants
+                    String[] cores = AppConstants.CORES_GRAFICOS;
                     int corIndex = 0;
                     
                     for (ConsultorFirebase consultor : consultores) {
@@ -442,14 +448,17 @@ public class MetricsDataProvider {
     public ChartData.PieChartData getFallbackPieChartData(String userEmail, boolean isAdmin) {
         List<ChartData.ConsultorData> consultores = new ArrayList<>();
         
+        // Usar as novas cores harmônicas
+        String[] cores = AppConstants.CORES_GRAFICOS;
+        
         if (isAdmin) {
-            consultores.add(new ChartData.ConsultorData("Ana", 26, 8, "#14b8a6"));
-            consultores.add(new ChartData.ConsultorData("Carlos", 19, 5, "#F44336"));
-            consultores.add(new ChartData.ConsultorData("Juliana", 22, 7, "#2196F3"));
-            consultores.add(new ChartData.ConsultorData("Roberto", 17, 4, "#FF9800"));
+            consultores.add(new ChartData.ConsultorData("Ana", 26, 8, cores[0]));      // Verde principal
+            consultores.add(new ChartData.ConsultorData("Carlos", 19, 5, cores[1]));   // Verde escuro
+            consultores.add(new ChartData.ConsultorData("Juliana", 22, 7, cores[2]));  // Ciano
+            consultores.add(new ChartData.ConsultorData("Roberto", 17, 4, cores[3]));  // Azul
         } else {
             String nomeConsultor = getNomeFromEmail(userEmail);
-            consultores.add(new ChartData.ConsultorData(nomeConsultor, 48, 12, "#14b8a6"));
+            consultores.add(new ChartData.ConsultorData(nomeConsultor, 48, 12, cores[0])); // Verde principal
         }
         
         return new ChartData.PieChartData(consultores);

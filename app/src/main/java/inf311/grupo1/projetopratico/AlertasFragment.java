@@ -43,12 +43,11 @@ public class AlertasFragment extends App_fragment implements
     private RecyclerView recyclerNotifications;
     private LinearLayout emptyStateLayout;
     private TextView tvEmptyState;
-    private TextView tvUnreadCount;
     
-    // Botões de filtro
-    private Button btnTodas;
-    private Button btnNaoLidas;
-    private Button btnLidas;
+    // Chips de filtro
+    private Button chipAll;
+    private Button chipUnread;
+    private Button chipRead;
     
     // Botões de ação
     private Button btnMarkAllRead;
@@ -92,11 +91,11 @@ public class AlertasFragment extends App_fragment implements
         // Configurar filtro inicial
         updateFilterButtons();
         
+        // Garantir que o primeiro botão esteja selecionado por padrão
+        chipAll.setSelected(true);
+        
         // Carregar notificações
         loadNotifications();
-        
-        // Atualizar contador de não lidas
-        updateUnreadCount();
     }
     
     /**
@@ -129,17 +128,11 @@ public class AlertasFragment extends App_fragment implements
         recyclerNotifications = view.findViewById(R.id.recycler_notifications);
         emptyStateLayout = view.findViewById(R.id.empty_state_layout);
         tvEmptyState = view.findViewById(R.id.tv_empty_notifications);
-        tvUnreadCount = view.findViewById(R.id.tv_unread_count);
         
-        // Botões de filtro
-        btnTodas = view.findViewById(R.id.alertas_btn_todas);
-        btnNaoLidas = view.findViewById(R.id.alertas_btn_nao_lidas);
-        btnLidas = view.findViewById(R.id.alertas_btn_lidas);
-        
-        // Inicializar todos os botões como não selecionados
-        btnTodas.setSelected(false);
-        btnNaoLidas.setSelected(false);
-        btnLidas.setSelected(false);
+        // Chips de filtro
+        chipAll = view.findViewById(R.id.chip_all);
+        chipUnread = view.findViewById(R.id.chip_unread);
+        chipRead = view.findViewById(R.id.chip_read);
         
         // Botões de ação
         btnMarkAllRead = view.findViewById(R.id.btn_mark_all_read);
@@ -167,9 +160,9 @@ public class AlertasFragment extends App_fragment implements
      */
     private void setupListeners() {
         // Filtros
-        btnTodas.setOnClickListener(v -> mudarFiltro("todas"));
-        btnNaoLidas.setOnClickListener(v -> mudarFiltro("nao_lidas"));
-        btnLidas.setOnClickListener(v -> mudarFiltro("lidas"));
+        chipAll.setOnClickListener(v -> mudarFiltro("todas"));
+        chipUnread.setOnClickListener(v -> mudarFiltro("nao_lidas"));
+        chipRead.setOnClickListener(v -> mudarFiltro("lidas"));
         
         // Ações
         btnMarkAllRead.setOnClickListener(v -> markAllAsRead());
@@ -217,7 +210,6 @@ public class AlertasFragment extends App_fragment implements
                         allNotifications.addAll(notifications);
                         
                         applyCurrentFilter();
-                        updateUnreadCount();
                         
                         if (swipeRefreshLayout != null) {
                             swipeRefreshLayout.setRefreshing(false);
@@ -244,32 +236,6 @@ public class AlertasFragment extends App_fragment implements
     }
     
     /**
-     * Atualiza o contador de notificações não lidas
-     */
-    private void updateUnreadCount() {
-        notificationService.getUnreadCount(new NotificationService.UnreadCountCallback() {
-            @Override
-            public void onSuccess(int count) {
-                if (getActivity() != null) {
-                    getActivity().runOnUiThread(() -> {
-                        if (count > 0) {
-                            tvUnreadCount.setText(String.valueOf(count));
-                            tvUnreadCount.setVisibility(View.VISIBLE);
-                        } else {
-                            tvUnreadCount.setVisibility(View.GONE);
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.e(TAG, "Erro ao obter contador de não lidas: " + error);
-            }
-        });
-    }
-    
-    /**
      * Muda o filtro atual
      */
     private void mudarFiltro(String novoFiltro) {
@@ -289,13 +255,13 @@ public class AlertasFragment extends App_fragment implements
         // Ativar o botão correto baseado no filtro atual
         switch (filtroAtual) {
             case "todas":
-                activateButton(btnTodas);
+                activateButton(chipAll);
                 break;
             case "nao_lidas":
-                activateButton(btnNaoLidas);
+                activateButton(chipUnread);
                 break;
             case "lidas":
-                activateButton(btnLidas);
+                activateButton(chipRead);
                 break;
         }
     }
@@ -304,23 +270,23 @@ public class AlertasFragment extends App_fragment implements
      * Reseta o estado visual de todos os botões de filtro
      */
     private void resetFilterButtons() {
-        deactivateButton(btnTodas);
-        deactivateButton(btnNaoLidas);
-        deactivateButton(btnLidas);
+        deactivateButton(chipAll);
+        deactivateButton(chipUnread);
+        deactivateButton(chipRead);
     }
     
     /**
-     * Ativa visualmente um botão
+     * Ativa visualmente um chip
      */
-    private void activateButton(Button button) {
-        button.setSelected(true);
+    private void activateButton(Button chip) {
+        chip.setSelected(true);
     }
     
     /**
-     * Desativa visualmente um botão
+     * Desativa visualmente um chip
      */
-    private void deactivateButton(Button button) {
-        button.setSelected(false);
+    private void deactivateButton(Button chip) {
+        chip.setSelected(false);
     }
     
     /**
@@ -346,6 +312,9 @@ public class AlertasFragment extends App_fragment implements
                         filteredNotifications.add(notification);
                     }
                 }
+                break;
+            default:
+                filteredNotifications.addAll(allNotifications);
                 break;
         }
         
@@ -446,7 +415,6 @@ public class AlertasFragment extends App_fragment implements
                         
                         // Recarregar se necessário
                         applyCurrentFilter();
-                        updateUnreadCount();
                         
                         Toast.makeText(getContext(), "Marcada como lida", Toast.LENGTH_SHORT).show();
                     });
@@ -489,7 +457,6 @@ public class AlertasFragment extends App_fragment implements
                                 
                                 // Recarregar se necessário
                                 applyCurrentFilter();
-                                updateUnreadCount();
                                 
                                 Toast.makeText(getContext(), "Notificação deletada", Toast.LENGTH_SHORT).show();
                             });
@@ -530,7 +497,6 @@ public class AlertasFragment extends App_fragment implements
                         
                         // Recarregar
                         applyCurrentFilter();
-                        updateUnreadCount();
                         
                         Toast.makeText(getContext(), "Todas marcadas como lidas", Toast.LENGTH_SHORT).show();
                     });
@@ -587,12 +553,12 @@ public class AlertasFragment extends App_fragment implements
     private String getEmptyStateMessage() {
         switch (filtroAtual) {
             case "nao_lidas":
-                return "Todas as notificações foram lidas";
+                return "🎉 Todas as notificações foram lidas!";
             case "lidas":
-                return "Nenhuma notificação lida ainda";
+                return "📭 Nenhuma notificação lida ainda";
             case "todas":
             default:
-                return "Nenhuma notificação encontrada";
+                return "🔔 Nenhuma notificação encontrada";
         }
     }
     
@@ -634,7 +600,6 @@ public class AlertasFragment extends App_fragment implements
         super.onResume();
         Log.d(TAG, "AlertasFragment onResume - Atualizando dados");
         loadNotifications();
-        updateUnreadCount();
     }
 
     @Override

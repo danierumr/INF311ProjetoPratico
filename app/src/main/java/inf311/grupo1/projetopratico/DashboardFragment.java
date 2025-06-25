@@ -25,6 +25,7 @@ import inf311.grupo1.projetopratico.services.DashboardDataProvider;
 import inf311.grupo1.projetopratico.services.MetricsDataProvider;
 import inf311.grupo1.projetopratico.utils.AppConstants;
 import inf311.grupo1.projetopratico.utils.App_fragment;
+import inf311.grupo1.projetopratico.utils.LeadCardHelper;
 import inf311.grupo1.projetopratico.utils.PieChartHelper;
 
 import java.util.ArrayList;
@@ -418,13 +419,41 @@ public class DashboardFragment extends App_fragment {
     }
 
     /**
-     * Adiciona um card de lead na interface
+     * Adiciona um card de lead na interface usando cards modernos padronizados
      */
     public void add_lead_card(Contato cont) {
         if (getContext() == null || dashScrollLinear2 == null) {
             Log.e(TAG, "Context ou dashScrollLinear2 é null");
             return;
         }
+        
+        try {
+            // Usar a classe utilitária para criar o card moderno
+            View cardView = LeadCardHelper.createModernLeadCard(
+                getContext(), 
+                cont, 
+                dashScrollLinear2, 
+                cont_dict, 
+                this
+            );
+            
+            if (cardView == null) {
+                // Fallback para método simples se houver erro
+                addSimpleDashboardCard(cont);
+            }
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao criar card de lead para: " + cont.nome, e);
+            // Fallback para método simples se houver erro
+            addSimpleDashboardCard(cont);
+        }
+    }
+    
+    /**
+     * Método de fallback para criar card simples no dashboard
+     */
+    private void addSimpleDashboardCard(Contato cont) {
+        if (getContext() == null || dashScrollLinear2 == null) return;
         
         int dp_16 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics());
         int dp_12 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics());
@@ -505,7 +534,7 @@ public class DashboardFragment extends App_fragment {
             }
         });
         
-        Log.d(TAG, "Card de lead adicionado: " + cont.nome);
+        Log.d(TAG, "Card simples de lead adicionado no dashboard: " + cont.nome);
     }
     
     /**
@@ -749,11 +778,22 @@ public class DashboardFragment extends App_fragment {
     }
     
     /**
-     * Configura o gráfico de pizza do dashboard
+     * Configura o gráfico de pizza moderno do dashboard
      */
     private void setupDashboardPieChart(ChartData.PieChartData chartData) {
-        // Usar a classe utilitária com configurações específicas para o dashboard
-        PieChartHelper.setupPieChart(dashPieChart, chartData, true);
-        Log.d(TAG, "Gráfico de pizza do dashboard configurado");
+        try {
+            if (dashPieChart == null || chartData == null) {
+                Log.w(TAG, "PieChart do dashboard ou dados são null");
+                return;
+            }
+            
+            // Usar a classe utilitária modernizada com configuração específica para dashboard
+            PieChartHelper.setupDashboardPieChart(dashPieChart, chartData);
+            
+            Log.d(TAG, "Gráfico de pizza moderno do dashboard configurado com sucesso");
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao configurar gráfico de pizza moderno do dashboard", e);
+        }
     }
 } 

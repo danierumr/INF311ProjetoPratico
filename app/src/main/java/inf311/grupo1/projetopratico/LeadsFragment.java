@@ -1,6 +1,8 @@
 package inf311.grupo1.projetopratico;
 
+import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.util.Log;
@@ -9,6 +11,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
@@ -16,15 +19,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import inf311.grupo1.projetopratico.services.LeadsDataProvider;
 import inf311.grupo1.projetopratico.utils.AppConstants;
 import inf311.grupo1.projetopratico.utils.App_fragment;
+import inf311.grupo1.projetopratico.utils.LeadCardHelper;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -50,9 +54,9 @@ public class LeadsFragment extends App_fragment {
     private LinearLayout leadsContainer;
     private SwipeRefreshLayout swipeRefreshLayout;
     
-    // Filter chips
-    private Chip chipTodos, chipPotenciais, chipInteressados, chipInscritosParciais, 
-    chipInscritos, chipConfirmados, chipConvocados, chipMatriculados;
+    // Filter Buttons (not Chips)
+    private Button chipTodos, chipPotenciais, chipInteressados, chipInscritosParciais, 
+            chipInscritos, chipConfirmados, chipConvocados;
     
     // Estado de cadastro ativo
     private static boolean isCadastroAtivo = false;
@@ -138,7 +142,7 @@ public class LeadsFragment extends App_fragment {
     private void initializeUI(View view) {
         searchView = view.findViewById(R.id.lead_search_bar);
         fabAddLead = view.findViewById(R.id.fab_add_lead);
-        leadsContainer = view.findViewById(R.id.lead_scroll_linear2);
+        leadsContainer = view.findViewById(R.id.leads_container);
         swipeRefreshLayout = view.findViewById(R.id.leads_swipe_refresh);
         
         // Inicializar chips de filtro
@@ -149,7 +153,6 @@ public class LeadsFragment extends App_fragment {
         chipInscritos = view.findViewById(R.id.leads_filter5);
         chipConfirmados = view.findViewById(R.id.leads_filter6);
         chipConvocados = view.findViewById(R.id.leads_filter7);
-        chipMatriculados = view.findViewById(R.id.leads_filter8);
         
         // Configurar pull to refresh
         setupPullToRefresh();
@@ -230,7 +233,7 @@ public class LeadsFragment extends App_fragment {
         View.OnClickListener filterListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                handleFilterClick((Chip) v);
+                handleFilterClick((Button) v);
             }
         };
         
@@ -241,7 +244,6 @@ public class LeadsFragment extends App_fragment {
         if (chipInscritos != null) chipInscritos.setOnClickListener(filterListener);
         if (chipConfirmados != null) chipConfirmados.setOnClickListener(filterListener);
         if (chipConvocados != null) chipConvocados.setOnClickListener(filterListener);
-        if (chipMatriculados != null) chipMatriculados.setOnClickListener(filterListener);
         
         Log.d(TAG, "Chips de filtro configurados");
     }
@@ -249,9 +251,9 @@ public class LeadsFragment extends App_fragment {
     /**
      * Manipula clique nos chips de filtro
      */
-    private void handleFilterClick(Chip clickedChip) {
+    private void handleFilterClick(Button clickedChip) {
         resetAllChips();
-        clickedChip.setChecked(true);
+        clickedChip.setSelected(true);
         
         String filtro = clickedChip.getText().toString().toLowerCase();
         applyFilter(filtro);
@@ -367,7 +369,7 @@ public class LeadsFragment extends App_fragment {
         currentFilter = "todos";
         resetAllChips();
         if (chipTodos != null) {
-            chipTodos.setChecked(true);
+            chipTodos.setSelected(true);
         }
             
             // Recarregar leads
@@ -490,13 +492,41 @@ public class LeadsFragment extends App_fragment {
     }
 
     /**
-     * Adiciona um card de lead na interface
+     * Adiciona um card de lead na interface usando a classe utilitária
      */
     public void add_lead_card(Contato cont) {
         if (getContext() == null || leadsContainer == null) {
             Log.e(TAG, "Context ou leadsContainer é null");
             return;
         }
+        
+        try {
+            // Usar a classe utilitária para criar o card moderno
+            View cardView = LeadCardHelper.createModernLeadCard(
+                getContext(), 
+                cont, 
+                leadsContainer, 
+                cont_dict, 
+                this
+            );
+            
+            if (cardView == null) {
+                // Fallback para método original se houver erro
+                addSimpleLeadCard(cont);
+            }
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao criar card de lead para: " + cont.nome, e);
+            // Fallback para método original se houver erro
+            addSimpleLeadCard(cont);
+        }
+    }
+    
+    /**
+     * Método de fallback para criar card simples se houver erro
+     */
+    private void addSimpleLeadCard(Contato cont) {
+        if (getContext() == null || leadsContainer == null) return;
         
         int dp_16 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16, getResources().getDisplayMetrics());
         int dp_12 = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 12, getResources().getDisplayMetrics());
@@ -505,9 +535,10 @@ public class LeadsFragment extends App_fragment {
 
         String st_name = cont.nome;
         String st_email = cont.email;
-        String st_phone = cont.telefone;
+        String st_phone = isTelefoneValido(cont.telefone) ? cont.telefone : "Telefone não informado";
         String st_interest = cont.interesse;
-        String st_time = DateUtils.getRelativeTimeSpanString(cont.ultimo_contato.getTime()).toString();
+        String st_time = cont.ultimo_contato != null ? 
+            DateUtils.getRelativeTimeSpanString(cont.ultimo_contato.getTime()).toString() : "Sem contato";
 
         CardView cv = new CardView(getContext());
         cv.setId(View.generateViewId());
@@ -559,6 +590,27 @@ public class LeadsFragment extends App_fragment {
         phone.setLayoutParams(phoneParams);
         phone.setText(st_phone);
         phone.setTextSize(14);
+        
+        // Adicionar funcionalidade de ligar ao clicar no telefone
+        if (isTelefoneValido(cont.telefone)) {
+            phone.setTextColor(ContextCompat.getColor(getContext(), R.color.primary_green));
+            phone.setTypeface(phone.getTypeface(), Typeface.BOLD);
+            phone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ligarTelefone(cont.telefone);
+                }
+            });
+        } else {
+            // Se não há telefone, deixar o texto em cinza e adicionar listener para mostrar toast
+            phone.setTextColor(ContextCompat.getColor(getContext(), R.color.text_secondary));
+            phone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(), "Telefone não informado para " + cont.nome, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         TextView interest = new TextView(getContext());
         interest.setId(View.generateViewId());
@@ -588,7 +640,7 @@ public class LeadsFragment extends App_fragment {
             }
         });
         
-        Log.d(TAG, "Card de lead adicionado: " + cont.nome);
+        Log.d(TAG, "Card simples de lead adicionado: " + cont.nome);
     }
 
     /**
@@ -633,13 +685,43 @@ public class LeadsFragment extends App_fragment {
      * Reseta todos os chips para estado não selecionado
      */
     private void resetAllChips() {
-        if (chipTodos != null) chipTodos.setChecked(false);
-        if (chipPotenciais != null) chipPotenciais.setChecked(false);
-        if (chipInteressados != null) chipInteressados.setChecked(false);
-        if (chipInscritosParciais != null) chipInscritosParciais.setChecked(false);
-        if (chipInscritos != null) chipInscritos.setChecked(false);
-        if (chipConfirmados != null) chipConfirmados.setChecked(false);
-        if (chipConvocados != null) chipConvocados.setChecked(false);
-        if (chipMatriculados != null) chipMatriculados.setChecked(false);
+        if (chipTodos != null) chipTodos.setSelected(false);
+        if (chipPotenciais != null) chipPotenciais.setSelected(false);
+        if (chipInteressados != null) chipInteressados.setSelected(false);
+        if (chipInscritosParciais != null) chipInscritosParciais.setSelected(false);
+        if (chipInscritos != null) chipInscritos.setSelected(false);
+        if (chipConfirmados != null) chipConfirmados.setSelected(false);
+        if (chipConvocados != null) chipConvocados.setSelected(false);
+    }
+
+    /**
+     * Abre o app de telefone para ligar para o lead
+     */
+    private void ligarTelefone(String telefone) {
+        try {
+            Intent phoneIntent = new Intent(Intent.ACTION_DIAL);
+            phoneIntent.setData(Uri.parse("tel:" + telefone));
+            
+            startActivity(phoneIntent);
+            Log.d(TAG, "Abrindo discador para: " + telefone);
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao abrir discador", e);
+            if (getActivity() != null) {
+                Toast.makeText(getActivity(), "Erro ao abrir discador", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    
+    /**
+     * Verifica se o telefone é válido (não null, não vazio, não "null")
+     */
+    private boolean isTelefoneValido(String telefone) {
+        return telefone != null && 
+               !telefone.trim().isEmpty() && 
+               !telefone.equalsIgnoreCase("null") &&
+               !telefone.equalsIgnoreCase("undefined") &&
+               !telefone.equals("0") &&
+               !telefone.trim().equals("-");
     }
 } 

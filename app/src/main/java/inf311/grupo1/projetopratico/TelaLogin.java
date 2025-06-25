@@ -7,11 +7,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseUser;
+
+import inf311.grupo1.projetopratico.services.MetricsDataProvider;
 
 public class TelaLogin extends AppCompatActivity {
 
@@ -24,6 +27,7 @@ public class TelaLogin extends AppCompatActivity {
     private EditText etEmail;
     private EditText etPassword;
     private Button btnLogin;
+    private TextView tvEsqueciSenha;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,9 @@ public class TelaLogin extends AppCompatActivity {
 
         // Inicializar Firebase Manager
         firebaseManager = FirebaseManager.getInstance();
+        
+        // Limpar todos os caches ao iniciar a tela de login
+        clearAllCaches();
         
         // Inicializar elementos da UI
         initializeUI();
@@ -42,7 +49,36 @@ public class TelaLogin extends AppCompatActivity {
         Log.d(TAG, "TelaLogin inicializada com Firebase Auth");
     }
 
-
+    /**
+     * Limpa todos os caches do sistema para garantir dados atualizados
+     */
+    private void clearAllCaches() {
+        Log.d(TAG, "=== LIMPANDO TODOS OS CACHES NO LOGIN ===");
+        
+        try {
+            // Limpar cache do MetricsDataProvider
+            MetricsDataProvider metricsProvider = MetricsDataProvider.getInstance();
+            metricsProvider.clearCache();
+            Log.d(TAG, "✅ Cache do MetricsDataProvider limpo");
+            
+            // Forçar reset do App_main se disponível
+            App_main app = (App_main) getApplication();
+            if (app != null) {
+                app.updated = false; // Forçar nova atualização dos dados
+                Log.d(TAG, "✅ App_main marcado para atualização forçada");
+            }
+            
+            // Limpar Data_master para evitar dados do usuário anterior
+            Data_master.admin = false;
+            Data_master.user_id = null;
+            Log.d(TAG, "✅ Data_master limpo");
+            
+            Log.d(TAG, "=== LIMPEZA DE CACHES NO LOGIN CONCLUÍDA ===");
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao limpar caches no login", e);
+        }
+    }
 
     /**
      * Inicializa todos os elementos da interface do usuário
@@ -51,6 +87,7 @@ public class TelaLogin extends AppCompatActivity {
         etEmail = findViewById(R.id.email_edit);
         etPassword = findViewById(R.id.password_edit);
         btnLogin = findViewById(R.id.login_button);
+        tvEsqueciSenha = findViewById(R.id.forgot_password);
     }
 
     /**
@@ -63,6 +100,16 @@ public class TelaLogin extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     performLogin();
+                }
+            });
+        }
+        
+        // Listener para "Esqueci a senha"
+        if (tvEsqueciSenha != null) {
+            tvEsqueciSenha.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    navigateToEsqueciSenha();
                 }
             });
         }
@@ -116,6 +163,9 @@ public class TelaLogin extends AppCompatActivity {
                 Data_master.admin = isAdmin;
                 Data_master.user_id = firebaseManager.getCurrentUserUid();
                 
+                // Forçar atualização dos leads para este usuário após login
+                forceUpdateLeadsDataAfterLogin();
+                
                 navigateToDashboard(isAdmin, name, email);
             }
 
@@ -128,6 +178,33 @@ public class TelaLogin extends AppCompatActivity {
                 firebaseManager.signOut();
             }
         });
+    }
+
+    /**
+     * Força atualização dos dados dos leads para o usuário atual após login
+     */
+    private void forceUpdateLeadsDataAfterLogin() {
+        Log.d(TAG, "=== FORÇANDO ATUALIZAÇÃO DOS LEADS APÓS LOGIN ===");
+        
+        try {
+            App_main app = (App_main) getApplication();
+            if (app != null) {
+                // Executar em thread separada para não bloquear a UI
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            app.forceUpdate(); // Força nova busca na API
+                            Log.d(TAG, "✅ Leads atualizados com sucesso após login");
+                        } catch (Exception e) {
+                            Log.e(TAG, "❌ Erro ao atualizar leads após login", e);
+                        }
+                    }
+                }).start();
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao forçar atualização dos leads após login", e);
+        }
     }
 
     /**
@@ -194,6 +271,15 @@ public class TelaLogin extends AppCompatActivity {
         
         startActivity(intent);
         finish();
+    }
+
+    /**
+     * Navega para a tela de recuperação de senha
+     */
+    private void navigateToEsqueciSenha() {
+        Intent intent = new Intent(TelaLogin.this, EsqueciSenhaActivity.class);
+        startActivity(intent);
+        Log.d(TAG, "Navegando para tela de recuperação de senha");
     }
 
 }

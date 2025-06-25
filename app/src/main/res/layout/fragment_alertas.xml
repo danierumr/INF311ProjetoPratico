@@ -1,216 +1,380 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/fragment_alertas"
-    android:background="@color/background_gray_light"
+    android:background="@drawable/login_background_gradient"
     tools:context=".AlertasFragment">
 
-    <!-- Header Section -->
-    <RelativeLayout
-        android:id="@+id/alertas_header"
-        android:layout_width="match_parent"
+    <!-- Modern Header with Green Gradient -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/header_card"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/primary_green"
-        android:paddingVertical="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        app:cardCornerRadius="0dp"
+        app:cardElevation="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Alertas e Notificações"
-            android:id="@+id/alertas_title"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="@color/text_white"
-            android:layout_centerVertical="true" />
-
-        <!-- Contador de não lidas -->
-        <TextView
-            android:id="@+id/tv_unread_count"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:background="@drawable/circle_red"
-            android:gravity="center"
-            android:textColor="@android:color/white"
-            android:textSize="12sp"
-            android:textStyle="bold"
-            android:visibility="gone"
-            tools:text="5"
-            tools:visibility="visible" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Acompanhe suas notificações importantes"
-            android:id="@+id/alertas_subtitle"
-            android:textSize="14sp"
-            android:textColor="@color/text_white"
-            android:alpha="0.8"
-            android:layout_below="@+id/alertas_title"
-            android:layout_marginTop="4dp" />
-
-    </RelativeLayout>
-
-    <!-- Filtros e Ações -->
-    <LinearLayout
-        android:id="@+id/alertas_controls"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/alertas_header"
-        android:background="@android:color/white"
-        android:orientation="vertical"
-        android:padding="16dp">
-
-        <!-- Botões de Filtro -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
+            android:background="@drawable/alerts_header_gradient"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:paddingBottom="32dp">
 
-            <Button
-                android:id="@+id/alertas_btn_todas"
-                android:layout_width="0dp"
-                android:layout_height="44dp"
-                android:layout_weight="1"
-                android:background="@drawable/filter_button_selector"
-                android:backgroundTint="@null"
-                android:text="Todas"
-                android:textColor="@color/filter_button_text_selector"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginEnd="6dp"
-                android:elevation="2dp" />
-
-            <Button
-                android:id="@+id/alertas_btn_nao_lidas"
-                android:layout_width="0dp"
-                android:layout_height="44dp"
-                android:layout_weight="1"
-                android:background="@drawable/filter_button_selector"
-                android:backgroundTint="@null"
-                android:text="Não Lidas"
-                android:textColor="@color/filter_button_text_selector"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginStart="3dp"
-                android:layout_marginEnd="3dp"
-                android:elevation="2dp" />
-
-            <Button
-                android:id="@+id/alertas_btn_lidas"
-                android:layout_width="0dp"
-                android:layout_height="44dp"
-                android:layout_weight="1"
-                android:background="@drawable/filter_button_selector"
-                android:backgroundTint="@null"
-                android:text="Lidas"
-                android:textColor="@color/filter_button_text_selector"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_marginStart="6dp"
-                android:elevation="2dp" />
-
-        </LinearLayout>
-
-        <!-- Botões de Ação -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
-
-            <Button
-                android:id="@+id/btn_mark_all_read"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:paddingHorizontal="24dp"
-                android:background="@drawable/button_outline"
-                android:backgroundTint="@null"
-                android:text="Marcar Todas como Lidas"
-                android:textColor="@color/white"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:drawableStart="@drawable/ic_check_all"
-                android:drawablePadding="8dp"
-                android:drawableTint="@color/primary_green" />
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <!-- SwipeRefreshLayout com RecyclerView -->
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipe_refresh_notifications"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/alertas_controls"
-        android:layout_marginBottom="90dp">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <!-- RecyclerView para as notificações -->
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recycler_notifications"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:clipToPadding="false"
-                android:paddingTop="8dp"
-                android:paddingBottom="16dp"
-                android:scrollbars="vertical"
-                tools:listitem="@layout/item_notification" />
-
-            <!-- Estado vazio -->
+            <!-- Header Content -->
             <LinearLayout
-                android:id="@+id/empty_state_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="40dp"
-                android:visibility="gone"
-                tools:visibility="visible">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- Bell Icon -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="16dp"
+                    app:cardBackgroundColor="@color/white"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="4dp">
+
+                    <ImageView
+                        android:layout_width="28dp"
+                        android:layout_height="28dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_bell"
+                        app:tint="@color/primary_green" />
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Header Text -->
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/alertas_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Notificações"
+                        android:textColor="@color/text_white"
+                        android:textSize="26sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/alertas_subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:alpha="0.9"
+                        android:text="Acompanhe suas atualizações importantes"
+                        android:textColor="@color/text_white"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- Modern Filter Section -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/filter_section_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="8dp"
+        app:cardBackgroundColor="@color/background_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/header_card">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- Filter Header -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="96dp"
-                    android:layout_height="96dp"
-                    android:src="@drawable/ic_notifications_none"
-                    android:tint="@color/text_secondary"
-                    android:alpha="0.4" />
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="12dp"
+                    android:src="@drawable/ic_filter"
+                    app:tint="@color/primary_green" />
 
                 <TextView
-                    android:id="@+id/tv_empty_notifications"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="24dp"
-                    android:text="Nenhuma notificação encontrada"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Filtrar Notificações"
                     android:textColor="@color/text_primary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
-                <TextView
+                <!-- Active Filter Count -->
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/active_filter_badge"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:text="Você está em dia! Suas notificações importantes aparecerão aqui."
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
-                    android:textAlignment="center"
-                    android:lineSpacingExtra="2dp" />
+                    android:visibility="gone"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="0dp"
+                    app:cardBackgroundColor="@color/primary_green"
+                    tools:visibility="visible">
+
+                    <TextView
+                        android:id="@+id/tv_active_filters"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="4dp"
+                        android:text="1"
+                        android:textColor="@color/text_white"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        tools:text="1" />
+
+                </androidx.cardview.widget.CardView>
 
             </LinearLayout>
 
-        </RelativeLayout>
+            <!-- Modern Filter Chips usando Buttons customizados -->
+            <LinearLayout
+                android:id="@+id/chip_group_filters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:orientation="horizontal"
+                android:gravity="start">
+
+                <Button
+                    android:id="@+id/chip_all"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="Todas"
+                    android:textSize="14sp"
+                    android:background="@drawable/filter_chip_background"
+                    android:textColor="@drawable/filter_chip_text_color"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="12dp"
+                    android:minWidth="0dp"
+                    android:minHeight="48dp"
+                    android:stateListAnimator="@null"
+                    android:elevation="0dp" />
+
+                <Button
+                    android:id="@+id/chip_unread"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginEnd="12dp"
+                    android:text="Não Lidas"
+                    android:textSize="14sp"
+                    android:background="@drawable/filter_chip_background"
+                    android:textColor="@drawable/filter_chip_text_color"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="12dp"
+                    android:minWidth="0dp"
+                    android:minHeight="48dp"
+                    android:stateListAnimator="@null"
+                    android:elevation="0dp" />
+
+                <Button
+                    android:id="@+id/chip_read"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="Lidas"
+                    android:textSize="14sp"
+                    android:background="@drawable/filter_chip_background"
+                    android:textColor="@drawable/filter_chip_text_color"
+                    android:paddingHorizontal="20dp"
+                    android:paddingVertical="12dp"
+                    android:minWidth="0dp"
+                    android:minHeight="48dp"
+                    android:stateListAnimator="@null"
+                    android:elevation="0dp" />
+
+            </LinearLayout>
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_mark_all_read"
+                    android:layout_width="0dp"
+                    android:layout_height="56dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/modern_action_button"
+                    android:elevation="4dp"
+                    android:text="✓ Marcar Lidas"
+                    android:textColor="@color/text_white"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:backgroundTint="@null"
+                    app:cornerRadius="28dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_refresh"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_marginStart="8dp"
+                    android:insetLeft="0dp"
+                    android:insetTop="0dp"
+                    android:insetRight="0dp"
+                    android:insetBottom="0dp"
+                    app:backgroundTint="@color/surface_elevated"
+                    app:cornerRadius="28dp"
+                    app:icon="@drawable/ic_refresh"
+                    app:iconGravity="textStart"
+                    app:iconPadding="0dp"
+                    app:iconTint="@color/primary_green"
+                    app:strokeColor="@color/divider_color"
+                    app:strokeWidth="1dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- SwipeRefreshLayout with RecyclerView -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_notifications"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="90dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/filter_section_card">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <!-- RecyclerView for notifications -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_notifications"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:clipToPadding="false"
+                android:paddingVertical="8dp"
+                android:scrollbars="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:listitem="@layout/item_notification" />
+
+            <!-- Modern Empty State -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/empty_state_card"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:visibility="gone"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="6dp"
+                app:cardBackgroundColor="@color/background_white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:visibility="visible">
+
+                <LinearLayout
+                    android:id="@+id/empty_state_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:padding="40dp">
+
+                    <!-- Empty State Icon -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:layout_marginBottom="24dp"
+                        app:cardBackgroundColor="#F0FDF4"
+                        app:cardCornerRadius="60dp"
+                        app:cardElevation="0dp">
+
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:layout_gravity="center"
+                            android:alpha="0.7"
+                            android:src="@drawable/ic_notifications_none"
+                            app:tint="@color/primary_green" />
+
+                    </androidx.cardview.widget.CardView>
+
+                    <TextView
+                        android:id="@+id/tv_empty_notifications"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="🎉 Tudo em dia!"
+                        android:textColor="@color/text_primary"
+                        android:textSize="22sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:lineSpacingExtra="4dp"
+                        android:text="Você não tem notificações no momento.\nQuando houver atualizações importantes,\nelas aparecerão aqui."
+                        android:textAlignment="center"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="16sp" />
+
+                    <!-- Optional Action Button -->
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_refresh_empty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:layout_marginTop="24dp"
+                        android:backgroundTint="@color/primary_green"
+                        android:paddingHorizontal="32dp"
+                        android:text="🔄 Atualizar"
+                        android:textColor="@color/text_white"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="24dp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-</RelativeLayout> 
+</androidx.constraintlayout.widget.ConstraintLayout> 

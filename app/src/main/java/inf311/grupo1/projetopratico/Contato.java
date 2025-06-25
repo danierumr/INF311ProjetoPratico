@@ -54,7 +54,7 @@ public class Contato implements Parcelable {
           serie=in.readString();
           escola = in.readString();
           ultimo_contato=new Date(in.readLong());
-          uid = in.readString(); // Ler UID do Parcel
+          uid = in.readString();
     }
 
     public Contato(JSONObject ob)
@@ -66,7 +66,7 @@ public class Contato implements Parcelable {
             telefone=ob.getString("telefone");
             responsavel=ob.getString("campopersonalizado_1_compl_cont");;
             interesse="";
-            //serie=s;
+            serie=ob.getString("campopersonalizado_6_compl_cont");
             escola = ob.getString("escolaorigem");//
             ultimo_contato=new Date();
             id=ob.getInt("id");
