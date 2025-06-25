@@ -1,16 +1,29 @@
 package inf311.grupo1.projetopratico.services;
 
+import android.util.Log;
+
 import inf311.grupo1.projetopratico.App_main;
 import inf311.grupo1.projetopratico.Contato;
 import inf311.grupo1.projetopratico.models.DashboardMetrics;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class DashboardDataProvider {
     
+    private static final String TAG = "DashboardDataProvider";
     private static DashboardDataProvider instance;
+    
+    // Status possíveis dos leads baseados na API Rubeus
+    private static final String STATUS_POTENCIAL = "Potencial";
+    private static final String STATUS_INTERESSADO = "Interessado";
+    private static final String STATUS_INSCRITO_PARCIAL = "Inscrito parcial";
+    private static final String STATUS_INSCRITO = "Inscrito";
+    private static final String STATUS_CONFIRMADO = "Confirmado";
+    private static final String STATUS_CONVOCADO = "Convocado";
+    private static final String STATUS_MATRICULADO = "Matriculado";
     
     private DashboardDataProvider() {}
     
@@ -22,128 +35,155 @@ public class DashboardDataProvider {
     }
     
     /**
-     * Obtém as métricas do dashboard para um usuário específico
-     * Futuramente este método fará uma chamada à API
+     * Obtém as métricas do dashboard baseadas nos dados reais da API Rubeus
      */
-    public DashboardMetrics getDashboardMetrics(String userEmail, boolean isAdmin) {
-        // Simula dados dinâmicos - futuramente virá da API
-        if (isAdmin) {
+    public DashboardMetrics getDashboardMetrics(String userEmail, boolean isAdmin, App_main app) {
+        try {
+            // Garantir que os dados estejam atualizados
+            if (!app.updated) {
+                app.update();
+            }
+            
+            List<Contato> contatos = app.get_leads();
+            if (contatos == null) {
+                contatos = new ArrayList<>();
+            }
+            
+            // Calcular métricas baseadas nos dados reais
+            int totalLeads = contatos.size();
+            int leadsNovos = contarLeadsPorStatus(contatos, STATUS_POTENCIAL);
+            int leadsContatados = contarLeadsContatados(contatos);
+            int leadsConvertidos = contarLeadsConvertidos(contatos);
+            double taxaConversao = totalLeads > 0 ? (double) leadsConvertidos / totalLeads * 100.0 : 0.0;
+            
+            Log.d(TAG, "Métricas calculadas - Total: " + totalLeads + 
+                      ", Novos: " + leadsNovos + 
+                      ", Convertidos: " + leadsConvertidos + 
+                      ", Taxa: " + String.format("%.1f%%", taxaConversao));
+            
             return new DashboardMetrics(
-                156,  // total leads
-                23,   // leads novos
-                89,   // leads contatados  
-                44,   // leads convertidos
-                28.2, // taxa conversão
-                12,   // atividades hoje
-                8     // visitas agendadas
+                totalLeads,
+                leadsNovos,
+                leadsContatados,
+                leadsConvertidos,
+                taxaConversao
             );
-        } else {
-            return new DashboardMetrics(
-                48,   // total leads
-                8,    // leads novos
-                28,   // leads contatados
-                12,   // leads convertidos
-                25.0, // taxa conversão
-                5,    // atividades hoje
-                3     // visitas agendadas
-            );
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao calcular métricas do dashboard", e);
+            // Retornar métricas zeradas em caso de erro
+            return new DashboardMetrics(0, 0, 0, 0, 0.0);
         }
     }
     
     /**
+     * Obtém as métricas do dashboard para um usuário específico (sobrecarga para compatibilidade)
+     */
+    public DashboardMetrics getDashboardMetrics(String userEmail, boolean isAdmin) {
+        Log.w(TAG, "Método getDashboardMetrics chamado sem App_main - retornando métricas zeradas");
+        Log.w(TAG, "Use getDashboardMetrics(userEmail, isAdmin, app) para obter dados reais");
+        return new DashboardMetrics(0, 0, 0, 0, 0.0);
+    }
+    
+    /**
      * Obtém os leads recentes para exibir no dashboard
-     * Futuramente este método fará uma chamada à API
      */
     public List<Contato> getLeadsRecentes(String userEmail, boolean isAdmin, int limite, App_main app) {
-        List<Contato> contatos = new ArrayList<>();
-        
-        // Simula dados dinâmicos - futuramente virá da API
-        /*if (isAdmin) {
-            // Admin vê leads de todos os consultores
-            contatos.add(new Contato("Maria Silva", "maria.silva@gmail.com",
-                    "31987654321", "José Silva", "Matrícula imediata", "3º EM", 
-                    "Colégio Exemplo", new Date()));
+        try {
+            // Garantir que os dados estejam atualizados
+            if (!app.updated) {
+                app.update();
+            }
             
-            contatos.add(new Contato("Pedro Santos", "pedro.santos@gmail.com",
-                    "31987654322", "Ana Santos", "Conhecer a escola", "1º EM", 
-                    "Escola ABC", new Date()));
+            List<Contato> contatos = app.get_leads();
+            if (contatos == null) {
+                contatos = new ArrayList<>();
+            }
             
-            contatos.add(new Contato("Carla Oliveira", "carla.oliveira@gmail.com",
-                    "31987654323", "Roberto Oliveira", "Informações", "2º EM", 
-                    "Instituto XYZ", new Date()));
-        } else {
-            // Consultor vê apenas seus leads
-            contatos.add(new Contato("João Silva", "joaosilva@gmail.com",
-                    "38922285", "João Silva pai", "Matrícula imediata", "5º ano", 
-                    "Escola 1", new Date()));
-
-            contatos.add(new Contato("Ana Silva", "anasilva@gmail.com",
-                    "38913223", "João Silva pai", "Matrícula imediata", "8º ano", 
-                    "Escola 1", new Date()));
-
-            contatos.add(new Contato("João Android II", "joaoandroid2@gmail.com",
-                    "38923237", "João Android", "Matrícula imediata", "2º EM", 
-                    "Escola 2", new Date()));
-        }*/
-
-        contatos = app.get_leads();
+            // Ordenar por prioridade (leads que precisam de atenção primeiro)
+            contatos.sort((c1, c2) -> {
+                int prioridade1 = calcularPrioridadeLead(c1);
+                int prioridade2 = calcularPrioridadeLead(c2);
+                return Integer.compare(prioridade2, prioridade1); // Ordem decrescente
+            });
         
         // Limitar o número de resultados
         if (contatos.size() > limite) {
             return contatos.subList(0, limite);
         }
         
+            Log.d(TAG, "Retornando " + contatos.size() + " leads recentes");
         return contatos;
-    }
-    
-    /**
-     * Obtém estatísticas rápidas para cards do dashboard
-     * Futuramente este método fará uma chamada à API
-     */
-    public DashboardQuickStats getQuickStats(String userEmail, boolean isAdmin) {
-        if (isAdmin) {
-            return new DashboardQuickStats(
-                156, // total leads
-                44,  // conversões
-                12,  // atividades hoje
-                "↑ 12%", // crescimento mensal
-                "Excelente performance da equipe!"
-            );
-        } else {
-            return new DashboardQuickStats(
-                48,  // total leads
-                12,  // conversões
-                5,   // atividades hoje
-                "↑ 8%", // crescimento mensal
-                "Você está 20% acima da meta!"
-            );
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao obter leads recentes", e);
+            return new ArrayList<>();
         }
     }
     
-    /**
-     * Classe auxiliar para estatísticas rápidas
-     */
-    public static class DashboardQuickStats {
-        private int totalLeads;
-        private int conversoes;
-        private int atividadesHoje;
-        private String crescimentoMensal;
-        private String mensagemMotivacional;
+    // Métodos auxiliares para cálculos
+    
+    private int contarLeadsPorStatus(List<Contato> contatos, String status) {
+        return (int) contatos.stream()
+                .filter(c -> status.equals(c.interesse))
+                .count();
+    }
+    
+    private int contarLeadsContatados(List<Contato> contatos) {
+        // Considerar contatados: todos exceto "Potencial"
+        return (int) contatos.stream()
+                .filter(c -> c.interesse != null && !STATUS_POTENCIAL.equals(c.interesse))
+                .count();
+    }
+    
+    private int contarLeadsConvertidos(List<Contato> contatos) {
+        // Considerar convertidos: "Matriculado"
+        return contarLeadsPorStatus(contatos, STATUS_MATRICULADO);
+    }
+    
+    private int calcularPrioridadeLead(Contato contato) {
+        // Calcular prioridade baseada no status e tempo desde último contato
+        if (contato.interesse == null) return 0;
         
-        public DashboardQuickStats(int totalLeads, int conversoes, int atividadesHoje, 
-                                 String crescimentoMensal, String mensagemMotivacional) {
-            this.totalLeads = totalLeads;
-            this.conversoes = conversoes;
-            this.atividadesHoje = atividadesHoje;
-            this.crescimentoMensal = crescimentoMensal;
-            this.mensagemMotivacional = mensagemMotivacional;
+        int prioridadeStatus = 0;
+        switch (contato.interesse) {
+            case STATUS_POTENCIAL:
+                prioridadeStatus = 5; // Alta prioridade - precisa ser contatado
+                break;
+            case STATUS_INTERESSADO:
+                prioridadeStatus = 4; // Precisa de acompanhamento
+                break;
+            case STATUS_CONFIRMADO:
+            case STATUS_CONVOCADO:
+                prioridadeStatus = 3; // Precisa de atenção
+                break;
+            case STATUS_INSCRITO_PARCIAL:
+                prioridadeStatus = 2; // Acompanhar inscrição
+                break;
+            case STATUS_INSCRITO:
+                prioridadeStatus = 1; // Baixa prioridade
+                break;
+            case STATUS_MATRICULADO:
+                prioridadeStatus = 0; // Menor prioridade
+                break;
+            default:
+                prioridadeStatus = 1;
         }
         
-        // Getters
-        public int getTotalLeads() { return totalLeads; }
-        public int getConversoes() { return conversoes; }
-        public int getAtividadesHoje() { return atividadesHoje; }
-        public String getCrescimentoMensal() { return crescimentoMensal; }
-        public String getMensagemMotivacional() { return mensagemMotivacional; }
+        // Ajustar prioridade baseada no tempo sem contato
+        if (contato.ultimo_contato != null) {
+            long diasSemContato = (System.currentTimeMillis() - contato.ultimo_contato.getTime()) / (24 * 60 * 60 * 1000);
+            if (diasSemContato > 7) {
+                prioridadeStatus += 2; // Aumentar prioridade se faz tempo sem contato
+            } else if (diasSemContato > 3) {
+                prioridadeStatus += 1;
+            }
+        }
+        
+        return prioridadeStatus;
     }
+    
+   
+    
+   
 } 

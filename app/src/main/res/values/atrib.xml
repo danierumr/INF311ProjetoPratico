@@ -1,11 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-
-
-        <declare-styleable name="Color_bar">
-            <attr name="bar_color" format="color"/>
-
-        </declare-styleable>
+    <!-- Arquivo limpo - atributos não utilizados removidos -->
 
 </resources>

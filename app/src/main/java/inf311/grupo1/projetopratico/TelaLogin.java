@@ -114,6 +114,7 @@ public class TelaLogin extends AppCompatActivity {
                 Log.d(TAG, "Dados do usuário carregados - Admin: " + isAdmin + ", Nome: " + name);
                 
                 Data_master.admin = isAdmin;
+                Data_master.user_id = firebaseManager.getCurrentUserUid();
                 
                 navigateToDashboard(isAdmin, name, email);
             }
@@ -192,7 +193,7 @@ public class TelaLogin extends AppCompatActivity {
         Log.d(TAG, "Navegando para dashboard - Admin: " + isAdmin + ", Email: " + email);
         
         startActivity(intent);
-        finish(); // Finalizar a activity de login
+        finish();
     }
 
 }

@@ -21,6 +21,8 @@ public class Contato implements Parcelable {
 
     public String responsavel;
 
+    public String uid; // UID do Firebase - campo personalizado 4 da API Rubeus
+
     public Date ultimo_contato;
 
 
@@ -37,6 +39,7 @@ public class Contato implements Parcelable {
         serie=s;
         escola = esc;
         ultimo_contato=d;
+        uid = null; // Inicializar como null por padrão
 
     }
 
@@ -51,6 +54,7 @@ public class Contato implements Parcelable {
           serie=in.readString();
           escola = in.readString();
           ultimo_contato=new Date(in.readLong());
+          uid = in.readString(); // Ler UID do Parcel
     }
 
     public Contato(JSONObject ob)
@@ -66,11 +70,34 @@ public class Contato implements Parcelable {
             escola = ob.getString("escolaorigem");//
             ultimo_contato=new Date();
             id=ob.getInt("id");
+            
+            // Extrair UID do campo personalizado 4 se existir
+            uid = null;
+            try {
+                JSONObject camposPersonalizados = ob.getJSONObject("camposPersonalizados");
+                if (camposPersonalizados.has("campopersonalizado_4_compl_cont") && 
+                    !camposPersonalizados.isNull("campopersonalizado_4_compl_cont")) {
+                    
+                    // O campo pode ser um array ou string, vamos tratar ambos
+                    Object campo4 = camposPersonalizados.get("campopersonalizado_4_compl_cont");
+                    if (campo4 instanceof String) {
+                        uid = (String) campo4;
+                    } else if (campo4 instanceof org.json.JSONArray) {
+                        org.json.JSONArray uidArray = (org.json.JSONArray) campo4;
+                        if (uidArray.length() > 0) {
+                            uid = uidArray.getString(0); // Pegar o primeiro UID
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                Log.w("Contato", "Erro ao extrair UID do campo personalizado 4", e);
+                uid = null;
+            }
         }
 
         catch (org.json.JSONException j)
         {
-
+            Log.w("Contato", "Erro ao criar Contato do JSON", j);
         }
 
     }
@@ -92,6 +119,7 @@ public class Contato implements Parcelable {
          p.writeString(serie);
          p.writeString(escola);
          p.writeLong(ultimo_contato.getTime());
+         p.writeString(uid); // Escrever UID no Parcel
     }
 
     public static final Parcelable.Creator<Contato> CREATOR =new Parcelable.Creator<Contato>()

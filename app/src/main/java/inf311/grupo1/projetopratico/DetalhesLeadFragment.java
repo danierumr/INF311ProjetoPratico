@@ -244,30 +244,25 @@ public class DetalhesLeadFragment extends App_fragment {
     }
     
     /**
-     * Retorna o estágio do lead (simulado)
-     * Em produção, isso viria da API
+     * Retorna o estágio do lead a partir do interesse
      */
     private String getEstagioLead() {
-        // Lógica simulada baseada no interesse
-        if (contato.interesse.toLowerCase().contains("imediata")) {
-            return "Quente";
-        } else if (contato.interesse.toLowerCase().contains("conhecer")) {
+        if (contato.interesse.toLowerCase().contains("Potencial")) {
+            return "Novo";
+        } else if (contato.interesse.toLowerCase().contains("Interessado")) {
             return "Morno";
         } else {
-            return "Novo";
+            return "Quente";
         }
     }
     
     /**
-     * Retorna a prioridade do lead (simulado)
-     * Em produção, isso viria da API
+     * Retorna a prioridade do lead a partir do interesse
      */
     private String getPrioridadeLead() {
-        // Lógica simulada baseada no interesse
-        if (contato.interesse.toLowerCase().contains("imediata")) {
+        if (contato.interesse.toLowerCase().contains("Interessado")) {
             return "Alta";
-        } else if (contato.interesse.toLowerCase().contains("valores") || 
-                   contato.interesse.toLowerCase().contains("bolsa")) {
+        } else if (contato.interesse.toLowerCase().contains("Potencial")) {
             return "Média";
         } else {
             return "Normal";
@@ -280,8 +275,8 @@ public class DetalhesLeadFragment extends App_fragment {
      */
     private String getObservacoesLead() {
         // Placeholder - em produção viria da API
-        return "Lead interessado em " + contato.interesse.toLowerCase() + 
-               ". Aluno da " + contato.escola + " cursando " + contato.serie + 
+        return "Lead com status " + contato.interesse.toLowerCase() + 
+               ". Aluno da " + contato.escola +
                ". Responsável: " + contato.responsavel + ".";
     }
     

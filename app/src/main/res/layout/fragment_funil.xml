@@ -7,94 +7,47 @@
     android:background="@color/background_gray_light"
     android:fitsSystemWindows="true">
 
-    <RelativeLayout
+    <!-- Header fixo no topo -->
+    <LinearLayout
         android:id="@+id/funil_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primary_green"
-        android:paddingVertical="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Funil de Captação"
-            android:id="@+id/funil_title"
-            android:textStyle="bold"
-            android:textSize="20sp"
-            android:textColor="@color/text_white"
-            android:gravity="center" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Visualize o desempenho do seu funil"
-            android:id="@+id/funil_subtitle"
-            android:textSize="14sp"
-            android:textColor="@color/text_white"
-            android:alpha="0.8"
-            android:gravity="center"
-            android:layout_below="@+id/funil_title"
-            android:layout_marginTop="4dp" />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:id="@+id/funil_intervalo_select"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/funil_header"
-        android:background="@android:color/white"
-        android:orientation="horizontal"
+        android:elevation="4dp"
+        android:orientation="vertical"
         android:padding="16dp">
 
-        <Button
-            android:id="@+id/funil_btn_semanal"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:background="@drawable/filter_button_selector"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
-            android:text="Semana"
-            android:textColor="@color/filter_button_text_selector"
-            android:textSize="14sp"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Funil de Conversão"
+            android:textColor="@android:color/white"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
-        <Button
-            android:id="@+id/funil_btn_mensal"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/filter_button_selector"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
-            android:text="Mês"
-            android:textColor="@color/filter_button_text_selector"
-            android:textSize="14sp"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/funil_btn_trimestral"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/filter_button_selector"
-            android:paddingHorizontal="16dp"
-            android:paddingVertical="8dp"
-            android:text="Trimestre"
-            android:textColor="@color/filter_button_text_selector"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:gravity="center"
+            android:text="Acompanhe o desempenho do seu funil de vendas"
+            android:textColor="@android:color/white"
+            android:textSize="14sp" />
 
     </LinearLayout>
 
-    <!-- ScrollView com os conteúdos principais -->
-    <ScrollView
-        android:id="@+id/scrollView_funil"
+    <!-- SwipeRefreshLayout com ScrollView -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/funil_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/funil_intervalo_select"
+        android:layout_below="@id/funil_header">
+
+        <ScrollView
+            android:id="@+id/scrollView_funil"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
         android:paddingBottom="90dp"
         android:clipToPadding="false"
         android:background="@color/background_gray_light">
@@ -139,14 +92,52 @@
                             android:layout_weight="1"/>
 
                         <TextView
+                                android:id="@+id/funil_total_leads"
                             android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="0 leads"
+                                android:textColor="@color/black"
+                                android:textSize="14sp"/>
+
+                        </LinearLayout>
+
+                        <!-- Potencial -->
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="183 leads"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="start"
+                                android:text="Potencial"
+                                android:textColor="@color/text_primary"
+                                android:textSize="14sp"
+                                android:layout_weight="1"/>
+
+                            <TextView
+                                android:id="@+id/funil_potenciais_count"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="end"
+                                android:text="0 leads"
                             android:textColor="@color/black"
                             android:textSize="14sp"/>
 
                     </LinearLayout>
 
+                        <ProgressBar
+                            android:id="@+id/funil_potenciais_progress"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="15dp"
+                            android:progress="0"
+                            android:max="100"
+                            android:progressTint="@color/primary_green"
+                            android:progressDrawable="@drawable/round_progress_bar" />
+
+                        <!-- Interessado -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -156,30 +147,33 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:text="Novos Leads"
+                                android:text="Interessado"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:layout_weight="1"/>
 
                         <TextView
+                                android:id="@+id/funil_interessados_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:text="42 leads"
+                                android:text="0 leads"
                             android:textColor="@color/black"
                             android:textSize="14sp"/>
 
                     </LinearLayout>
 
                     <ProgressBar
+                            android:id="@+id/funil_interessados_progress"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
                         android:layout_height="15dp"
-                        android:progress="100"
+                            android:progress="0"
                         android:max="100"
                         android:progressTint="@color/primary_green"
                         android:progressDrawable="@drawable/round_progress_bar" />
 
+                        <!-- Inscrito parcial -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -189,30 +183,33 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:text="Contatados"
+                                android:text="Inscrito parcial"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:layout_weight="1"/>
 
                         <TextView
+                                android:id="@+id/funil_inscritos_parciais_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:text="38 leads"
+                                android:text="0 leads"
                             android:textColor="@color/black"
                             android:textSize="14sp"/>
 
                     </LinearLayout>
 
                     <ProgressBar
+                            android:id="@+id/funil_inscritos_parciais_progress"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
                         android:layout_height="15dp"
-                        android:progress="90"
+                            android:progress="0"
                         android:max="100"
                         android:progressTint="@color/primary_green"
                         android:progressDrawable="@drawable/round_progress_bar" />
 
+                        <!-- Inscrito -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -222,30 +219,33 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:text="Interessados"
+                                android:text="Inscrito"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:layout_weight="1"/>
 
                         <TextView
+                                android:id="@+id/funil_inscritos_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:text="31 leads"
+                                android:text="0 leads"
                             android:textColor="@color/black"
                             android:textSize="14sp"/>
 
                     </LinearLayout>
 
                     <ProgressBar
+                            android:id="@+id/funil_inscritos_progress"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
                         android:layout_height="15dp"
-                        android:progress="73"
+                            android:progress="0"
                         android:max="100"
                         android:progressTint="@color/primary_green"
                         android:progressDrawable="@drawable/round_progress_bar" />
 
+                        <!-- Confirmado -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -255,30 +255,33 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:text="Agendados"
+                                android:text="Confirmado"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:layout_weight="1"/>
 
                         <TextView
+                                android:id="@+id/funil_confirmados_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:text="24 leads"
+                                android:text="0 leads"
                             android:textColor="@color/black"
                             android:textSize="14sp"/>
 
                     </LinearLayout>
 
                     <ProgressBar
+                            android:id="@+id/funil_confirmados_progress"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
                         android:layout_height="15dp"
-                        android:progress="57"
+                            android:progress="0"
                         android:max="100"
                         android:progressTint="@color/primary_green"
                         android:progressDrawable="@drawable/round_progress_bar" />
 
+                        <!-- Convocado -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -288,30 +291,33 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:text="Visitaram"
+                                android:text="Convocado"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:layout_weight="1"/>
 
                         <TextView
+                                android:id="@+id/funil_convocados_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:text="18 leads"
+                                android:text="0 leads"
                             android:textColor="@color/black"
                             android:textSize="14sp"/>
 
                     </LinearLayout>
 
                     <ProgressBar
+                            android:id="@+id/funil_convocados_progress"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
                         android:layout_height="15dp"
-                        android:progress="43"
+                            android:progress="0"
                         android:max="100"
                         android:progressTint="@color/primary_green"
                         android:progressDrawable="@drawable/round_progress_bar" />
 
+                        <!-- Matriculado -->
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -321,26 +327,28 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="start"
-                            android:text="Matriculados"
+                                android:text="Matriculado"
                             android:textColor="@color/text_primary"
                             android:textSize="14sp"
                             android:layout_weight="1"/>
 
                         <TextView
+                                android:id="@+id/funil_matriculados_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="end"
-                            android:text="12 leads"
+                                android:text="0 leads"
                             android:textColor="@color/black"
                             android:textSize="14sp"/>
 
                     </LinearLayout>
 
                     <ProgressBar
+                            android:id="@+id/funil_matriculados_progress"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
                         android:layout_height="15dp"
-                        android:progress="28"
+                            android:progress="0"
                         android:max="100"
                         android:progressTint="@color/primary_green"
                         android:progressDrawable="@drawable/round_progress_bar" />
@@ -372,107 +380,7 @@
                         android:textStyle="bold"
                         android:layout_weight="1"/>
 
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/card_red"
-                        card_view:cardCornerRadius="12dp"
-                        card_view:cardElevation="0dp"
-                        android:layout_margin="10dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Contatados → Interessados"
-                                android:textStyle="bold"
-                                android:textColor="@color/black"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Queda de 16% na conversão. Recomendamos revisar o script de primeiro contato."
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:layout_marginTop="4dp"/>
-
-                        </LinearLayout>
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/card_yellow"
-                        card_view:cardCornerRadius="12dp"
-                        card_view:cardElevation="0dp"
-                        android:layout_margin="10dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Interessados → Agendados"
-                                android:textStyle="bold"
-                                android:textColor="@color/black"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Performance estável. Continue com a estratégia atual de agendamento."
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:layout_marginTop="4dp"/>
-
-                        </LinearLayout>
-                    </FrameLayout>
-
-                    <FrameLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:background="@drawable/card_green"
-                        card_view:cardCornerRadius="12dp"
-                        card_view:cardElevation="0dp"
-                        android:layout_margin="10dp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:padding="16dp">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Visitaram → Matriculados"
-                                android:textStyle="bold"
-                                android:textColor="@color/black"
-                                android:textSize="16sp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Excelente taxa de conversão! Mantenha o padrão de qualidade das visitas."
-                                android:textColor="@color/black"
-                                android:textSize="14sp"
-                                android:layout_marginTop="4dp"/>
-
-                        </LinearLayout>
-                    </FrameLayout>
+                        <!-- As análises serão criadas dinamicamente -->
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -480,5 +388,7 @@
         </LinearLayout>
 
     </ScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout> 

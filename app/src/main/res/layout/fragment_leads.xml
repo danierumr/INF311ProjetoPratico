@@ -104,7 +104,7 @@
                     android:id="@+id/leads_filter2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/lead_filter_novos"
+                    android:text="@string/lead_filter_potenciais"
                     android:layout_marginEnd="8dp"
                     app:chipBackgroundColor="@color/background_white"
                     app:chipStrokeColor="@color/primary_green"
@@ -115,7 +115,7 @@
                     android:id="@+id/leads_filter3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/lead_filter_contatados"
+                    android:text="@string/lead_filter_interessados"
                     android:layout_marginEnd="8dp"
                     app:chipBackgroundColor="@color/background_white"
                     app:chipStrokeColor="@color/primary_green"
@@ -126,7 +126,7 @@
                     android:id="@+id/leads_filter4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/lead_filter_interesados"
+                    android:text="@string/lead_filter_inscritos_parciais"
                     android:layout_marginEnd="8dp"
                     app:chipBackgroundColor="@color/background_white"
                     app:chipStrokeColor="@color/primary_green"
@@ -137,7 +137,7 @@
                     android:id="@+id/leads_filter5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/lead_filter_agendados"
+                    android:text="@string/lead_filter_inscritos"
                     android:layout_marginEnd="8dp"
                     app:chipBackgroundColor="@color/background_white"
                     app:chipStrokeColor="@color/primary_green"
@@ -148,7 +148,7 @@
                     android:id="@+id/leads_filter6"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/lead_filter_visitaram"
+                    android:text="@string/lead_filter_confirmados"
                     android:layout_marginEnd="8dp"
                     app:chipBackgroundColor="@color/background_white"
                     app:chipStrokeColor="@color/primary_green"
@@ -157,6 +157,16 @@
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/leads_filter7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/lead_filter_convocados"
+                    app:chipBackgroundColor="@color/background_white"
+                    app:chipStrokeColor="@color/primary_green"
+                    android:textColor="@color/primary_green"
+                    app:chipStrokeWidth="1dp" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/leads_filter8"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/lead_filter_matriculados"
@@ -171,13 +181,18 @@
 
     </androidx.cardview.widget.CardView>
 
-    <!-- Leads List Section -->
-    <ScrollView
-        android:id="@+id/lead_scroll_view2"
+    <!-- SwipeRefreshLayout com Leads List Section -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/leads_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/filter_card"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="16dp">
+
+        <ScrollView
+            android:id="@+id/lead_scroll_view2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
         android:background="@color/background_gray_light">
 
         <LinearLayout
@@ -194,6 +209,8 @@
         </LinearLayout>
 
     </ScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <!-- Floating Action Button -->
     <com.google.android.material.floatingactionbutton.FloatingActionButton

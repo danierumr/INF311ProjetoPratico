@@ -42,12 +42,19 @@
 
     </RelativeLayout>
 
-    <!-- Scroll Content -->
-    <ScrollView
+    <!-- SwipeRefreshLayout para Pull to Refresh -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/metricas_swipe_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/header_section"
         android:background="@color/background_gray_light">
+
+        <!-- Scroll Content -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/background_gray_light">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -98,6 +105,7 @@
                         </LinearLayout>
 
                         <TextView
+                                android:id="@+id/metricas_total_leads"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -107,6 +115,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                                android:id="@+id/metricas_leads_growth"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
@@ -155,6 +164,7 @@
                         </LinearLayout>
 
                         <TextView
+                                android:id="@+id/metricas_total_conversoes"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
@@ -164,6 +174,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                                android:id="@+id/metricas_conversoes_growth"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
@@ -244,6 +255,7 @@
 
             <!-- Desempenho Individual -->
             <LinearLayout
+                    android:id="@+id/metricas_individual_performance_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
@@ -432,5 +444,7 @@
         </LinearLayout>
 
     </ScrollView>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </RelativeLayout> 

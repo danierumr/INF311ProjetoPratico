@@ -14,13 +14,28 @@ import android.widget.Toast;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.github.mikephil.charting.charts.BarChart;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.BarData;
+import com.github.mikephil.charting.data.BarDataSet;
+import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import inf311.grupo1.projetopratico.models.ChartData;
 import inf311.grupo1.projetopratico.models.UserProfile;
 import inf311.grupo1.projetopratico.models.UserMetrics;
+import inf311.grupo1.projetopratico.services.MetricsDataProvider;
 import inf311.grupo1.projetopratico.services.UserProfileService;
 import inf311.grupo1.projetopratico.utils.AppConstants;
 import inf311.grupo1.projetopratico.utils.App_fragment;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PerfilFragment extends App_fragment {
     
@@ -35,21 +50,18 @@ public class PerfilFragment extends App_fragment {
     
     // Serviços de dados
     private UserProfileService userProfileService;
+    private MetricsDataProvider metricsDataProvider;
     
     private CircleImageView ivAvatar;
     private ImageView ivCamera;
     private TextView tvNome;
     private TextView tvCargo;
     
-    private TextView tvTotalLeads;
-    private TextView tvConvertidos;
-    private TextView tvTaxaConversao;
-    private TextView tvEsteMes;
-    
     private TextView tvEmail;
     private TextView tvCargoInfo;
     
     private LinearLayout llSair;
+    private BarChart perfilBarChart;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -84,6 +96,7 @@ public class PerfilFragment extends App_fragment {
     private void initializeServices() {
         firebaseManager = FirebaseManager.getInstance();
         userProfileService = UserProfileService.getInstance();
+        metricsDataProvider = MetricsDataProvider.getInstance();
         Log.d(TAG, "Serviços inicializados");
     }
     
@@ -111,18 +124,15 @@ public class PerfilFragment extends App_fragment {
         tvNome = view.findViewById(R.id.tv_nome);
         tvCargo = view.findViewById(R.id.tv_cargo);
         
-        // Métricas de desempenho
-        tvTotalLeads = view.findViewById(R.id.tv_total_leads);
-        tvConvertidos = view.findViewById(R.id.tv_convertidos);
-        tvTaxaConversao = view.findViewById(R.id.tv_taxa_conversao);
-        tvEsteMes = view.findViewById(R.id.tv_este_mes);
-        
         // Informações pessoais
         tvEmail = view.findViewById(R.id.tv_email);
         tvCargoInfo = view.findViewById(R.id.tv_cargo_info);
         
         // Opções de configuração
         llSair = view.findViewById(R.id.ll_sair);
+        
+        // Gráfico de barras
+        perfilBarChart = view.findViewById(R.id.perfil_bar_chart);
         
         Log.d(TAG, "UI inicializada");
     }
@@ -159,26 +169,31 @@ public class PerfilFragment extends App_fragment {
         Log.d(TAG, "Carregando dados do usuário");
         
         try {
-            // Obter perfil completo do usuário
-            UserProfile userProfile = userProfileService.getUserProfile(userUid, userEmail, isAdmin);
+            // Obter perfil completo do usuário com dados reais da API
+            UserProfile userProfile = userProfileService.getUserProfile(userUid, userEmail, isAdmin, app_pointer);
             
             // Atualizar informações básicas
             updateBasicInfo(userProfile);
             
-            // Atualizar métricas
-            updateMetrics(userProfile.getMetricas());
+            // Carregar gráfico de barras individual
+            loadIndividualBarChart();
             
-            // Obter estatísticas detalhadas
-            loadDetailedStats();
-            
-            Log.d(TAG, "Dados do usuário carregados com sucesso");
+            Log.d(TAG, "Dados do usuário carregados com sucesso usando dados reais da API");
             
         } catch (Exception e) {
-            Log.e(TAG, "Erro ao carregar dados do usuário", e);
-            showError("Erro ao carregar perfil");
+            Log.e(TAG, "Erro ao carregar dados reais, tentando fallback", e);
             
-            // Fallback para dados básicos
-            loadBasicUserData();
+            try {
+                // Fallback para método sem App_main
+                UserProfile userProfile = userProfileService.getUserProfile(userUid, userEmail, isAdmin);
+                updateBasicInfo(userProfile);
+                Log.w(TAG, "Usando dados simulados como fallback");
+                
+            } catch (Exception e2) {
+                Log.e(TAG, "Erro no fallback", e2);
+                showError("Erro ao carregar perfil");
+                loadBasicUserData();
+            }
         }
     }
     
@@ -194,41 +209,6 @@ public class PerfilFragment extends App_fragment {
         if (tvCargoInfo != null) tvCargoInfo.setText(userProfile.getCargoFormatado());
         
         Log.d(TAG, "Informações básicas atualizadas para: " + userProfile.getNomeExibicao());
-    }
-    
-    /**
-     * Atualiza as métricas de desempenho
-     */
-    private void updateMetrics(UserMetrics metricas) {
-        if (metricas == null) return;
-        
-        if (tvTotalLeads != null) tvTotalLeads.setText(String.valueOf(metricas.getTotalLeads()));
-        if (tvConvertidos != null) tvConvertidos.setText(String.valueOf(metricas.getConvertidos()));
-        if (tvTaxaConversao != null) tvTaxaConversao.setText(metricas.getTaxaConversaoFormatted());
-        if (tvEsteMes != null) tvEsteMes.setText(String.valueOf(metricas.getEsteMes()));
-        
-        Log.d(TAG, "Métricas atualizadas - Total: " + metricas.getTotalLeads() + 
-                  ", Conversões: " + metricas.getConvertidos());
-    }
-    
-    /**
-     * Carrega estatísticas detalhadas do usuário
-     */
-    private void loadDetailedStats() {
-        try {
-            UserProfileService.UserDetailedStats stats = 
-                userProfileService.getUserDetailedStats(userEmail, isAdmin);
-            
-            // TODO: Implementar exibição das estatísticas detalhadas na interface
-            // Por exemplo, adicionar cards ou seções extras com essas informações
-            
-            Log.d(TAG, "Estatísticas detalhadas - Leads ativos: " + stats.getLeadsAtivos() +
-                      ", Média leads/dia: " + stats.getMediaLeadsPorDia() +
-                      ", Dias consecutivos: " + stats.getDiasConsecutivosAtivo());
-                      
-        } catch (Exception e) {
-            Log.e(TAG, "Erro ao carregar estatísticas detalhadas", e);
-        }
     }
     
     /**
@@ -249,24 +229,9 @@ public class PerfilFragment extends App_fragment {
         if (tvCargo != null) tvCargo.setText(cargo);
         if (tvCargoInfo != null) tvCargoInfo.setText(cargo);
         
-        if (tvTotalLeads != null) tvTotalLeads.setText("--");
-        if (tvConvertidos != null) tvConvertidos.setText("--");
-        if (tvTaxaConversao != null) tvTaxaConversao.setText("--");
-        if (tvEsteMes != null) tvEsteMes.setText("--");
-        
         Log.d(TAG, "Dados básicos carregados");
     }
     
-    public void updateMetricas(int totalLeads, int convertidos, String taxaConversao, int esteMes) {
-        Log.d(TAG, "Atualizando métricas: " + totalLeads + " leads, " + convertidos + " conversões");
-        
-        if (tvTotalLeads != null) tvTotalLeads.setText(String.valueOf(totalLeads));
-        if (tvConvertidos != null) tvConvertidos.setText(String.valueOf(convertidos));
-        if (tvTaxaConversao != null) tvTaxaConversao.setText(taxaConversao);
-        if (tvEsteMes != null) tvEsteMes.setText(String.valueOf(esteMes));
-    }
-    
-   
     public void updateUserInfo(String nome, String email, String cargo) {
         Log.d(TAG, "Atualizando informações do usuário: " + nome);
         
@@ -387,5 +352,155 @@ public class PerfilFragment extends App_fragment {
     
     public boolean isCurrentUserAdmin() {
         return isAdmin;
+    }
+    
+    /**
+     * Carrega dados para o gráfico de barras individual do usuário
+     */
+    private void loadIndividualBarChart() {
+        Log.d(TAG, "Carregando dados do gráfico de barras individual para: " + userEmail);
+        
+        // Carregar dados individuais (não da equipe) - sempre forçar isAdmin=false para dados individuais
+        metricsDataProvider.getBarChartData(userEmail, false, app_pointer, 
+            new MetricsDataProvider.BarChartCallback() {
+                @Override
+                public void onSuccess(ChartData.BarChartData data) {
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                setupIndividualBarChart(data);
+                            }
+                        });
+                    }
+                }
+                
+                @Override
+                public void onError(String error) {
+                    Log.e(TAG, "Erro ao carregar dados do gráfico individual: " + error);
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Usar dados de fallback individuais
+                                ChartData.BarChartData fallback = 
+                                    metricsDataProvider.getBarChartData(userEmail, false);
+                                setupIndividualBarChart(fallback);
+                            }
+                        });
+                    }
+                }
+            });
+    }
+    
+    /**
+     * Configura o gráfico de barras individual com os dados do usuário
+     */
+    private void setupIndividualBarChart(ChartData.BarChartData chartData) {
+        try {
+            if (perfilBarChart == null || chartData == null) {
+                Log.w(TAG, "BarChart do perfil ou dados são null");
+                return;
+            }
+            
+            // Para o perfil, vamos mostrar apenas os dados do usuário atual
+            // Filtrar dados para mostrar apenas o usuário atual
+            ChartData.ConsultorData dadosUsuario = null;
+            String nomeUsuario = getNomeFromEmail(userEmail);
+            
+            for (ChartData.ConsultorData consultor : chartData.getConsultores()) {
+                if (consultor.getNome().toLowerCase().contains(nomeUsuario.toLowerCase())) {
+                    dadosUsuario = consultor;
+                    break;
+                }
+            }
+            
+            // Se não encontrou dados específicos, usar o primeiro consultor ou criar dados básicos
+            if (dadosUsuario == null && !chartData.getConsultores().isEmpty()) {
+                dadosUsuario = chartData.getConsultores().get(0);
+            } else if (dadosUsuario == null) {
+                // Criar dados básicos se não houver dados
+                dadosUsuario = new ChartData.ConsultorData("Você", 0, 0, "#14b8a6");
+            }
+            
+            List<BarEntry> leadsEntries = new ArrayList<>();
+            List<BarEntry> conversoesEntries = new ArrayList<>();
+            List<String> labels = new ArrayList<>();
+            
+            // Adicionar dados do usuário
+            leadsEntries.add(new BarEntry(0, dadosUsuario.getLeads()));
+            conversoesEntries.add(new BarEntry(0, dadosUsuario.getConversoes()));
+            labels.add("Meus Dados");
+
+            BarDataSet leadsDataSet = new BarDataSet(leadsEntries, "Leads");
+            leadsDataSet.setColor(android.graphics.Color.parseColor("#14b8a6"));
+
+            BarDataSet conversoesDataSet = new BarDataSet(conversoesEntries, "Conversões");
+            conversoesDataSet.setColor(android.graphics.Color.parseColor("#F44336"));
+
+            List<IBarDataSet> dataSets = new ArrayList<>();
+            dataSets.add(leadsDataSet);
+            dataSets.add(conversoesDataSet);
+
+            BarData data = new BarData(dataSets);
+            data.setValueTextSize(12f);
+            data.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    return String.valueOf((int) value);
+                }
+            });
+
+            perfilBarChart.setData(data);
+            
+            // Configurar aparência
+            perfilBarChart.getDescription().setEnabled(false);
+            perfilBarChart.setFitBars(true);
+
+            // Configurar eixos
+            XAxis xAxis = perfilBarChart.getXAxis();
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+            xAxis.setDrawGridLines(false);
+            xAxis.setGranularity(1f);
+            xAxis.setValueFormatter(new ValueFormatter() {
+                @Override
+                public String getFormattedValue(float value) {
+                    int index = (int) value;
+                    return index < labels.size() ? labels.get(index) : "";
+                }
+            });
+
+            YAxis leftAxis = perfilBarChart.getAxisLeft();
+            leftAxis.setDrawGridLines(true);
+            leftAxis.setAxisMinimum(0f);
+
+            perfilBarChart.getAxisRight().setEnabled(false);
+
+            // Configurar legenda
+            Legend legend = perfilBarChart.getLegend();
+            legend.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
+            legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.RIGHT);
+            legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
+            legend.setDrawInside(false);
+            
+            perfilBarChart.invalidate();
+            
+            Log.d(TAG, "Gráfico de barras individual configurado - Leads: " + dadosUsuario.getLeads() + 
+                      ", Conversões: " + dadosUsuario.getConversoes());
+                      
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao configurar gráfico de barras individual", e);
+        }
+    }
+    
+    /**
+     * Extrai nome do email para identificação
+     */
+    private String getNomeFromEmail(String email) {
+        if (email == null || !email.contains("@")) {
+            return "Usuário";
+        }
+        String nome = email.split("@")[0];
+        return Character.toUpperCase(nome.charAt(0)) + nome.substring(1);
     }
 } 

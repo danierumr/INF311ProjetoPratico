@@ -44,7 +44,7 @@
     <string name="dash_novo">Novo lead</string>
     <string name="dash_metrica">Metricas da equipe</string>
     <string name="dash_metrica_sub">Visualize o desempenho de toda a equipe</string>
-    <string name="dash_taxa_conversao">Taxa de Conversão</string>
+    <string name="dash_taxa_conversao">% de conversão</string>
     <string name="dash_tempo_resposta">Tempo de Resposta</string>
     <string name="dash_interacoes">Interações</string>
     <string name="dash_meta_mensal">Meta Mensal</string>
@@ -62,7 +62,7 @@
     <string name="dlead_responsavel">Responsável:</string>
     <string name="dlead_email">Email:</string>
     <string name="dlead_tel">Telefone:</string>
-    <string name="dlead_interesse">Interesse:</string>
+    <string name="dlead_interesse">Status:</string>
     <string name="dlead_ult_cont">Último Contato:</string>
     <string name="dlead_ult_observacoes">Observações</string>
     <string name="dlead_hist">Histórico de Atividades</string>
@@ -72,11 +72,12 @@
     <string name="lead_title">Leads</string>
     <string name="lead_buscar">Buscar Leads…</string>
     <string name="lead_filter_todos">Todos</string>
-    <string name="lead_filter_novos">Novos leads</string>
-    <string name="lead_filter_contatados">Contatados</string>
-    <string name="lead_filter_interesados">Interessados</string>
-    <string name="lead_filter_agendados">Agendados</string>
-    <string name="lead_filter_visitaram">Visitaram</string>
+    <string name="lead_filter_potenciais">Potenciais</string>
+    <string name="lead_filter_interessados">Interessados</string>
+    <string name="lead_filter_inscritos">Inscritos</string>
+    <string name="lead_filter_inscritos_parciais">Inscritos Parciais</string>
+    <string name="lead_filter_confirmados">Confirmados</string>
+    <string name="lead_filter_convocados">Convocados</string>
     <string name="lead_filter_matriculados">Matriculados</string>
     <string name="lead_btn"> Adicionar Novo Lead</string>
 

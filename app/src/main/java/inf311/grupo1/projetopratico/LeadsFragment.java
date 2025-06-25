@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -47,10 +48,11 @@ public class LeadsFragment extends App_fragment {
     private SearchView searchView;
     private FloatingActionButton fabAddLead;
     private LinearLayout leadsContainer;
+    private SwipeRefreshLayout swipeRefreshLayout;
     
     // Filter chips
-    private Chip chipTodos, chipNovos, chipContatados, chipInteressados, 
-                chipAgendados, chipVisitaram, chipMatriculados;
+    private Chip chipTodos, chipPotenciais, chipInteressados, chipInscritosParciais, 
+    chipInscritos, chipConfirmados, chipConvocados, chipMatriculados;
     
     // Estado de cadastro ativo
     private static boolean isCadastroAtivo = false;
@@ -137,17 +139,49 @@ public class LeadsFragment extends App_fragment {
         searchView = view.findViewById(R.id.lead_search_bar);
         fabAddLead = view.findViewById(R.id.fab_add_lead);
         leadsContainer = view.findViewById(R.id.lead_scroll_linear2);
+        swipeRefreshLayout = view.findViewById(R.id.leads_swipe_refresh);
         
         // Inicializar chips de filtro
         chipTodos = view.findViewById(R.id.leads_filter1);
-        chipNovos = view.findViewById(R.id.leads_filter2);
-        chipContatados = view.findViewById(R.id.leads_filter3);
-        chipInteressados = view.findViewById(R.id.leads_filter4);
-        chipAgendados = view.findViewById(R.id.leads_filter5);
-        chipVisitaram = view.findViewById(R.id.leads_filter6);
-        chipMatriculados = view.findViewById(R.id.leads_filter7);
+        chipPotenciais = view.findViewById(R.id.leads_filter2);
+        chipInteressados = view.findViewById(R.id.leads_filter3);
+        chipInscritosParciais = view.findViewById(R.id.leads_filter4);
+        chipInscritos = view.findViewById(R.id.leads_filter5);
+        chipConfirmados = view.findViewById(R.id.leads_filter6);
+        chipConvocados = view.findViewById(R.id.leads_filter7);
+        chipMatriculados = view.findViewById(R.id.leads_filter8);
+        
+        // Configurar pull to refresh
+        setupPullToRefresh();
         
         Log.d(TAG, "UI inicializada");
+    }
+    
+    /**
+     * Configura o pull to refresh
+     */
+    private void setupPullToRefresh() {
+        if (swipeRefreshLayout != null) {
+            // Configurar cores do loading
+            swipeRefreshLayout.setColorSchemeResources(
+                R.color.primary_green,
+                R.color.secondary_green,
+                R.color.accent_green
+            );
+            
+            // Configurar o listener de refresh
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    Log.d(TAG, "Pull to refresh ativado - atualizando leads");
+                    refreshLeads();
+                }
+            });
+            
+            Log.d(TAG, "Pull to refresh configurado para leads");
+        } else {
+            Log.w(TAG, "SwipeRefreshLayout não encontrado");
+        }
     }
     
     /**
@@ -201,11 +235,12 @@ public class LeadsFragment extends App_fragment {
         };
         
         if (chipTodos != null) chipTodos.setOnClickListener(filterListener);
-        if (chipNovos != null) chipNovos.setOnClickListener(filterListener);
-        if (chipContatados != null) chipContatados.setOnClickListener(filterListener);
+        if (chipPotenciais != null) chipPotenciais.setOnClickListener(filterListener);
         if (chipInteressados != null) chipInteressados.setOnClickListener(filterListener);
-        if (chipAgendados != null) chipAgendados.setOnClickListener(filterListener);
-        if (chipVisitaram != null) chipVisitaram.setOnClickListener(filterListener);
+        if (chipInscritosParciais != null) chipInscritosParciais.setOnClickListener(filterListener);
+        if (chipInscritos != null) chipInscritos.setOnClickListener(filterListener);
+        if (chipConfirmados != null) chipConfirmados.setOnClickListener(filterListener);
+        if (chipConvocados != null) chipConvocados.setOnClickListener(filterListener);
         if (chipMatriculados != null) chipMatriculados.setOnClickListener(filterListener);
         
         Log.d(TAG, "Chips de filtro configurados");
@@ -306,13 +341,71 @@ public class LeadsFragment extends App_fragment {
      * Atualiza os dados dos leads
      */
     public void refreshLeads() {
-        Log.d(TAG, "Atualizando dados dos leads");
+        Log.d(TAG, "Iniciando atualização dos dados dos leads");
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(true);
+        }
+        
+        // Executar o carregamento de dados em thread separada para não bloquear a UI
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+        try {
+            // Forçar atualização dos dados da API sempre no pull to refresh
+            if (app_pointer != null) {
+                Log.d(TAG, "Forçando atualização da API via pull to refresh");
+                        app_pointer.forceUpdate(); // Executado em thread separada
+                    }
+                    
+                    // Voltar para a UI thread para atualizar a interface
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+            // Resetar filtros
         currentFilter = "todos";
         resetAllChips();
         if (chipTodos != null) {
             chipTodos.setChecked(true);
         }
+            
+            // Recarregar leads
         loadLeads();
+            
+            Log.d(TAG, "Leads atualizados com sucesso");
+            
+        } catch (Exception e) {
+                                    Log.e(TAG, "Erro ao atualizar interface dos leads", e);
+            showError("Erro ao atualizar leads");
+        } finally {
+            // Parar o loading do SwipeRefreshLayout
+                                    if (swipeRefreshLayout != null) {
+                swipeRefreshLayout.setRefreshing(false);
+                Log.d(TAG, "Pull to refresh finalizado");
+            }
+        }
+                            }
+                        });
+                    }
+                    
+                } catch (Exception e) {
+                    Log.e(TAG, "Erro ao atualizar dados da API", e);
+                    if (getActivity() != null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showError("Erro ao atualizar leads");
+                                if (swipeRefreshLayout != null) {
+                                    swipeRefreshLayout.setRefreshing(false);
+                                    Log.d(TAG, "Pull to refresh finalizado com erro");
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        }).start();
     }
     
     /**
@@ -326,8 +419,12 @@ public class LeadsFragment extends App_fragment {
             // Por exemplo, atualizar TextViews com os valores das estatísticas
             
             Log.d(TAG, "Estatísticas carregadas - Total: " + stats.getTotal() +
-                      ", Novos: " + stats.getNovos() +
+                      ", Potenciais: " + stats.getPotenciais() +
                       ", Interessados: " + stats.getInteressados() +
+                      ", Inscritos Parciais: " + stats.getInscritosParciais() +
+                      ", Inscritos: " + stats.getInscritos() +
+                      ", Confirmados: " + stats.getConfirmados() +
+                      ", Convocados: " + stats.getConvocados() +
                       ", Matriculados: " + stats.getMatriculados());
                       
         } catch (Exception e) {
@@ -537,11 +634,12 @@ public class LeadsFragment extends App_fragment {
      */
     private void resetAllChips() {
         if (chipTodos != null) chipTodos.setChecked(false);
-        if (chipNovos != null) chipNovos.setChecked(false);
-        if (chipContatados != null) chipContatados.setChecked(false);
+        if (chipPotenciais != null) chipPotenciais.setChecked(false);
         if (chipInteressados != null) chipInteressados.setChecked(false);
-        if (chipAgendados != null) chipAgendados.setChecked(false);
-        if (chipVisitaram != null) chipVisitaram.setChecked(false);
+        if (chipInscritosParciais != null) chipInscritosParciais.setChecked(false);
+        if (chipInscritos != null) chipInscritos.setChecked(false);
+        if (chipConfirmados != null) chipConfirmados.setChecked(false);
+        if (chipConvocados != null) chipConvocados.setChecked(false);
         if (chipMatriculados != null) chipMatriculados.setChecked(false);
     }
 } 
