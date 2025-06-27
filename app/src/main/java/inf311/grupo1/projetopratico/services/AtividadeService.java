@@ -180,6 +180,7 @@ public class AtividadeService{
         public String tipo;
         public String contato;
         public String pessoaNome;
+        public String pessoa;
         public String status;
         public String statusNome;
         public String descricao;

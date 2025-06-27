@@ -272,64 +272,6 @@
 
             </com.google.android.material.divider.MaterialDivider>
 
-            <TextView
-                android:id="@+id/acompanhamento_historico_atividade"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/acompanhamento_div2"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="start"
-                android:text="@string/acompanhamento_historico_atividades"
-                android:textSize="7pt" />
-
-            <TextView
-                android:id="@+id/acompanhamento_informacoes_atividade"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/acompanhamento_historico_atividade"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="start"
-                android:text="@string/acompanhamento_historico_email"
-                android:textSize="5pt" />
-
-            <TextView
-                android:id="@+id/acompanhamento_detalhes_atividade"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/acompanhamento_informacoes_atividade"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="start"
-                android:text="@string/acompanhamento_historico_descricao"
-                android:textSize="7pt" />
-
-            <TextView
-                android:id="@+id/acompanhamento_data_atividade"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/acompanhamento_detalhes_atividade"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="20dp"
-                android:layout_marginEnd="8dp"
-                android:gravity="start"
-                android:text="@string/acompanhamento_data_placeholder"
-                android:textSize="5pt" />
-
-            <com.google.android.material.divider.MaterialDivider
-                android:id="@+id/acompanhamento_div3"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_below="@id/acompanhamento_data_atividade"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="125dp">
-
-            </com.google.android.material.divider.MaterialDivider>
-
         </RelativeLayout>
 
     </ScrollView>

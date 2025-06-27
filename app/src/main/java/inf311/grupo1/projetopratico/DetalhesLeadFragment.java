@@ -46,7 +46,7 @@ public class DetalhesLeadFragment extends App_fragment {
     
     // UI Elements - Notes and Actions
     private TextView observacoesTextView;
-    private MaterialButton registrarAtividadeBtn;
+    //private MaterialButton registrarAtividadeBtn;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,7 +134,7 @@ public class DetalhesLeadFragment extends App_fragment {
         
         // Notes and actions
         observacoesTextView = view.findViewById(R.id.detalhes_lead_obser_body);
-        registrarAtividadeBtn = view.findViewById(R.id.detalhes_lead_btn);
+        //registrarAtividadeBtn = view.findViewById(R.id.detalhes_lead_btn);
         
         Log.d(TAG, "UI inicializada");
     }
@@ -315,14 +315,14 @@ public class DetalhesLeadFragment extends App_fragment {
             });
         }
         
-        if (registrarAtividadeBtn != null) {
-            registrarAtividadeBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    registrarAtividade();
-                }
-            });
-        }
+//        if (registrarAtividadeBtn != null) {
+//            registrarAtividadeBtn.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    registrarAtividade();
+//                }
+//            });
+//        }
         
         Log.d(TAG, "Listeners configurados");
     }
@@ -356,14 +356,14 @@ public class DetalhesLeadFragment extends App_fragment {
     /**
      * Registra uma nova atividade para o lead
      */
-    private void registrarAtividade() {
-        Log.d(TAG, "Registrando atividade para lead: " + contato.nome);
-        if (contato != null && getActivity() instanceof MainActivityNova){
-            MainActivityNova mainActivity = (MainActivityNova) getActivity();
-            mainActivity.navigateToAcompanhamento(contato);
-            Log.d(TAG, "Navegando para acompanhamento do lead: " + contato.nome);
-        }
-    }
+//    private void registrarAtividade() {
+//        Log.d(TAG, "Registrando atividade para lead: " + contato.nome);
+//        if (contato != null && getActivity() instanceof MainActivityNova){
+//            MainActivityNova mainActivity = (MainActivityNova) getActivity();
+//            mainActivity.navigateToAcompanhamento(contato);
+//            Log.d(TAG, "Navegando para acompanhamento do lead: " + contato.nome);
+//        }
+//    }
     
     /**
      * Abre o app de email para enviar email ao lead
