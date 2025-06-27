@@ -5,6 +5,9 @@ import static inf311.grupo1.projetopratico.Data_master.token;
 
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -177,8 +180,9 @@ public class AtividadeService{
     public class Atividade {
         public int id;
         public String vencimento;
-        public String tipo;
+        public int tipo;
         public String contato;
+        public int pessoa;
         public String pessoaNome;
         public String status;
         public String statusNome;
@@ -197,4 +201,52 @@ public class AtividadeService{
         public List<Atividade> dados;
     }
 
+    public static void CadastroAtividade (
+        String contato, // obrigatorio
+        String formaContato, // obrigatorio
+        String tipo, // obrigatorio
+        String tipoSalvar, // obrigatorio
+        String vencimento, // obrigatorio
+        String pessoas, // obrigatorio
+        String descricao, // obrigatorio
+        String responsavel,
+        String mostrarNotificacao,
+        String tempoNotificacao,
+        String tipoTempo,
+        String concluido
+    ) throws IOException {
+        String url = "https://crmufvgrupo1.apprubeus.com.br/api/Agendamento/cadastro";
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("mostrarNotificacao", mostrarNotificacao);
+        params.put("tempoNotificacao", tempoNotificacao);
+        params.put("tipoTempo", tipoTempo);
+        params.put("contato", contato);
+        params.put("formaContato", formaContato);
+        params.put("tipo", tipo);
+        params.put("dataVisao", "");
+        params.put("duracaoVisao", "00:05:00");
+        params.put("razaoOportunidade", "1");
+        params.put("alterarResumo", "0");
+        params.put("responsavelUnico", "82");
+        params.put("oportunidades", "");
+        params.put("oportunidade", "");
+        params.put("hora", "23:59:59");
+        params.put("descricao", descricao);
+        params.put("tipoVinculo", "pessoa");
+        params.put("tipoAtividade", tipo);
+        params.put("concluido", concluido);
+        params.put("duracao", "300");
+        params.put("vencimento", vencimento + " 23:59:59");
+        params.put("bloquearRazao", "");
+        params.put("pessoas[]", pessoas);
+        params.put("agendamentoUnico", "true");
+        params.put("tipoSalvar", tipoSalvar);
+        params.put("indiceFilaRequisicao", 1);
+        //params.put("pessoa", pessoas);
+
+        params.put("origem", Data_master.origem);
+        params.put("token", Data_master.token);
+
+        String res = App_main.do_api_call(params, url);
+    }
 }
