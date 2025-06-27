@@ -151,11 +151,12 @@
                     <!-- Total Leads Card -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
-                        android:layout_height="140dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="3dp"
+                        app:cardUseCompatPadding="true"
                         app:cardBackgroundColor="@color/background_white">
 
                         <LinearLayout
@@ -163,7 +164,7 @@
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="20dp">
 
                             <androidx.cardview.widget.CardView
                                 android:layout_width="40dp"
@@ -205,7 +206,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="+12% vs mês anterior"
+                                android:text=""
                                 android:textColor="@color/primary_green"
                                 android:textSize="10sp"
                                 android:textStyle="bold" />
@@ -217,11 +218,12 @@
                     <!-- Conversions Card -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
-                        android:layout_height="140dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp"
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="3dp"
+                        app:cardUseCompatPadding="true"
                         app:cardBackgroundColor="@color/background_white">
 
                         <LinearLayout
@@ -229,7 +231,7 @@
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="20dp">
 
                             <androidx.cardview.widget.CardView
                                 android:layout_width="40dp"
@@ -271,7 +273,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="2dp"
-                                android:text="+8% vs mês anterior"
+                                android:text=""
                                 android:textColor="@color/primary_green"
                                 android:textSize="10sp"
                                 android:textStyle="bold" />
@@ -299,7 +301,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
+                    app:cardElevation="3dp"
+                    app:cardUseCompatPadding="true"
                     app:cardBackgroundColor="@color/background_white">
 
                     <LinearLayout
@@ -340,7 +343,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="18dp"
-                            app:cardElevation="4dp"
+                            app:cardElevation="2dp"
                             app:cardBackgroundColor="@color/chart_background">
 
                             <LinearLayout
@@ -370,7 +373,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="16dp"
                     app:cardCornerRadius="20dp"
-                    app:cardElevation="6dp"
+                    app:cardElevation="3dp"
+                    app:cardUseCompatPadding="true"
                     app:cardBackgroundColor="@color/background_white">
 
                     <LinearLayout
@@ -411,7 +415,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="18dp"
-                            app:cardElevation="4dp"
+                            app:cardElevation="2dp"
                             app:cardBackgroundColor="@color/chart_background">
 
                             <LinearLayout

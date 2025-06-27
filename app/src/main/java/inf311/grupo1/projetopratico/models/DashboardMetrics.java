@@ -12,7 +12,7 @@ public class DashboardMetrics {
     public DashboardMetrics(int totalLeads, int leadsNovos, int leadsContatados, 
                            int leadsConvertidos, double taxaConversao) {
         this.totalLeads = totalLeads;
-        this.leadsNovos = leadsNovos;
+        this.leadsNovos = totalLeads;
         this.leadsContatados = leadsContatados;
         this.leadsConvertidos = leadsConvertidos;
         this.taxaConversao = taxaConversao;

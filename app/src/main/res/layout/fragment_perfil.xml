@@ -166,7 +166,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="6dp"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
                 app:cardBackgroundColor="@color/background_white">
 
                 <LinearLayout
@@ -207,7 +208,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="18dp"
-                        app:cardElevation="6dp"
+                        app:cardElevation="2dp"
                         app:cardBackgroundColor="@color/chart_background">
 
                         <LinearLayout
@@ -248,7 +249,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="12dp"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="6dp"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
                 app:cardBackgroundColor="@color/background_white">
 
                 <LinearLayout
@@ -289,8 +291,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="10dp"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="2dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="1dp"
                         app:cardBackgroundColor="@color/background_gradient_start">
 
                         <LinearLayout
@@ -325,8 +327,8 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="10dp"
-                        app:cardElevation="2dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="1dp"
                         app:cardBackgroundColor="@color/background_gradient_start">
 
                         <LinearLayout
@@ -366,7 +368,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="20dp"
-                app:cardElevation="6dp"
+                app:cardElevation="3dp"
+                app:cardUseCompatPadding="true"
                 app:cardBackgroundColor="@color/background_white">
 
                 <LinearLayout
@@ -406,8 +409,8 @@
                     <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:cardCornerRadius="14dp"
-                        app:cardElevation="3dp"
+                        app:cardCornerRadius="16dp"
+                        app:cardElevation="2dp"
                         app:cardBackgroundColor="#fff5f5">
 
                         <LinearLayout

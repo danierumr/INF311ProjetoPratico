@@ -361,25 +361,7 @@ public class MetricasFragment extends App_fragment {
                 totalConversoesTextView.setText(String.valueOf(metrics.getTotalConversoes()));
             }
             
-            if (leadsGrowthTextView != null) {
-                // Calcular crescimento baseado na taxa de conversão
-                double crescimento = metrics.getTaxaConversaoMedia() > 25.0 ? 
-                    Math.random() * 15 + 5 : Math.random() * 10 - 5;
-                String sinal = crescimento >= 0 ? "+" : "";
-                leadsGrowthTextView.setText(String.format("%s%.1f%% vs mês anterior", sinal, crescimento));
-                leadsGrowthTextView.setTextColor(getResources().getColor(
-                    crescimento >= 0 ? R.color.primary_green : R.color.text_secondary));
-            }
             
-            if (conversoesGrowthTextView != null) {
-                // Calcular crescimento das conversões
-                double crescimentoConv = metrics.getTotalConversoes() > 10 ? 
-                    Math.random() * 12 + 3 : Math.random() * 8 - 2;
-                String sinal = crescimentoConv >= 0 ? "+" : "";
-                conversoesGrowthTextView.setText(String.format("%s%.1f%% vs mês anterior", sinal, crescimentoConv));
-                conversoesGrowthTextView.setTextColor(getResources().getColor(
-                    crescimentoConv >= 0 ? R.color.primary_green : R.color.text_secondary));
-            }
             
             Log.d(TAG, "Métricas da equipe atualizadas - Leads: " + metrics.getTotalLeads() + 
                       ", Conversões: " + metrics.getTotalConversoes() + 

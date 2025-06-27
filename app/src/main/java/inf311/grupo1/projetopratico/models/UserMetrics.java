@@ -15,7 +15,7 @@ public class UserMetrics {
         this.totalLeads = totalLeads;
         this.convertidos = convertidos;
         this.taxaConversao = taxaConversao;
-        this.esteMes = esteMes;
+        this.esteMes = totalLeads;
         this.metaMensal = metaMensal;
         this.diasTrabalhados = diasTrabalhados;
     }
