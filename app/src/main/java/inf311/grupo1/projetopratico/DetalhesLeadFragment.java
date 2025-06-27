@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.google.android.material.button.MaterialButton;
 
 import java.util.Date;
 
+import inf311.grupo1.projetopratico.services.AtividadeService;
 import inf311.grupo1.projetopratico.utils.App_fragment;
 
 public class DetalhesLeadFragment extends App_fragment {
@@ -46,7 +48,9 @@ public class DetalhesLeadFragment extends App_fragment {
     
     // UI Elements - Notes and Actions
     private TextView observacoesTextView;
-    //private MaterialButton registrarAtividadeBtn;
+    private MaterialButton registrarAtividadeBtn;
+
+    LinearLayout container;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -134,8 +138,11 @@ public class DetalhesLeadFragment extends App_fragment {
         
         // Notes and actions
         observacoesTextView = view.findViewById(R.id.detalhes_lead_obser_body);
-        //registrarAtividadeBtn = view.findViewById(R.id.detalhes_lead_btn);
-        
+        registrarAtividadeBtn = view.findViewById(R.id.detalhes_lead_btn);
+
+        // Activities list
+        container = view.findViewById(R.id.activities_container);
+
         Log.d(TAG, "UI inicializada");
     }
     
@@ -187,6 +194,10 @@ public class DetalhesLeadFragment extends App_fragment {
             // Notes
             String observacoes = getObservacoesLead();
             observacoesTextView.setText(observacoes);
+
+            // List
+            listarAtividades();
+
             
             Log.d(TAG, "Dados preenchidos para lead: " + contato.nome);
             
@@ -196,6 +207,73 @@ public class DetalhesLeadFragment extends App_fragment {
                 Toast.makeText(getActivity(), "Erro ao carregar informações do lead", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    /**
+     * listar as atividades do lead
+     */
+    private void listarAtividades() {
+        Log.d(TAG, "Listando atividades do lead: " + contato.nome);
+        try {
+            AtividadeService.ListaAtividades resposta = AtividadeService.listarAtividades(
+                    null, null, null, null, null, null,
+                    null, null, null, null, null, null,
+                    null, null, null, null, null, null,
+                    null, null, null, null, null, null,
+                    null, null, null
+            );
+
+            container.removeAllViews();
+            if (resposta != null && resposta.dados != null) {
+                for (AtividadeService.Atividade a : resposta.dados) {
+                    if(contato.id == a.pessoa){
+                        LayoutInflater inflater = LayoutInflater.from(getContext());
+                        View cardView = inflater.inflate(R.layout.atividade, container, false);
+                        TextView titulo = cardView.findViewById(R.id.container_titulo);
+                        TextView tipo = cardView.findViewById(R.id.container_tipo);
+                        TextView vencimento = cardView.findViewById(R.id.container_vencimento);
+                        TextView status = cardView.findViewById(R.id.container_status_text);
+                        TextView descricao = cardView.findViewById(R.id.container_descricao);
+
+                        titulo.setText(a.contato != null ? a.contato : "Título não informado");
+                        switch (a.tipo) {
+                            case 1:
+                                tipo.setText("Ligação");
+                                break;
+                            case 2:
+                                tipo.setText("Email");
+                                break;
+                            case 3:
+                                tipo.setText("Mensagem");
+                                break;
+                            case 4:
+                                tipo.setText("Visita");
+                                break;
+                            case 5:
+                                tipo.setText("Tarefa");
+                                break;
+                            default:
+                                tipo.setText("Tipo nao informado");
+                        }
+
+                        status.setText(a.statusNome != null ? a.statusNome : "Status não informado");
+                        descricao.setText(a.descricao != null ? a.descricao : "Descrição não informada");
+
+                        if (a.vencimento != null) {
+                            vencimento.setText(a.vencimento);
+                        } else {
+                            vencimento.setText("Data de vencimento não informada");
+                        }
+
+                        // Adiciona o card à lista de atividades
+                        container.addView(cardView);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Erro ao carregar atividades", e);
+        }
+
     }
     
     /**
@@ -315,14 +393,14 @@ public class DetalhesLeadFragment extends App_fragment {
             });
         }
         
-//        if (registrarAtividadeBtn != null) {
-//            registrarAtividadeBtn.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    registrarAtividade();
-//                }
-//            });
-//        }
+        if (registrarAtividadeBtn != null) {
+            registrarAtividadeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    registrarAtividade();
+                }
+            });
+        }
         
         Log.d(TAG, "Listeners configurados");
     }
@@ -356,14 +434,14 @@ public class DetalhesLeadFragment extends App_fragment {
     /**
      * Registra uma nova atividade para o lead
      */
-//    private void registrarAtividade() {
-//        Log.d(TAG, "Registrando atividade para lead: " + contato.nome);
-//        if (contato != null && getActivity() instanceof MainActivityNova){
-//            MainActivityNova mainActivity = (MainActivityNova) getActivity();
-//            mainActivity.navigateToAcompanhamento(contato);
-//            Log.d(TAG, "Navegando para acompanhamento do lead: " + contato.nome);
-//        }
-//    }
+    private void registrarAtividade() {
+        Log.d(TAG, "Registrando atividade para lead: " + contato.nome);
+        if (contato != null && getActivity() instanceof MainActivityNova){
+            MainActivityNova mainActivity = (MainActivityNova) getActivity();
+            mainActivity.navigateToAcompanhamento(contato);
+            Log.d(TAG, "Navegando para acompanhamento do lead: " + contato.nome);
+        }
+    }
     
     /**
      * Abre o app de email para enviar email ao lead

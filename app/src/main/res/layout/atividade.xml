@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="8dp"
+    android:layout_marginHorizontal="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="@color/background_white">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <!-- Título da Atividade -->
+        <TextView
+            android:id="@+id/container_titulo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Titulo da Atividade"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:maxLines="2"
+            android:ellipsize="end"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Tipo da Atividade -->
+        <TextView
+            android:id="@+id/container_tipo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Tipo da atividade"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/container_titulo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Data e Hora de Vencimento -->
+        <TextView
+            android:id="@+id/container_vencimento"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Data de vencimento"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@id/container_tipo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <!-- Status de Vencimento -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/container_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            android:layout_marginTop="8dp"
+            app:cardBackgroundColor="@color/common_google_signin_btn_text_light"
+            app:layout_constraintTop_toBottomOf="@id/container_vencimento"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:id="@+id/container_status_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="Status"
+                android:textColor="@color/text_white"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Descrição da Atividade -->
+        <TextView
+            android:id="@+id/container_descricao"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="Descricao da atividade."
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:maxLines="5"
+            android:ellipsize="end"
+            app:layout_constraintTop_toBottomOf="@id/container_status"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

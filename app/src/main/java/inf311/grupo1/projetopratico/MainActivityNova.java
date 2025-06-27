@@ -40,7 +40,7 @@ public class MainActivityNova extends AppCompatActivity {
     private static final String METRICAS_FRAGMENT = "metricas_fragment";
     private static final String ALERTAS_FRAGMENT = "alertas_fragment";
     private static final String FUNIL_FRAGMENT = "funil_fragment";
-    //private static final String ACOMPANHAMENTO_FRAGMENT = "acompanhamento_fragment";
+    private static final String ACOMPANHAMENTO_FRAGMENT = "acompanhamento_fragment";
     
     private String currentFragmentTag = null;
 
@@ -337,12 +337,12 @@ public class MainActivityNova extends AppCompatActivity {
                 Log.d(TAG, "Criando FunilFragment");
                 break;
 
-//            case ACOMPANHAMENTO_FRAGMENT:
-//            case "acompanhamento":
-//                fragment = new AcompanhamentoFragment();
-//                fragment.app_pointer = app;
-//                Log.d(TAG, "Criando AcompanhamentoFragment");
-//                break;
+            case ACOMPANHAMENTO_FRAGMENT:
+            case "acompanhamento":
+                fragment = new AcompanhamentoFragment();
+                fragment.app_pointer = app;
+                Log.d(TAG, "Criando AcompanhamentoFragment");
+                break;
                 
             default:
                 Log.w(TAG, "Fragment tag desconhecida: " + tag + ". Criando DashboardFragment por padrão");
@@ -551,11 +551,11 @@ public class MainActivityNova extends AppCompatActivity {
     /**
      * Navega para acompanhamento do lead
      */
-//    public void navigateToAcompanhamento(Contato contato) {
-//        Bundle args = new Bundle();
-//        args.putParcelable("contato", contato);
-//        navigateToFragment(ACOMPANHAMENTO_FRAGMENT, args);
-//    }
+    public void navigateToAcompanhamento(Contato contato) {
+        Bundle args = new Bundle();
+        args.putParcelable("contato", contato);
+        navigateToFragment(ACOMPANHAMENTO_FRAGMENT, args);
+    }
 
     /**
      * Navega para métricas da equipe
