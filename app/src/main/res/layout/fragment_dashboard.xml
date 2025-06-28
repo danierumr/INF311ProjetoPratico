@@ -143,44 +143,58 @@
                     <!-- Total Leads Card -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
-                        android:layout_height="120dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
                         android:background="@drawable/metric_card_leads"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp">
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="3dp"
+                        app:cardUseCompatPadding="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="20dp">
 
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_marginBottom="8dp"
-                                android:src="@drawable/ic_trending_up"
-                                app:tint="#2196F3" />
+                            <!-- Icon Container -->
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="44dp"
+                                android:layout_height="44dp"
+                                android:layout_marginBottom="12dp"
+                                app:cardCornerRadius="22dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="#E0F2FE">
+
+                                <ImageView
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_trending_up"
+                                    app:tint="#0284C7" />
+
+                            </androidx.cardview.widget.CardView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Total de Leads"
-                                android:textColor="#1976D2"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
+                                android:textColor="#0284C7"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-medium" />
 
                             <TextView
                                 android:id="@+id/tv_total_leads"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
+                                android:layout_marginTop="6dp"
                                 android:text="48"
-                                android:textColor="#0D47A1"
-                                android:textSize="28sp"
-                                android:textStyle="bold" />
+                                android:textColor="#075985"
+                                android:textSize="26sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-black" />
 
                         </LinearLayout>
 
@@ -189,44 +203,58 @@
                     <!-- Conversions Card -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
-                        android:layout_height="120dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:background="@drawable/metric_card_conversions"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp">
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="3dp"
+                        app:cardUseCompatPadding="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="20dp">
 
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_marginBottom="8dp"
-                                android:src="@drawable/ic_check_circle"
-                                app:tint="@color/success_green" />
+                            <!-- Icon Container -->
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="44dp"
+                                android:layout_height="44dp"
+                                android:layout_marginBottom="12dp"
+                                app:cardCornerRadius="22dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="#DCFCE7">
+
+                                <ImageView
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_check_circle"
+                                    app:tint="#16A34A" />
+
+                            </androidx.cardview.widget.CardView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Conversões"
-                                android:textColor="@color/success_green"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
+                                android:textColor="#16A34A"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-medium" />
 
                             <TextView
                                 android:id="@+id/tv_convertidos"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
+                                android:layout_marginTop="6dp"
                                 android:text="12"
-                                android:textColor="@color/accent_green"
-                                android:textSize="28sp"
-                                android:textStyle="bold" />
+                                android:textColor="#15803D"
+                                android:textSize="26sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-black" />
 
                         </LinearLayout>
 
@@ -244,44 +272,58 @@
                     <!-- Conversion Rate Card -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
-                        android:layout_height="120dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
                         android:background="@drawable/metric_card_percentage"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp">
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="3dp"
+                        app:cardUseCompatPadding="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="20dp">
 
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_marginBottom="8dp"
-                                android:src="@drawable/ic_analytics"
-                                app:tint="@color/lilas_barra" />
+                            <!-- Icon Container -->
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="44dp"
+                                android:layout_height="44dp"
+                                android:layout_marginBottom="12dp"
+                                app:cardCornerRadius="22dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="#F3E8FF">
+
+                                <ImageView
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_analytics"
+                                    app:tint="#9333EA" />
+
+                            </androidx.cardview.widget.CardView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Taxa Conversão"
-                                android:textColor="@color/lilas_barra"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
+                                android:textColor="#9333EA"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-medium" />
 
                             <TextView
                                 android:id="@+id/tv_taxa_conversao"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
+                                android:layout_marginTop="6dp"
                                 android:text="25%"
-                                android:textColor="#7B1FA2"
-                                android:textSize="28sp"
-                                android:textStyle="bold" />
+                                android:textColor="#7C3AED"
+                                android:textSize="26sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-black" />
 
                         </LinearLayout>
 
@@ -290,44 +332,58 @@
                     <!-- Monthly Card -->
                     <androidx.cardview.widget.CardView
                         android:layout_width="0dp"
-                        android:layout_height="120dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:background="@drawable/metric_card_monthly"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp">
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="3dp"
+                        app:cardUseCompatPadding="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="16dp">
+                            android:padding="20dp">
 
-                            <ImageView
-                                android:layout_width="24dp"
-                                android:layout_height="24dp"
-                                android:layout_marginBottom="8dp"
-                                android:src="@drawable/ic_trending_up"
-                                app:tint="@color/warning_orange" />
+                            <!-- Icon Container -->
+                            <androidx.cardview.widget.CardView
+                                android:layout_width="44dp"
+                                android:layout_height="44dp"
+                                android:layout_marginBottom="12dp"
+                                app:cardCornerRadius="22dp"
+                                app:cardElevation="0dp"
+                                app:cardBackgroundColor="#FEF3C7">
+
+                                <ImageView
+                                    android:layout_width="22dp"
+                                    android:layout_height="22dp"
+                                    android:layout_gravity="center"
+                                    android:src="@drawable/ic_trending_up"
+                                    app:tint="#D97706" />
+
+                            </androidx.cardview.widget.CardView>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Este Mês"
-                                android:textColor="@color/warning_orange"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
+                                android:textColor="#D97706"
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-medium" />
 
                             <TextView
                                 android:id="@+id/tv_este_mes"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
+                                android:layout_marginTop="6dp"
                                 android:text="8"
-                                android:textColor="#E65100"
-                                android:textSize="28sp"
-                                android:textStyle="bold" />
+                                android:textColor="#C2410C"
+                                android:textSize="26sp"
+                                android:textStyle="bold"
+                                android:fontFamily="sans-serif-black" />
 
                         </LinearLayout>
 
@@ -342,8 +398,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="24dp"
                     app:cardCornerRadius="20dp"
-                    app:cardElevation="8dp"
-                    app:cardBackgroundColor="@color/background_white">
+                    app:cardElevation="3dp"
+                    app:cardBackgroundColor="@color/background_white"
+                    app:cardUseCompatPadding="true">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -383,7 +440,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:cardCornerRadius="18dp"
-                            app:cardElevation="4dp"
+                            app:cardElevation="2dp"
                             app:cardBackgroundColor="@color/chart_background">
 
                             <LinearLayout
@@ -429,7 +486,7 @@
                     <androidx.cardview.widget.CardView
                         android:id="@+id/dash_btn_metricas"
                         android:layout_width="0dp"
-                        android:layout_height="80dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1"
                         android:background="@drawable/action_button_background"
@@ -437,8 +494,9 @@
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:onClick="metricasDaEquipe"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp">
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="3dp"
+                        app:cardUseCompatPadding="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -458,7 +516,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="Métricas"
+                                android:text="Equipe"
                                 android:textColor="@color/text_primary"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
@@ -471,7 +529,7 @@
                     <androidx.cardview.widget.CardView
                         android:id="@+id/dash_btn_funil"
                         android:layout_width="0dp"
-                        android:layout_height="80dp"
+                        android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_weight="1"
                         android:background="@drawable/action_button_background"
@@ -479,8 +537,9 @@
                         android:focusable="true"
                         android:foreground="?android:attr/selectableItemBackground"
                         android:onClick="funil_cap"
-                        app:cardCornerRadius="16dp"
-                        app:cardElevation="6dp">
+                        app:cardCornerRadius="20dp"
+                        app:cardElevation="3dp"
+                        app:cardUseCompatPadding="true">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -500,7 +559,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:gravity="center"
-                                android:text="Funil"
+                                android:text="Funil de Conversão"
                                 android:textColor="@color/text_primary"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />

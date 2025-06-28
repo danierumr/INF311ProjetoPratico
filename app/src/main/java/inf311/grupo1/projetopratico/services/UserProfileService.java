@@ -112,7 +112,8 @@ public class UserProfileService {
             double taxaConversao = totalLeads > 0 ? (double) convertidos / totalLeads * 100.0 : 0.0;
             
             // Leads deste mês
-            int esteMes = contarLeadsEsteMes(contatos);
+            // int esteMes = contarLeadsEsteMes(contatos);
+            int esteMes = totalLeads;
             
             // Meta mensal baseada no tipo de usuário e performance atual
             int metaMensal = calcularMetaMensal(totalLeads, isAdmin);

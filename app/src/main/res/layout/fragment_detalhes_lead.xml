@@ -688,6 +688,7 @@
                         android:id="@+id/detalhes_lead_btn"
                         android:layout_width="match_parent"
                         android:layout_height="64dp"
+                        android:layout_marginBottom="24dp"
                         android:backgroundTint="@color/primary_green"
                         android:text="@string/dlead_regist_at"
                         android:textColor="@color/text_white"
@@ -701,14 +702,47 @@
                         app:iconTint="@color/text_white"
                         android:elevation="6dp" />
 
+                    <!-- Activities Header -->
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="16dp"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="20dp"
+                            android:layout_height="20dp"
+                            android:layout_marginEnd="8dp"
+                            android:src="@drawable/ic_activity"
+                            app:tint="@color/text_secondary" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="📋 Histórico de Atividades"
+                            android:textColor="@color/text_primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="1dp"
+                            android:layout_weight="2"
+                            android:layout_marginStart="12dp"
+                            android:background="@color/background_gray_light" />
+
+                    </LinearLayout>
+
+                    <!-- Activities Container with better spacing -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:id="@+id/activities_container">
-                        </LinearLayout>
-
-
+                        android:id="@+id/activities_container"
+                        android:paddingTop="8dp">
+                    </LinearLayout>
 
                 </LinearLayout>
 
