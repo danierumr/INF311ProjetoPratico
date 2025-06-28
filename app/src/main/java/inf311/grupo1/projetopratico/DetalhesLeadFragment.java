@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -229,51 +230,164 @@ public class DetalhesLeadFragment extends App_fragment {
                     if(contato.id == a.pessoa){
                         LayoutInflater inflater = LayoutInflater.from(getContext());
                         View cardView = inflater.inflate(R.layout.atividade, container, false);
+                        
+                        // Elementos do novo layout
                         TextView titulo = cardView.findViewById(R.id.container_titulo);
                         TextView tipo = cardView.findViewById(R.id.container_tipo);
                         TextView vencimento = cardView.findViewById(R.id.container_vencimento);
                         TextView status = cardView.findViewById(R.id.container_status_text);
                         TextView descricao = cardView.findViewById(R.id.container_descricao);
+                        ImageView activityIcon = cardView.findViewById(R.id.activity_icon);
+                        CardView statusCard = cardView.findViewById(R.id.container_status);
 
-                        titulo.setText(a.contato != null ? a.contato : "Título não informado");
+                        titulo.setText(a.contato != null ? a.contato : "Atividade");
+
+                        // Configurar tipo e ícone baseado no tipo da atividade
+                        String tipoTexto = "";
+                        int iconResource = R.drawable.ic_activity;
+                        int statusColor = ContextCompat.getColor(getContext(), R.color.primary_green);
+                        
                         switch (a.tipo) {
                             case 1:
-                                tipo.setText("Ligação");
+                                tipoTexto = "📞 Ligação";
+                                iconResource = R.drawable.ic_phone;
+                                statusColor = ContextCompat.getColor(getContext(), R.color.verdeagua);
                                 break;
                             case 2:
-                                tipo.setText("Email");
+                                tipoTexto = "📧 Email";
+                                iconResource = R.drawable.ic_email;
+                                statusColor = ContextCompat.getColor(getContext(), R.color.azul_barra);
                                 break;
                             case 3:
-                                tipo.setText("Mensagem");
+                                tipoTexto = "💬 Mensagem";
+                                iconResource = R.drawable.ic_notes;
+                                statusColor = ContextCompat.getColor(getContext(), R.color.lilas_barra);
                                 break;
                             case 4:
-                                tipo.setText("Visita");
+                                tipoTexto = "🏫 Visita";
+                                iconResource = R.drawable.ic_school_modern;
+                                statusColor = ContextCompat.getColor(getContext(), R.color.roxo_barra);
                                 break;
                             case 5:
-                                tipo.setText("Tarefa");
+                                tipoTexto = "📋 Tarefa";
+                                iconResource = R.drawable.ic_reminder;
+                                statusColor = ContextCompat.getColor(getContext(), R.color.magenta_barra);
                                 break;
                             default:
-                                tipo.setText("Tipo nao informado");
+                                tipoTexto = "📝 Atividade";
+                                iconResource = R.drawable.ic_activity;
+                                statusColor = ContextCompat.getColor(getContext(), R.color.text_secondary);
+                        }
+                        
+                        tipo.setText(tipoTexto);
+                        if (activityIcon != null) {
+                            activityIcon.setImageResource(iconResource);
                         }
 
-                        status.setText(a.statusNome != null ? a.statusNome : "Status não informado");
-                        descricao.setText(a.descricao != null ? a.descricao : "Descrição não informada");
+                        // Configurar status com cor
+                        String statusTexto = a.statusNome != null ? a.statusNome : "Em andamento";
+                        status.setText(statusTexto);
+                        if (statusCard != null) {
+                            statusCard.setCardBackgroundColor(statusColor);
+                        }
 
-                        if (a.vencimento != null) {
+                        String descricaoTexto = a.descricao != null && !a.descricao.trim().isEmpty() 
+                            ? a.descricao 
+                            : "Nenhuma descrição adicional fornecida para esta atividade.";
+                        descricao.setText(descricaoTexto);
+
+                        if (a.vencimento != null && !a.vencimento.trim().isEmpty()) {
                             vencimento.setText(a.vencimento);
                         } else {
-                            vencimento.setText("Data de vencimento não informada");
+                            vencimento.setText("Sem prazo definido");
                         }
 
                         // Adiciona o card à lista de atividades
                         container.addView(cardView);
                     }
                 }
+                
+                if (container.getChildCount() == 0) {
+                    addEmptyStateCard();
+                }
+            } else {
+                addEmptyStateCard();
             }
         } catch (Exception e) {
             Log.e(TAG, "Erro ao carregar atividades", e);
+            addErrorStateCard();
         }
+    }
 
+    /**
+     * Adiciona um card de estado vazio quando não há atividades
+     */
+    private void addEmptyStateCard() {
+        if (getContext() == null || container == null) return;
+        
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View emptyCard = inflater.inflate(R.layout.atividade, container, false);
+        
+        TextView titulo = emptyCard.findViewById(R.id.container_titulo);
+        TextView tipo = emptyCard.findViewById(R.id.container_tipo);
+        TextView vencimento = emptyCard.findViewById(R.id.container_vencimento);
+        TextView status = emptyCard.findViewById(R.id.container_status_text);
+        TextView descricao = emptyCard.findViewById(R.id.container_descricao);
+        ImageView activityIcon = emptyCard.findViewById(R.id.activity_icon);
+        CardView statusCard = emptyCard.findViewById(R.id.container_status);
+        
+        titulo.setText("Nenhuma atividade registrada");
+        tipo.setText("📝 Histórico vazio");
+        vencimento.setText("Registre a primeira atividade");
+        status.setText("Aguardando");
+        descricao.setText("Este lead ainda não possui atividades registradas. Use o botão acima para registrar a primeira atividade de acompanhamento.");
+        
+        if (activityIcon != null) {
+            activityIcon.setImageResource(R.drawable.ic_activity);
+        }
+        
+        if (statusCard != null) {
+            statusCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.text_secondary));
+        }
+        
+        // Tornar o card menos proeminente
+        emptyCard.setAlpha(0.7f);
+        
+        container.addView(emptyCard);
+    }
+
+    /**
+     * Adiciona um card de erro quando falha ao carregar atividades
+     */
+    private void addErrorStateCard() {
+        if (getContext() == null || container == null) return;
+        
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+        View errorCard = inflater.inflate(R.layout.atividade, container, false);
+        
+        TextView titulo = errorCard.findViewById(R.id.container_titulo);
+        TextView tipo = errorCard.findViewById(R.id.container_tipo);
+        TextView vencimento = errorCard.findViewById(R.id.container_vencimento);
+        TextView status = errorCard.findViewById(R.id.container_status_text);
+        TextView descricao = errorCard.findViewById(R.id.container_descricao);
+        ImageView activityIcon = errorCard.findViewById(R.id.activity_icon);
+        CardView statusCard = errorCard.findViewById(R.id.container_status);
+        
+        titulo.setText("Erro ao carregar atividades");
+        tipo.setText("⚠️ Erro de conexão");
+        vencimento.setText("Tente novamente");
+        status.setText("Erro");
+        descricao.setText("Não foi possível carregar o histórico de atividades. Verifique sua conexão e tente novamente.");
+        
+        if (activityIcon != null) {
+            activityIcon.setImageResource(R.drawable.ic_system_alert);
+        }
+        
+        if (statusCard != null) {
+            statusCard.setCardBackgroundColor(ContextCompat.getColor(getContext(), R.color.error_red));
+        }
+        
+        container.addView(errorCard);
     }
     
     /**

@@ -11,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,10 +34,10 @@ public class AcompanhamentoFragment extends App_fragment {
 
     private static final String TAG = "AcompanhamentoFragment";
 
-    // Keep references to your buttons
-    private Button ligacao, email, tarefa, mensagem, visita, cadastrar;
+    private LinearLayout ligacao, email, tarefa, mensagem, visita;
+    private Button cadastrar;
     private EditText descricao, nomeAtividade;
-    private List<Button> actionButtons;
+    private List<LinearLayout> actionButtons;
 
     private TextView lead_nome, escola;
 
@@ -64,8 +65,11 @@ public class AcompanhamentoFragment extends App_fragment {
 
         lead_nome = view.findViewById(R.id.acompanhamento_lead_nome);
         escola = view.findViewById(R.id.acompanhamento_escola);
-        lead_nome.setText(contato.nome);
-        escola.setText(contato.escola + " • " + contato.serie);
+        
+        if (contato != null) {
+            lead_nome.setText(contato.nome);
+            escola.setText(contato.escola + " • " + contato.serie);
+        }
 
         descricao = view.findViewById(R.id.acompanhamento_descricao);
         nomeAtividade = view.findViewById(R.id.acompanhamento_nome_atividade_caixa);
@@ -73,7 +77,9 @@ public class AcompanhamentoFragment extends App_fragment {
         calendarioButton = view.findViewById(R.id.acompanhamento_calendario_btn);
         selectedDateCalendar = Calendar.getInstance();
         updateCalendarButtonText();
-        calendarioButton.setOnClickListener(v -> showDatePickerDialog());
+        
+        // Desabilitar funcionalidade - não adicionar listeners
+        // calendarioButton.setOnClickListener(v -> showDatePickerDialog());
 
         ligacao = view.findViewById(R.id.acompanhamento_ligacao_btn);
         email = view.findViewById(R.id.acompanhamento_email_btn);
@@ -89,32 +95,58 @@ public class AcompanhamentoFragment extends App_fragment {
         actionButtons.add(visita);
         actionButtons.add(tarefa);
 
-        ligacao.setOnClickListener(v -> handleActionButtonClick(1, ligacao));
-        email.setOnClickListener(v -> handleActionButtonClick(2, email));
-        mensagem.setOnClickListener(v -> handleActionButtonClick(3, mensagem));
-        tarefa.setOnClickListener(v -> handleActionButtonClick(4, tarefa));
-        visita.setOnClickListener(v -> handleActionButtonClick(5, visita));
-        cadastrar.setOnClickListener(v -> {
-            try {
-                handleCadastrar();
-            } catch (IOException e) {
-                Log.e(TAG, "CAIMO NO CATCH", e);
-                throw new RuntimeException(e);
-            }
-        });
+        // Funcionalidade desabilitada - não adicionar listeners
+        // ligacao.setOnClickListener(v -> handleActionButtonClick(1, ligacao));
+        // email.setOnClickListener(v -> handleActionButtonClick(2, email));
+        // mensagem.setOnClickListener(v -> handleActionButtonClick(3, mensagem));
+        // tarefa.setOnClickListener(v -> handleActionButtonClick(4, tarefa));
+        // visita.setOnClickListener(v -> handleActionButtonClick(5, visita));
+        // cadastrar.setOnClickListener(v -> {
+        //     try {
+        //         handleCadastrar();
+        //     } catch (IOException e) {
+        //         Log.e(TAG, "CAIMO NO CATCH", e);
+        //         throw new RuntimeException(e);
+        //     }
+        // });
+
+        setupDisabledInteractions();
 
         updateButtonBackgrounds();
 
         return view;
     }
 
-    private void handleActionButtonClick(int buttonIndex, Button clickedButton) {
+    /**
+     * Configura interações que mostram que a funcionalidade está desabilitada
+     */
+    private void setupDisabledInteractions() {
+        View.OnClickListener disabledClickListener = v -> {
+            if (getContext() != null) {
+                Toast.makeText(getContext(), "🚀 Funcionalidade em desenvolvimento! Em breve estará disponível.", Toast.LENGTH_SHORT).show();
+            }
+        };
+
+        // Aplicar listener desabilitado para todos os elementos interativos
+        if (ligacao != null) ligacao.setOnClickListener(disabledClickListener);
+        if (email != null) email.setOnClickListener(disabledClickListener);
+        if (mensagem != null) mensagem.setOnClickListener(disabledClickListener);
+        if (tarefa != null) tarefa.setOnClickListener(disabledClickListener);
+        if (visita != null) visita.setOnClickListener(disabledClickListener);
+        if (cadastrar != null) cadastrar.setOnClickListener(disabledClickListener);
+        if (calendarioButton != null) calendarioButton.setOnClickListener(disabledClickListener);
+    }
+
+    private void handleActionButtonClick(int buttonIndex, LinearLayout clickedButton) {
+        // Funcionalidade desabilitada
         last_pressed = buttonIndex;
         updateButtonBackgrounds();
-        Log.d(TAG, "Button " + buttonIndex + " pressed.");
+        Log.d(TAG, "Button " + buttonIndex + " pressed (disabled).");
     }
 
     private void handleCadastrar() throws IOException {
+        // Funcionalidade desabilitada - não executar
+        /*
         AtividadeService.CadastroAtividade(
                 nomeAtividade.getText().toString(),
                 "0",
@@ -129,17 +161,21 @@ public class AcompanhamentoFragment extends App_fragment {
                 "",
                 "0"
         );
-        Toast.makeText(getContext(), "Atividade cadastrada com sucesso!", Toast.LENGTH_SHORT).show();
+        */
+        Toast.makeText(getContext(), "🚀 Funcionalidade em desenvolvimento!", Toast.LENGTH_SHORT).show();
     }
 
     private void updateButtonBackgrounds() {
         for (int i = 0; i < actionButtons.size(); i++) {
-            Button button = actionButtons.get(i);
-            button.setSelected(i == last_pressed);
+            LinearLayout button = actionButtons.get(i);
+            // button.setSelected(i == last_pressed); // Comentado para manter visual desabilitado
         }
     }
 
     private void showDatePickerDialog() {
+        // Funcionalidade desabilitada
+        Toast.makeText(getContext(), "🚀 Seleção de data estará disponível em breve!", Toast.LENGTH_SHORT).show();
+        /*
         int year = selectedDateCalendar.get(Calendar.YEAR);
         int month = selectedDateCalendar.get(Calendar.MONTH);
         int day = selectedDateCalendar.get(Calendar.DAY_OF_MONTH);
@@ -156,11 +192,14 @@ public class AcompanhamentoFragment extends App_fragment {
                 month,
                 day);
         datePickerDialog.show();
+        */
     }
 
     private void updateCalendarButtonText() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
         String dateString = dateFormat.format(selectedDateCalendar.getTime());
-        calendarioButton.setText(dateString);
+        if (calendarioButton != null) {
+            calendarioButton.setText(dateString);
+        }
     }
 }
